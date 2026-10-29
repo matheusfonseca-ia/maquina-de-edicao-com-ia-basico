@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C22-INSTALAR (47,1167–48,9167) gráfico cheio: "e jogar no seu Claude. Pronto." → em cima o repositório com o link copiado, seta terracota desce até o chat do Claude; "jogar": link colado no campo + "Instale essa skill" digitado; "Claude": enviar; resposta "✓ Skill instalada"; "Pronto": carimbo verde PRONTO -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C22 Inter"; src: url("../assets/fonts/Inter.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+        @font-face { font-family: "C22 Mono"; src: url("../assets/fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; font-display: block; }
+        @font-face { font-family: "C22 Serif"; src: url("../assets/fonts/Newsreader.ttf") format("truetype"); font-weight: 200 800; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .c22-bg {
+          position: absolute; left: 0; top: 0; width: 1080px; height: 1920px;
+          background-color: #efedeb;
+          background-image: linear-gradient(#e6e4e1 2px, transparent 2px), linear-gradient(90deg, #e6e4e1 2px, transparent 2px);
+          background-size: 90px 90px; background-position: -1px -1px;
+        }
+        /* repositório (em cima, menor) */
+        .c22-repo { position: absolute; left: 150px; top: 214px; width: 780px; height: 214px; border-radius: 26px; background: #ffffff; box-shadow: 0 14px 32px rgba(0, 0, 0, 0.09); font-family: "C22 Inter", sans-serif; color: #1f2328; }
+        .c22-gh { position: absolute; left: 32px; top: 30px; width: 58px; height: 58px; }
+        .c22-rn { position: absolute; left: 112px; top: 30px; height: 58px; line-height: 58px; font-size: 34px; letter-spacing: -0.015em; white-space: nowrap; }
+        .c22-owner { color: #0969da; font-weight: 400; }
+        .c22-sep { color: #59636e; font-weight: 300; }
+        .c22-name { color: #0969da; font-weight: 700; }
+        .c22-chip { position: absolute; height: 60px; padding: 0 22px 0 16px; border-radius: 30px; background: #f6e3da; display: flex; align-items: center; gap: 12px; white-space: nowrap;
+          font-family: "C22 Mono", monospace; font-weight: 700; font-size: 30px; color: #c15f3c; }
+        .c22-chip svg { width: 32px; height: 32px; flex: none; }
+        .c22-meta { position: absolute; right: 32px; top: 122px; height: 60px; line-height: 60px; font-size: 30px; font-weight: 600; color: #59636e; white-space: nowrap; }
+        .c22-arrow { position: absolute; left: 490px; top: 440px; width: 100px; height: 262px; }
+        /* chat do Claude */
+        .c22-chat { position: absolute; left: 90px; top: 846px; width: 900px; height: 640px; border-radius: 28px; background: #faf9f5; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1); font-family: "C22 Inter", sans-serif; color: #1a1a1a; }
+        .c22-head { position: absolute; left: 34px; top: 26px; height: 60px; display: flex; align-items: center; gap: 16px; white-space: nowrap; }
+        .c22-logo { width: 54px; height: 54px; flex: none; }
+        .c22-brand { font-family: "C22 Serif", serif; font-weight: 600; font-size: 46px; letter-spacing: -0.02em; color: #1a1a1a; }
+        .c22-new { position: absolute; right: 34px; top: 36px; height: 44px; line-height: 44px; font-weight: 600; font-size: 30px; color: #8a8783; }
+        .c22-hsep { position: absolute; left: 0; top: 108px; width: 900px; height: 2px; background: #ece9e4; }
+        .c22-bub { position: absolute; left: 70px; top: 132px; width: 796px; height: 150px; border-radius: 24px; background: #ebe8e3; }
+        .c22-btxt { position: absolute; left: 28px; top: 88px; font-weight: 600; font-size: 34px; line-height: 44px; color: #1a1a1a; white-space: nowrap; }
+        .c22-reply { position: absolute; left: 34px; top: 300px; height: 70px; display: flex; align-items: center; gap: 18px; white-space: nowrap; }
+        .c22-rlogo { width: 48px; height: 48px; flex: none; }
+        .c22-rtxt { display: flex; align-items: center; gap: 12px; font-family: "C22 Serif", serif; font-weight: 500; font-size: 42px; color: #1a1a1a; }
+        .c22-rtxt svg { width: 40px; height: 40px; }
+        .c22-input { position: absolute; left: 34px; top: 402px; width: 832px; height: 204px; box-sizing: border-box; border-radius: 26px; background: #ffffff; border: 4px solid #e3e0dc; }
+        .c22-typed { position: absolute; left: 26px; top: 100px; height: 60px; line-height: 60px; font-weight: 600; font-size: 36px; color: #1a1a1a; white-space: nowrap; }
+        .c22-ph { position: absolute; left: 26px; top: 26px; height: 60px; line-height: 60px; font-weight: 500; font-size: 34px; color: #8a8783; white-space: nowrap; }
+        .c22-caret { display: inline-block; width: 4px; height: 40px; background: #d97757; vertical-align: -7px; margin-left: 3px; }
+        .c22-send { position: absolute; left: 734px; top: 112px; width: 70px; height: 70px; border-radius: 18px; background: #d97757; }
+        .c22-send svg { position: absolute; left: 17px; top: 17px; width: 36px; height: 36px; }
+        .c22-stamp { position: absolute; left: 540px; top: 1290px; height: 150px; padding: 0 40px; box-sizing: border-box; border: 10px solid #2da44e; border-radius: 16px; background: rgba(249, 248, 246, 0.94);
+          display: flex; align-items: center; white-space: nowrap; font-family: "C22 Inter", sans-serif; font-weight: 900; font-size: 104px; letter-spacing: 0.03em; color: #2da44e; line-height: 1; }
+      </style>
+      <div data-hf-id="hf-3c6i" id="root" data-composition-id="c22-instalar" data-width="1080" data-height="1920" data-duration="1.8">
+        <div data-hf-id="hf-0yq5" class="c22-bg"></div>
+        <div data-hf-id="hf-4lqi" class="c22-repo" id="c22-repo">
+          <svg data-hf-id="hf-7uvd" class="c22-gh" viewBox="0 0 24 24"><path data-hf-id="hf-vi4b" fill="#1a1a1a" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
+          <div data-hf-id="hf-hrsc" class="c22-rn"><span data-hf-id="hf-1tpq" class="c22-owner">Jakeschincariol</span><span data-hf-id="hf-ct8c" class="c22-sep"> / </span><span data-hf-id="hf-8668" class="c22-name">instagram-agent-skill</span></div>
+          <div data-hf-id="hf-be7k" class="c22-chip" id="c22-src" style="left: 32px; top: 122px"><svg data-hf-id="hf-ulu9" viewBox="0 0 24 24"><path data-hf-id="hf-b59u" d="M10 13.5a4.5 4.5 0 0 0 6.4.4l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.6 1.6" fill="none" stroke="#c15f3c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /><path data-hf-id="hf-et6b" d="M14 10.5a4.5 4.5 0 0 0-6.4-.4l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.6-1.6" fill="none" stroke="#c15f3c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>link copiado</div>
+          <div data-hf-id="hf-p5xa" class="c22-meta">★ 3.3k · MIT</div>
+        </div>
+        <svg data-hf-id="hf-i8qu" class="c22-arrow" viewBox="0 0 100 262"><path data-hf-id="hf-17jk" id="c22-shaft" d="M50 8 L50 236" fill="none" stroke="#d97757" stroke-width="16" stroke-linecap="round" /><path data-hf-id="hf-pts4" id="c22-tip" d="M14 196 L50 240 L86 196" fill="none" stroke="#d97757" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        <div data-hf-id="hf-31he" class="c22-chat" id="c22-chat">
+          <div data-hf-id="hf-4pnu" class="c22-head"><svg data-hf-id="hf-oqcx" class="c22-logo" viewBox="0 0 24 24"><path data-hf-id="hf-iua3" fill="#d97757" d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z" /></svg><span data-hf-id="hf-8j96" class="c22-brand">Claude</span></div>
+          <div data-hf-id="hf-9725" class="c22-new">Nova conversa</div>
+          <div data-hf-id="hf-7i6w" class="c22-hsep"></div>
+          <div data-hf-id="hf-v0kw" class="c22-bub" id="c22-bub">
+            <div data-hf-id="hf-lsym" class="c22-chip" style="left: 22px; top: 20px; background: #ffffff"><svg data-hf-id="hf-1tol" viewBox="0 0 24 24"><path data-hf-id="hf-t9h2" d="M10 13.5a4.5 4.5 0 0 0 6.4.4l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.6 1.6" fill="none" stroke="#c15f3c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /><path data-hf-id="hf-rlar" d="M14 10.5a4.5 4.5 0 0 0-6.4-.4l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.6-1.6" fill="none" stroke="#c15f3c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>Jakeschincariol/instagram-agent-skill</div>
+            <div data-hf-id="hf-f9yb" class="c22-btxt">Instale essa skill</div>
+          </div>
+          <div data-hf-id="hf-h1mq" class="c22-reply" id="c22-reply"><svg data-hf-id="hf-i6kg" class="c22-rlogo" id="c22-rlogo" viewBox="0 0 24 24"><use data-hf-id="hf-2ggg" href="#c22-dummy" /></svg><span data-hf-id="hf-e48b" class="c22-rtxt" id="c22-rtxt"><svg data-hf-id="hf-30lo" viewBox="0 0 24 24"><circle data-hf-id="hf-3pvp" cx="12" cy="12" r="11" fill="#2da44e" /><path data-hf-id="hf-lhgs" d="M6.5 12.5l3.8 3.8 7.4-8" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" /></svg>Skill instalada</span></div>
+          <div data-hf-id="hf-i4aq" class="c22-input" id="c22-input">
+            <div data-hf-id="hf-zcki" class="c22-ph" id="c22-ph">Como posso ajudar?</div>
+            <div data-hf-id="hf-r3o3" class="c22-chip" id="c22-paste" style="left: 22px; top: 24px"><svg data-hf-id="hf-2man" viewBox="0 0 24 24"><path data-hf-id="hf-tns3" d="M10 13.5a4.5 4.5 0 0 0 6.4.4l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.6 1.6" fill="none" stroke="#c15f3c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /><path data-hf-id="hf-r6zq" d="M14 10.5a4.5 4.5 0 0 0-6.4-.4l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.6-1.6" fill="none" stroke="#c15f3c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>Jakeschincariol/instagram-agent-skill</div>
+            <div data-hf-id="hf-ja48" class="c22-typed"><span data-hf-id="hf-t7k6" id="c22-t"></span><span data-hf-id="hf-ukvt" class="c22-caret" id="c22-caret"></span></div>
+            <div data-hf-id="hf-z4v6" class="c22-send" id="c22-send"><svg data-hf-id="hf-3t7q" viewBox="0 0 24 24"><path data-hf-id="hf-2heo" d="M12 19V5M5.5 11.5L12 5l6.5 6.5" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+          </div>
+        </div>
+        <div data-hf-id="hf-obp8" class="c22-chip" id="c22-fly" data-layout-allow-overlap="" style="left: 182px; top: 336px"><svg data-hf-id="hf-3ewp" viewBox="0 0 24 24"><path data-hf-id="hf-u234" d="M10 13.5a4.5 4.5 0 0 0 6.4.4l3-3a4.5 4.5 0 0 0-6.4-6.4l-1.6 1.6" fill="none" stroke="#c15f3c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /><path data-hf-id="hf-qsop" d="M14 10.5a4.5 4.5 0 0 0-6.4-.4l-3 3a4.5 4.5 0 0 0 6.4 6.4l1.6-1.6" fill="none" stroke="#c15f3c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>link copiado</div>
+        <div data-hf-id="hf-tj2e" class="c22-stamp" id="c22-stamp" data-layout-allow-overlap="">PRONTO</div>
+      </div>
+      <script>
+        (function () {
+          // tempos locais = global − 47,1167 · "jogar" 0,003 · "no seu" 0,323–0,483 · "Claude" 0,643 · "Pronto" 1,343
+          // logo do Claude também na resposta (cópia do cabeçalho)
+          var rl = document.getElementById("c22-rlogo"); rl.innerHTML = document.querySelector(".c22-logo").innerHTML;
+          var L1 = 228; // comprimento da haste
+          gsap.set("#c22-shaft", { strokeDasharray: L1, strokeDashoffset: L1 });
+          gsap.set("#c22-tip", { strokeDasharray: 110, strokeDashoffset: 110 });
+          gsap.set(["#c22-shaft", "#c22-tip"], { opacity: 0 });
+          gsap.set(["#c22-paste", "#c22-bub", "#c22-reply"], { opacity: 0 });
+          gsap.set("#c22-bub", { y: 30 });
+          gsap.set("#c22-rlogo", { transformOrigin: "50% 50%" });
+          gsap.set("#c22-rtxt", { opacity: 0, x: -10 });
+          gsap.set("#c22-fly", { opacity: 0 });
+          gsap.set("#c22-stamp", { xPercent: -50, opacity: 0, scale: 1.6, rotation: -10 });
+          var tl = gsap.timeline({ paused: true });
+          // cursor piscando no campo vazio
+          [[0.12, 0], [0.24, 1]].forEach(function (q) { tl.set("#c22-caret", { opacity: q[1] }, q[0]); });
+          // "jogar" (0,003): a seta se desenha e o link desce até o campo do chat
+          tl.set("#c22-shaft", { opacity: 1 }, 0.02); tl.set("#c22-tip", { opacity: 1 }, 0.15);
+          tl.to("#c22-shaft", { strokeDashoffset: 0, duration: 0.18, ease: "power2.out" }, 0.003);
+          tl.to("#c22-tip", { strokeDashoffset: 0, duration: 0.1, ease: "power2.out" }, 0.15);
+          tl.set("#c22-fly", { opacity: 1 }, 0.02);
+                    tl.to("#c22-fly", { x: -36, y: 936, duration: 0.3, ease: "power2.in" }, 0.03);
+          tl.set("#c22-fly", { opacity: 0 }, 0.33);
+          // colado no campo (com contorno terracota)
+          tl.set("#c22-ph", { opacity: 0 }, 0.33);
+          tl.to("#c22-paste", { opacity: 1, duration: 0.06 }, 0.33);
+          tl.fromTo("#c22-paste", { scale: 1.06 }, { scale: 1, duration: 0.12, ease: "power2.out", immediateRender: false }, 0.33);
+          tl.to("#c22-input", { borderColor: "#d97757", duration: 0.06 }, 0.33);
+          // "no seu" (0,323–0,483): "Instale essa skill" digitado
+          var W = "Instale essa skill";
+          for (var k = 1; k <= W.length; k++) tl.set("#c22-t", { textContent: W.slice(0, k) }, 0.36 + (k - 1) * 0.015);
+          // "Claude" (0,643): enviar
+          tl.to("#c22-send", { scale: 0.86, duration: 0.05 }, 0.643); tl.to("#c22-send", { scale: 1, duration: 0.07 }, 0.698);
+          tl.set("#c22-paste", { opacity: 0 }, 0.68); tl.set("#c22-t", { textContent: "" }, 0.68); tl.set("#c22-ph", { opacity: 1 }, 0.68);
+          tl.to("#c22-input", { borderColor: "#e3e0dc", duration: 0.08 }, 0.68);
+          tl.to("#c22-bub", { opacity: 1, y: 0, duration: 0.22, ease: "power2.out" }, 0.68);
+          // Claude pensando (logo girando) e responde
+          tl.to("#c22-reply", { opacity: 1, duration: 0.1 }, 0.86);
+          tl.to("#c22-rlogo", { rotation: 360, duration: 0.42, ease: "power1.inOut" }, 0.86);
+          tl.to("#c22-rtxt", { opacity: 1, x: 0, duration: 0.2, ease: "power2.out" }, 1.06);
+          // "Pronto" (1,343): carimbo verde PRONTO
+          tl.to("#c22-stamp", { opacity: 1, scale: 1, duration: 0.12, ease: "power3.in" }, 1.343);
+          tl.to("#c22-stamp", { x: 7, duration: 0.03 }, 1.463); tl.to("#c22-stamp", { x: -6, duration: 0.03 }, 1.498); tl.to("#c22-stamp", { x: 0, duration: 0.03 }, 1.533);
+          tl.to("#c22-chat", { y: 6, duration: 0.04 }, 1.463); tl.to("#c22-chat", { y: 0, duration: 0.08 }, 1.508);
+          tl.set({}, {}, 1.8);
+          window.__timelines["c22-instalar"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

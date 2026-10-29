@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C07-BILHOES (10,9833–13,0667) gráfico cheio: "E oferece até 1,3 bilhões de" → pilha de moedas-token crescendo + contador gigante 0 → 1.300.000.000 -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C07 Inter"; src: url("../assets/fonts/Inter.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+        @font-face { font-family: "C07 Mono"; src: url("../assets/fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; font-display: block; }
+
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .c07-bg {
+          position: absolute; left: 0; top: 0; width: 1080px; height: 1920px;
+          background-color: #efedeb;
+          background-image: linear-gradient(#e6e4e1 2px, transparent 2px), linear-gradient(90deg, #e6e4e1 2px, transparent 2px);
+          background-size: 90px 90px; background-position: -1px -1px;
+        }
+        .c07-shadow { position: absolute; left: 180px; top: 664px; width: 720px; height: 30px; border-radius: 50%; background: rgba(0, 0, 0, 0.07); }
+        .c07-coin { position: absolute; width: 84px; height: 84px; image-rendering: pixelated; }
+        .c07-spark { position: absolute; width: 18px; height: 18px; background: #e8b547; opacity: 0; }
+        .c07-chiprow { position: absolute; left: 0; top: 870px; width: 1080px; height: 64px; display: flex; align-items: center; justify-content: center; }
+        .c07-chip {
+          height: 64px; padding: 0 26px; border-radius: 14px; background: #f6e3da; white-space: nowrap;
+          font-family: "C07 Mono", monospace; font-weight: 800; font-size: 36px; line-height: 64px; letter-spacing: 0.1em; color: #b5532f;
+        }
+        .c07-numrow { position: absolute; left: 60px; top: 960px; width: 960px; height: 170px; display: flex; align-items: center; justify-content: center; }
+        .c07-num {
+          white-space: nowrap; font-family: "C07 Inter", sans-serif; font-weight: 900; font-size: 126px; line-height: 170px;
+          letter-spacing: -0.045em; color: #1a1a1a; font-variant-numeric: tabular-nums;
+        }
+        .c07-subrow { position: absolute; left: 0; top: 1146px; width: 1080px; height: 84px; display: flex; align-items: center; justify-content: center; }
+        .c07-sub {
+          white-space: nowrap; font-family: "C07 Mono", monospace; font-weight: 800; font-size: 64px; line-height: 84px; letter-spacing: 0.06em; color: #c15f3c;
+        }
+        .c07-brk { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; pointer-events: none; }
+      </style>
+      <div data-hf-id="hf-vnjg" id="root" data-composition-id="c07-bilhoes" data-width="1080" data-height="1920" data-duration="2.083333">
+        <div data-hf-id="hf-yzqk" class="c07-bg"></div>
+        <div data-hf-id="hf-p9vd" class="c07-shadow"></div>
+        <div data-hf-id="hf-mgak" id="c07-pile"></div>
+        <div data-hf-id="hf-a9ga" id="c07-sparks"></div>
+        <div data-hf-id="hf-fmzx" class="c07-chiprow"><div data-hf-id="hf-ufp8" class="c07-chip" id="c07-chip">TOKENS</div></div>
+        <div data-hf-id="hf-qiw5" class="c07-numrow"><div data-hf-id="hf-z62c" class="c07-num" id="c07-num">0</div></div>
+        <svg data-hf-id="hf-1ls3" class="c07-brk" viewBox="0 0 1080 1920"><path data-hf-id="hf-n69t" id="c07-line" d="M300 1240 L780 1240" fill="none" stroke="#d97757" stroke-width="8" stroke-linecap="round" /></svg>
+        <div data-hf-id="hf-0jqf" class="c07-subrow"><div data-hf-id="hf-hak5" class="c07-sub" id="c07-sub">1,3 BILHÃO</div></div>
+      </div>
+      <script>
+        (function () {
+          // ---------- moeda-token pixel 12×12 (dourada, borda escura, "T" no meio) ----------
+          var COIN = [
+            "...OOOOOO...",
+            ".OOGGGGGGOO.",
+            ".OGHHGGGGGO.",
+            "OGHGGGGGGGDO",
+            "OGHTTTTTTGDO",
+            "OGGGGTTGGGDO",
+            "OGGGGTTGGGDO",
+            "OGGGGTTGGGDO",
+            "OGGGGTTGGGDO",
+            ".OGGGGGGGDO.",
+            ".OODDDDDDOO.",
+            "...OOOOOO..."
+          ];
+          var CC = { O: "#b8862a", G: "#e8b547", H: "#f7d27a", D: "#d19a35", T: "#8a5f17" };
+          function drawCoin(cv) {
+            var g = cv.getContext("2d");
+            for (var r = 0; r < 12; r++) for (var c = 0; c < 12; c++) { var q = COIN[r][c]; if (q === ".") continue; g.fillStyle = CC[q]; g.fillRect(c, r, 1, 1); }
+          }
+          // pirâmide 8-7-6-5-4-3 (de baixo pra cima)
+          var pile = document.getElementById("c07-pile"), coins = [];
+          [8, 7, 6, 5, 4, 3].forEach(function (n, row) {
+            for (var j = 0; j < n; j++) {
+              var cv = document.createElement("canvas"); cv.width = 12; cv.height = 12; cv.className = "c07-coin";
+              cv.style.left = (540 - n * 42 + j * 84) + "px"; cv.style.top = (596 - row * 62) + "px";
+              drawCoin(cv); pile.appendChild(cv); coins.push({ el: cv, row: row });
+            }
+          });
+          var sparkHost = document.getElementById("c07-sparks");
+          var sparks = [[250, 300], [820, 330], [180, 520], [890, 540], [530, 220]].map(function (p) {
+            var s = document.createElement("div"); s.className = "c07-spark"; s.style.left = p[0] + "px"; s.style.top = p[1] + "px"; sparkHost.appendChild(s); return s;
+          });
+
+          function fmt(n) {
+            var s = String(Math.round(n)), out = "";
+            while (s.length > 3) { out = "." + s.slice(-3) + out; s = s.slice(0, -3); }
+            return s + out;
+          }
+
+          var line = document.getElementById("c07-line"), LL = 480;
+          line.setAttribute("stroke-dasharray", LL);
+
+          var tl = gsap.timeline({ paused: true });
+          // quadro 0: base da pilha (8 moedas), etiqueta TOKENS e o número 0
+          var rest = coins.filter(function (c) { return c.row > 0; });
+          rest.forEach(function (c) { gsap.set(c.el, { opacity: 0 }); });
+          gsap.set("#c07-sub", { opacity: 0 });
+          gsap.set(line, { attr: { "stroke-dashoffset": LL } });
+
+          // "oferece" (0,067): a pilha cresce em cascata, moeda por moeda
+          rest.forEach(function (c, i) {
+            var t = 0.067 + i * 0.027;
+            tl.fromTo(c.el, { opacity: 0, y: -60 }, { opacity: 1, y: 0, duration: 0.12, ease: "power2.in", immediateRender: false }, t);
+          });
+          tl.fromTo("#c07-chip", { scale: 1 }, { scale: 1.08, duration: 0.07, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 0.067);
+
+          // "até" (0,517) → "bilhões" (1,477): contador rola de 0 até 1.300.000.000 (desacelerando)
+          var N = 24, A = 0.517, B = 1.477;
+          for (var k = 1; k <= N; k++) {
+            var p = k / N, v = 1300000000 * (1 - Math.pow(1 - p, 3));
+            tl.set("#c07-num", { textContent: fmt(k === N ? 1300000000 : v) }, A + (B - A) * (k - 1) / (N - 1));
+          }
+          // "1,3" (0,757): a pilha dá um pulinho
+          coins.forEach(function (c) {
+            var t = 0.757 + c.row * 0.025;
+            tl.to(c.el, { y: -12, duration: 0.06, ease: "power2.out" }, t);
+            tl.to(c.el, { y: 0, duration: 0.07, ease: "power2.in" }, t + 0.06);
+          });
+          // "bilhões" (1,477): número bate, "1,3 BILHÃO" entra com traço, brilhos na pilha
+          tl.set("#c07-num", { color: "#1a1a1a" }, B);
+          tl.fromTo("#c07-num", { scale: 1 }, { scale: 1.1, duration: 0.07, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, B);
+          tl.to(line, { attr: { "stroke-dashoffset": 0 }, duration: 0.2, ease: "power1.inOut" }, B + 0.04);
+          tl.fromTo("#c07-sub", { opacity: 0, y: 10, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.25, ease: "power2.out", immediateRender: false }, B + 0.08);
+          sparks.forEach(function (el, j) {
+            var t0 = B + j * 0.04;
+            tl.set(el, { opacity: 1, scale: 0.4, rotation: 0 }, t0);
+            tl.to(el, { scale: 1.3, rotation: 45, duration: 0.14, ease: "power1.out" }, t0);
+            tl.to(el, { opacity: 0, duration: 0.1 }, t0 + 0.14);
+          });
+          coins.forEach(function (c, i) {
+            var t = B + 0.05 + (5 - c.row) * 0.03;
+            tl.to(c.el, { y: -16, duration: 0.07, ease: "power2.out" }, t);
+            tl.to(c.el, { y: 0, duration: 0.08, ease: "power2.in" }, t + 0.07);
+          });
+          // "de" (1,957): rótulo pulsa
+          tl.fromTo("#c07-sub", { scale: 1 }, { scale: 1.06, duration: 0.05, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 1.957);
+          tl.set({}, {}, 2.083333);
+          window.__timelines["c07-bilhoes"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

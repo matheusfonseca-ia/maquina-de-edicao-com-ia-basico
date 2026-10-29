@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C07-TERMINAL (9,25–10,2833) dividido: "para o Claude Code" → terminal do Claude Code com o modelo colado; "Claude": mascote pisca; "Code": procurando a TV na rede Wi-Fi → ✓ TV encontrada · 192.168.0.27 (IP ilustrativo) -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C07 Mono"; src: url("../assets/fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; font-display: block; }
+        @font-face { font-family: "C07 Inter"; src: url("../assets/fonts/Inter.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .c07-bg {
+          position: absolute; left: 0; top: 0; width: 1080px; height: 770px;
+          background-color: #efedeb;
+          background-image: linear-gradient(#e6e4e1 2px, transparent 2px), linear-gradient(90deg, #e6e4e1 2px, transparent 2px);
+          background-size: 90px 90px; background-position: -1px -1px;
+        }
+        .c07-term {
+          position: absolute; left: 90px; top: 255px; width: 900px; height: 445px; border-radius: 18px; overflow: hidden; background: #151513;
+          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18); font-family: "C07 Mono", monospace; color: #f2f0ec;
+        }
+        .c07-bar { position: absolute; left: 0; top: 0; width: 900px; height: 50px; background: #1d1d1a; border-bottom: 2px solid #262622; }
+        .c07-light { position: absolute; top: 17px; width: 16px; height: 16px; border-radius: 50%; }
+        .c07-title { position: absolute; left: 0; top: 0; width: 900px; height: 50px; line-height: 50px; text-align: center; font-size: 26px; color: #8a8783; }
+        .c07-mascot { position: absolute; left: 30px; top: 74px; width: 96px; height: 64px; }
+        .c07-px { position: absolute; }
+        .c07-head1 { position: absolute; left: 150px; top: 72px; font-size: 32px; line-height: 40px; font-weight: 800; white-space: pre; }
+        .c07-dim { color: #8a8783; font-weight: 400; }
+        .c07-head2 { position: absolute; left: 150px; top: 112px; font-size: 30px; line-height: 38px; color: #8a8783; white-space: pre; }
+        .c07-user { position: absolute; left: 30px; top: 170px; width: 840px; height: 74px; border-radius: 12px; background: #262522; }
+        .c07-ut { position: absolute; left: 22px; top: 0; font-size: 30px; line-height: 74px; white-space: pre; color: #f2f0ec; }
+        .c07-gt { color: #8a8783; }
+        .c07-code { color: #e8916f; font-weight: 800; }
+        .c07-line { position: absolute; left: 34px; font-size: 32px; line-height: 46px; white-space: pre; color: #f2f0ec; }
+        .c07-dot { color: #d97757; }
+        .c07-sub { color: #8a8783; }
+        .c07-ok { font-family: "C07 Inter", sans-serif; font-weight: 900; color: #3dbe5a; }
+        .c07-ip { color: #ffffff; font-weight: 800; }
+        .c07-wifi { position: absolute; left: 770px; top: 258px; width: 100px; height: 84px; }
+        .c07-wifi path { fill: none; stroke-linecap: round; stroke-width: 9; stroke: #3a3836; }
+        .c07-wifi circle { fill: #3a3836; }
+      </style>
+      <div id="root" data-composition-id="c07-terminal" data-width="1080" data-height="1920" data-duration="1.033333">
+        <div class="c07-bg"></div>
+        <div class="c07-term" id="c07-term">
+          <div class="c07-bar">
+            <div class="c07-light" style="left: 22px; background: #ff5f57"></div>
+            <div class="c07-light" style="left: 48px; background: #febc2e"></div>
+            <div class="c07-light" style="left: 74px; background: #28c840"></div>
+            <div class="c07-title">claude — ~/minha-tv</div>
+          </div>
+          <div class="c07-mascot" id="c07-mascot"></div>
+          <div class="c07-head1">Claude Code <span class="c07-dim">v2.1</span></div>
+          <div class="c07-head2">Opus 5.5 · ~/minha-tv</div>
+          <div class="c07-user"><div class="c07-ut"><span class="c07-gt">&gt; </span>Aqui o modelo da minha TV: <span class="c07-code">L55M8-A2</span></div></div>
+          <div class="c07-line" id="c07-l1" style="top: 268px"><span class="c07-dot" id="c07-b1">●</span> <span id="c07-l1t">Pensando</span><span id="c07-dots"></span></div>
+          <div class="c07-line" id="c07-l2" style="top: 322px"><span class="c07-sub">└ </span><span class="c07-ok">✓</span> TV encontrada · <span class="c07-ip">192.168.0.27</span></div>
+          <div class="c07-line" id="c07-l3" style="top: 376px"><span class="c07-sub">└ ADB por Wi-Fi · sem root</span></div>
+          <svg class="c07-wifi" id="c07-wifi" viewBox="0 0 100 84">
+            <path id="c07-w3" d="M8 34 A60 60 0 0 1 92 34" />
+            <path id="c07-w2" d="M22 50 A40 40 0 0 1 78 50" />
+            <path id="c07-w1" d="M36 64 A20 20 0 0 1 64 64" />
+            <circle id="c07-w0" cx="50" cy="76" r="7" />
+          </svg>
+        </div>
+      </div>
+      <script>
+        (function () {
+          // mascote (blocos de 8 px); olhos guardados pra piscar
+          var MASCOT = ["..BBBBBBBB..", "..BBBBBBBB..", "..BEBBBBEB..", "BBBEBBBBEBBB", "BBBBBBBBBBBB", "..BBBBBBBB..", "..B.B..B.B..", "..B.B..B.B.."];
+          var host = document.getElementById("c07-mascot"), eyes = [];
+          for (var r = 0; r < 8; r++) for (var c = 0; c < 12; c++) {
+            var ch = MASCOT[r][c]; if (ch === ".") continue;
+            var p = document.createElement("div"); p.className = "c07-px";
+            p.style.left = c * 8 + "px"; p.style.top = r * 8 + "px"; p.style.width = "8px"; p.style.height = "8px";
+            p.style.background = ch === "E" ? "#1a1a1a" : "#d97757"; host.appendChild(p);
+            if (ch === "E" && r === 2) eyes.push(p);
+          }
+
+          gsap.set(["#c07-l1", "#c07-l2", "#c07-l3"], { opacity: 0 });
+          var tl = gsap.timeline({ paused: true });
+          // "Claude" (0,08): o mascote pisca e dá um pulinho
+          eyes.forEach(function (e) { tl.set(e, { backgroundColor: "#d97757" }, 0.08); tl.set(e, { backgroundColor: "#1a1a1a" }, 0.2); });
+          tl.to("#c07-mascot", { y: -10, duration: 0.08, ease: "power2.out" }, 0.08);
+          tl.to("#c07-mascot", { y: 0, duration: 0.1, ease: "power2.in" }, 0.16);
+          // 0,30: "Pensando…"
+          tl.fromTo("#c07-l1", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.18, ease: "power2.out", immediateRender: false }, 0.3);
+          var dots = [".", "..", "…"];
+          for (var d = 0; d < 3; d++) tl.set("#c07-dots", { textContent: dots[d] }, 0.36 + d * 0.07);
+          // "Code" (0,60): procurando a TV na rede Wi-Fi + ondas do Wi-Fi acendendo
+          tl.set("#c07-l1t", { textContent: "Procurando a TV na rede Wi-Fi" }, 0.6);
+          tl.set("#c07-dots", { textContent: "…" }, 0.6);
+          tl.fromTo("#c07-l1", { x: -6 }, { x: 0, duration: 0.1, ease: "power2.out", immediateRender: false }, 0.6);
+          for (var b = 0; b < 4; b++) tl.set("#c07-b1", { opacity: b % 2 ? 1 : 0.35 }, 0.62 + b * 0.07);
+          ["#c07-w0", "#c07-w1", "#c07-w2", "#c07-w3"].forEach(function (id, i) {
+            tl.set(id, id === "#c07-w0" ? { fill: "#d97757" } : { stroke: "#d97757" }, 0.6 + i * 0.06);
+          });
+          // 0,82: ✓ TV encontrada · 192.168.0.27 (Wi-Fi fica verde)
+          tl.fromTo("#c07-l2", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.16, ease: "power2.out", immediateRender: false }, 0.82);
+          tl.set("#c07-b1", { opacity: 1, color: "#3dbe5a" }, 0.82);
+          tl.set("#c07-dots", { textContent: "" }, 0.82);
+          tl.set(["#c07-w1", "#c07-w2", "#c07-w3"], { stroke: "#3dbe5a" }, 0.82);
+          tl.set("#c07-w0", { fill: "#3dbe5a" }, 0.82);
+          tl.fromTo("#c07-wifi", { scale: 1 }, { scale: 1.12, duration: 0.07, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 0.82);
+          // 0,90: "└ ADB por Wi-Fi · sem root"
+          tl.fromTo("#c07-l3", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.12, ease: "power2.out", immediateRender: false }, 0.9);
+          tl.set({}, {}, 1.033333);
+          window.__timelines["c07-terminal"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

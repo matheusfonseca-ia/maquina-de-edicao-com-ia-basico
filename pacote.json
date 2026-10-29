@@ -1,0 +1,14 @@
+{
+  "id": "principal",
+  "nome": "Máquina de Edição — Oferta principal",
+  "requerMotor": false,
+  "skills": [
+    "maquina-de-edicao",
+    "reels-de-negocio",
+    "tela-dividida-explicativa",
+    "legenda-encaixada",
+    "telas-em-profundidade",
+    "cortes-de-video-longo",
+    "youtube-educativo"
+  ]
+}

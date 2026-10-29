@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C20-TRAVA (42,1333–44,9167) pixel cheia: "Você não trava na hora de criar conteúdo" → muro de tijolos BLOQUEIO CRIATIVO na frente do mascote, sol nascendo atrás; "não trava": investida e o muro explode; "na hora": DESTRAVADO; "criar": lâmpadas-ideia sobem e acendem (HUD IDEIAS 0 → 30); "conteúdo": letreiro CONTEÚDO DESBLOQUEADO -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C20 Pixel"; src: url("../assets/fonts/Silkscreen-Bold.ttf") format("truetype"); font-weight: 700; font-display: block; }
+        @font-face { font-family: "C20 PixelR"; src: url("../assets/fonts/Silkscreen-Regular.ttf") format("truetype"); font-weight: 400; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; background: #2b3a6b; }
+        .c20-world { position: absolute; left: -20px; top: -20px; width: 1120px; height: 1960px; }
+        .c20-cv { position: absolute; left: 0; top: 0; width: 1120px; height: 1960px; image-rendering: pixelated; }
+        .c20-stage { position: absolute; left: 20px; top: 20px; width: 1080px; height: 1920px; }
+        .c20-hud { position: absolute; height: 84px; padding: 0 28px; background: #1c1a18; border: 6px solid #3a3330; box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35); white-space: nowrap; display: flex; align-items: center; gap: 18px; font-family: "C20 Pixel", monospace; font-weight: 700; color: #f4efe6; line-height: 1; }
+        .c20-gold { color: #e8b547; }
+        .c20-small { font-family: "C20 PixelR", monospace; font-weight: 400; color: #d8d2c8; }
+        .c20-mortar { position: absolute; left: 140px; top: 900px; width: 800px; height: 600px; background: #4a3b38; }
+        .c20-brick { position: absolute; width: 96px; height: 46px; background: #b4553c; box-shadow: inset 0 6px 0 #cf6e52, inset 0 -6px 0 #8a3d2b; }
+        .c20-plq { position: absolute; top: 1056px; width: 310px; height: 288px; background: #1c1a18; border: 8px solid #3a3330; box-sizing: border-box; }
+        .c20-word { position: absolute; display: flex; justify-content: center; gap: 6px; white-space: nowrap; }
+        .c20-let { position: relative; display: inline-block; font-family: "C20 Pixel", monospace; font-weight: 700; font-size: 84px; line-height: 100px; color: #f4efe6; }
+        .c20-spark { position: absolute; width: 12px; height: 12px; background: #fff3c4; opacity: 0; }
+        .c20-tag { position: absolute; height: 72px; padding: 0 20px; background: #ffffff; border: 6px solid #1a1a1a; display: flex; align-items: center; gap: 14px; white-space: nowrap; font-family: "C20 Pixel", monospace; font-weight: 700; font-size: 36px; color: #1a1a1a; box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.25); }
+        .c20-sign { position: absolute; top: 400px; width: 900px; height: 252px; box-sizing: border-box; background: #1c1a18; border: 12px solid #3a3330; box-shadow: 0 10px 0 rgba(0, 0, 0, 0.35); }
+        .c20-sline { position: absolute; left: 0; width: 876px; text-align: center; font-family: "C20 Pixel", monospace; font-weight: 700; font-size: 70px; line-height: 84px; color: #e8b547; text-shadow: 6px 6px 0 #8f6418; white-space: nowrap; }
+      </style>
+      <div data-hf-id="hf-ji7s" id="root" data-composition-id="c20-trava" data-width="1080" data-height="1920" data-duration="2.783333">
+        <div data-hf-id="hf-mrsp" class="c20-world" id="c20-world" data-layout-allow-overflow="">
+          <canvas data-hf-id="hf-if65" class="c20-cv" id="c20-cv" width="280" height="490"></canvas>
+          <canvas data-hf-id="hf-zecl" class="c20-cv" id="c20-rays" width="280" height="490"></canvas>
+          <div data-hf-id="hf-enuc" class="c20-stage" id="c20-stage" data-layout-allow-overlap="">
+            <div data-hf-id="hf-fi5u" class="c20-mortar" id="c20-mortar"></div>
+          </div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          var seed = 2020; function rnd() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
+          // pintor com margem de 5 px (o mundo tem 20 px de sobra em volta pra tremer)
+          function painter(cv) { var g = cv.getContext("2d"); return function (x, y, w, h, c) { g.fillStyle = c; g.fillRect(x + 5, y + 5, w, h); }; }
+          var HZ = 240; // horizonte (y 960 na tela), atrás do muro
+          var P = painter(document.getElementById("c20-cv"));
+          (function drawWorld() { var x, y;
+            var SKY = ["#24305e", "#2b3a6b", "#3a4479", "#524e86", "#6f5890", "#93628f", "#b86e86", "#d9827a", "#ef9c6c", "#f7b86a"];
+            for (y = -5; y < HZ; y++) P(-5, y, 280, 1, SKY[Math.max(0, Math.min(9, Math.floor(y / 24)))]);
+            for (var s = 0; s < 60; s++) { var sx = Math.floor(rnd() * 270), sy = Math.floor(rnd() * 110), c = rnd() < 0.3 ? "#fff3c4" : "#d9d4f0"; P(sx, sy, 1, 1, c); if (rnd() < 0.12) { P(sx - 1, sy, 3, 1, c); P(sx, sy - 1, 1, 3, c); } }
+            function cloud(cx, cy, w, col) { P(cx, cy, w, 3, col); P(cx + 4, cy - 2, w - 10, 2, col); P(cx + 2, cy + 3, w - 4, 1, "#7a5a8c"); }
+            cloud(14, 150, 40, "#a56c8e"); cloud(212, 138, 44, "#a56c8e"); cloud(40, 186, 30, "#c97a84"); cloud(196, 192, 34, "#c97a84");
+            // sol nascendo no centro, atrás do muro
+            for (y = -34; y <= 0; y++) for (x = -34; x <= 34; x++) { var d = x * x + y * y; if (d <= 1156) P(135 + x, HZ + y, 1, 1, d > 900 ? "#ffb44a" : d > 576 ? "#ffcf5a" : "#ffe48a"); }
+            // montanhas dos lados
+            for (x = -5; x < 275; x++) { var h1 = Math.round(18 + 8 * Math.sin(x / 17) + 4 * Math.sin(x / 6)); if (Math.abs(x - 135) < 44) h1 = Math.min(h1, Math.round(Math.abs(x - 135) / 4)); P(x, HZ - h1, 1, h1, "#6a4f86"); P(x, HZ - h1, 1, 1, "#82629c"); }
+            // campo com faixas
+            for (y = HZ; y < 486; y++) { var band = Math.floor((y - HZ) / 18) % 2; for (x = -5; x < 275; x++) { var v = rnd(); P(x, y, 1, 1, v < 0.05 ? "#3a7c3d" : v < 0.09 ? "#76c169" : band ? "#53a352" : "#5cae59"); } }
+            P(-5, HZ, 280, 1, "#86d077");
+            // caminho de terra em perspectiva até o sol
+            for (y = HZ; y < 486; y++) { var t = (y - HZ) / (480 - HZ), hw = Math.round(6 + t * 74); for (x = 135 - hw; x <= 135 + hw; x++) { var v2 = rnd(); P(x, y, 1, 1, v2 < 0.06 ? "#b48f58" : v2 < 0.1 ? "#dcbc84" : "#caa66c"); } P(135 - hw - 1, y, 1, 1, "#9c7a46"); P(135 + hw + 1, y, 1, 1, "#9c7a46"); }
+            // pedrinhas e flores
+            for (var f = 0; f < 46; f++) { var fx = Math.floor(rnd() * 270), fy = HZ + 6 + Math.floor(rnd() * 230); if (Math.abs(fx - 135) < 10 + (fy - HZ) * 0.33) continue; P(fx, fy, 1, 1, rnd() < 0.5 ? "#f4efe6" : "#f6d27a"); }
+            [[40, 420], [228, 432], [20, 456], [250, 468]].forEach(function (q) { P(q[0], q[1], 5, 3, "#9a958c"); P(q[0] + 1, q[1] - 1, 3, 1, "#c4bfb5"); });
+          })();
+          // raios de sol (revelados quando o muro cai)
+          (function drawRays() { var R = painter(document.getElementById("c20-rays")); var g = document.getElementById("c20-rays").getContext("2d");
+            for (var y = 0; y < HZ; y++) for (var x = 0; x < 270; x++) { var a = Math.atan2(HZ - y, x - 135), k = Math.floor((a / Math.PI) * 14); if (k % 2 === 0 && (HZ - y) > 30) { var dd = Math.sqrt((x - 135) * (x - 135) + (HZ - y) * (HZ - y)); if (dd < 210) R(x, y, 1, 1, "rgba(255,226,150," + (0.26 * (1 - dd / 210)).toFixed(3) + ")"); } } })();
+
+          var root = document.getElementById("root"), stage = document.getElementById("c20-stage"), world = document.getElementById("c20-world");
+          var tl = gsap.timeline({ paused: true });
+          function box(host, x, y, w, h, bg, cls) { var d = document.createElement("div"); if (cls) d.className = cls; d.style.position = "absolute"; d.style.left = x + "px"; d.style.top = y + "px"; d.style.width = w + "px"; d.style.height = h + "px"; if (bg) d.style.background = bg; host.appendChild(d); return d; }
+          function blk(host, x, y, s, c) { return box(host, x * s, y * s, s, s, c); }
+          function layer(host) { var d = document.createElement("div"); d.style.position = "absolute"; d.style.left = "0"; d.style.top = "0"; host.appendChild(d); return d; }
+          function span(host, text, cls) { var e = document.createElement("span"); if (cls) e.className = cls; e.textContent = text; host.appendChild(e); return e; }
+          var ICONS = { check: ["......X", ".....XX", "X...XX.", "XX.XX..", ".XXX...", "..X...."] };
+          function icon(kind, s, color) { var M = ICONS[kind]; var el = document.createElement("span"); el.style.position = "relative"; el.style.display = "inline-block"; el.style.width = M[0].length * s + "px"; el.style.height = M.length * s + "px"; el.style.flex = "none";
+            for (var r = 0; r < M.length; r++) for (var c = 0; c < M[r].length; c++) if (M[r][c] === "X") blk(el, c, r, s, color); return el; }
+          function sparkBurst(host, cx, cy, n, t, dist, color) { for (var i = 0; i < n; i++) { var a = (i / n) * Math.PI * 2 + 0.3, sp = box(host, cx - 6, cy - 6, 12, 12, color || "#fff3c4", "c20-spark"); var d = dist * (0.7 + 0.3 * ((i * 7) % 5) / 4);
+            tl.set(sp, { opacity: 1, x: 0, y: 0 }, t); tl.to(sp, { x: Math.cos(a) * d, y: Math.sin(a) * d, duration: 0.22, ease: "power2.out" }, t); tl.to(sp, { opacity: 0, duration: 0.1 }, t + 0.16); } }
+          function poof(cx, cy, t, k) { var p = box(stage, cx, cy, 0, 0);
+            [[-34, -10, 32, "#efeae2"], [-8, -30, 36, "#f7f3ec"], [18, -8, 32, "#e2dcd2"], [-16, 10, 28, "#d8d2c8"], [12, 14, 24, "#efeae2"], [-40, 12, 16, "#cfc8bd"], [34, -26, 16, "#f7f3ec"]].forEach(function (q) { box(p, q[0] * k - q[2] * k / 2, q[1] * k - q[2] * k / 2, q[2] * k, q[2] * k, q[3]); });
+            gsap.set(p, { opacity: 0, scale: 0.35, transformOrigin: "0px 0px" }); tl.set(p, { opacity: 1 }, t); tl.to(p, { scale: 1.3, y: -30, duration: 0.34, ease: "power2.out" }, t); tl.to(p, { opacity: 0, duration: 0.14 }, t + 0.22); }
+
+          // local = global − 42,1333 · "Você" 0,307 · "não" 0,547 · "trava" 0,707 · "na hora" 1,267–1,347 · "criar" 1,667 · "conteúdo" 2,067
+          var IMP = 0.707, ICX = 540, ICY = 1200;
+
+          // ---------- muro de tijolos 800×600 (x 140–940, y 900–1500) ----------
+          var bricks = [];
+          for (var row = 0; row < 12; row++) { var off = row % 2 ? -50 : 0;
+            for (var col = 0; col < 9; col++) { var bx = 140 + off + col * 100, bw = 96, x0 = bx + 2; if (x0 < 142) { bw -= 142 - x0; x0 = 142; } if (x0 + bw > 938) bw = 938 - x0; if (bw <= 8) continue;
+              var br = box(stage, x0, 902 + row * 50, bw, 46, null, "c20-brick"); if (rnd() < 0.18) br.style.background = "#a64c35"; bricks.push({ el: br, cx: x0 + bw / 2, cy: 925 + row * 50 }); } }
+          // rachaduras (aparecem em "não")
+          var crack = box(stage, 0, 0, 0, 0); gsap.set(crack, { opacity: 0 });
+          [[0, -1], [1, -2], [1, -3], [2, -4], [2, -5], [3, -6], [-1, 1], [-2, 2], [-2, 3], [-3, 4], [-4, 5], [1, 1], [2, 1], [3, 2], [4, 2], [5, 3], [-1, -1], [-2, -1], [-3, -2], [-4, -2], [-5, -3], [-6, -3]].forEach(function (q) { box(crack, ICX + q[0] * 14 - 7, ICY + q[1] * 14 - 7, 14, 14, "#1f1513"); });
+          // placa BLOQUEIO / CRIATIVO (duas metades + letras soltas)
+          var plL = box(stage, 230, 1056, 310, 288, null, "c20-plq"), plR = box(stage, 540, 1056, 310, 288, null, "c20-plq");
+          plL.style.borderRightWidth = "0"; plR.style.borderLeftWidth = "0";
+          var letters = [];
+          [["BLOQUEIO", 1086], ["CRIATIVO", 1214]].forEach(function (w) { var word = w[0], n = word.length;
+            var line = box(stage, 230, w[1], 620, 100, null, "c20-word");
+            for (var i = 0; i < n; i++) { var L = document.createElement("span"); L.className = "c20-let"; L.setAttribute("data-layout-allow-overlap", ""); L.textContent = word[i]; line.appendChild(L); letters.push({ el: L, cx: 540 + (i - n / 2 + 0.5) * 62, cy: w[1] + 50 }); } });
+
+          // ---------- mascote (blocos de 20) ----------
+          var BODY = ["..BBBBBBBB..", "..BBBBBBBB..", "..BEBBBBEB..", "BBBEBBBBEBBB", "BBBBBBBBBBBB", "..BBBBBBBB..", "..B.B..B.B..", "..B.B..B.B.."], LEGB = ["..B.B..B.B..", ".B.B...B.B.."], S = 20;
+          var hero = box(stage, 420, 1560, 240, 160); var alive = layer(hero), legsA = layer(hero), legsB = layer(hero);
+          for (var r = 0; r < 8; r++) for (var c = 0; c < 12; c++) { var ch = BODY[r][c]; if (ch === ".") continue; blk(r < 6 ? alive : legsA, c, r, S, ch === "E" ? "#1a1a1a" : "#d97757"); }
+          for (var r2 = 0; r2 < 2; r2++) for (var c2 = 0; c2 < 12; c2++) if (LEGB[r2][c2] === "B") blk(legsB, c2, r2 + 6, S, "#d97757");
+          gsap.set(legsB, { opacity: 0 }); gsap.set(hero, { transformOrigin: "50% 100%" });
+          // sombra
+          var shadow = box(stage, 440, 1712, 200, 16, "rgba(40,60,30,0.35)"); stage.insertBefore(shadow, hero);
+          // linhas de velocidade
+          var speed = []; [[-70, 40, 16, 90], [270, 50, 16, 110], [-40, 110, 12, 70], [250, 120, 12, 80]].forEach(function (q) { var sp = box(hero, q[0], q[1], q[2], q[3], "#fff8e6"); gsap.set(sp, { opacity: 0 }); speed.push(sp); });
+
+          // ---------- HUD ----------
+          var h1 = box(root, 0, 196, 0, 0, null, "c20-hud"); h1.style.width = ""; h1.style.height = ""; h1.style.left = "50%"; h1.style.fontSize = "56px"; gsap.set(h1, { xPercent: -50 });
+          span(h1, "IDEIAS", "c20-small"); var num = span(h1, "0", "c20-gold");
+
+          // ---------- "Você" (0,307): mascote toma impulso ----------
+          tl.to(hero, { y: 10, scaleY: 0.82, scaleX: 1.1, duration: 0.14, ease: "power2.out" }, 0.307);
+          tl.to(hero, { x: -10, duration: 0.04 }, 0.38); tl.to(hero, { x: 8, duration: 0.04 }, 0.42); tl.to(hero, { x: 0, duration: 0.04 }, 0.46);
+          poof(470, 1712, 0.32, 0.55); poof(610, 1712, 0.36, 0.5);
+          // ---------- "não" (0,547): investida contra o muro ----------
+          tl.to(hero, { scaleY: 1, scaleX: 1, duration: 0.06 }, 0.547);
+          tl.to(hero, { y: -400, duration: 0.16, ease: "power2.in" }, 0.547);
+          tl.to(shadow, { opacity: 0, duration: 0.1 }, 0.547);
+          tl.to(speed, { opacity: 1, duration: 0.03 }, 0.56); tl.to(speed, { opacity: 0, duration: 0.05 }, IMP);
+          for (var tr = 0.55; tr < IMP; tr += 0.05) { var odd = Math.round((tr - 0.55) / 0.05) % 2; tl.set(legsA, { opacity: odd ? 0 : 1 }, tr); tl.set(legsB, { opacity: odd ? 1 : 0 }, tr); }
+          tl.set(legsA, { opacity: 1 }, IMP); tl.set(legsB, { opacity: 0 }, IMP);
+          tl.set(crack, { opacity: 1 }, 0.6);
+          tl.to(bricks.map(function (b) { return b.el; }), { x: 3, duration: 0.03 }, 0.62); tl.to(bricks.map(function (b) { return b.el; }), { x: 0, duration: 0.03 }, 0.65);
+
+          // ---------- "trava" (0,707): o muro explode ----------
+          tl.set(crack, { opacity: 0 }, IMP); tl.set("#c20-mortar", { opacity: 0 }, IMP);
+          function fly(el, cx, cy, spread) { var dx = cx - ICX, dy = cy - ICY, len = Math.sqrt(dx * dx + dy * dy) || 1, k = (spread + rnd() * 240) / len;
+            var ox = dx * k, oy = dy * k - 160 - rnd() * 200, rot = (rnd() - 0.5) * 540;
+            tl.to(el, { x: ox, y: oy, rotation: rot * 0.5, duration: 0.26, ease: "power2.out" }, IMP);
+            tl.to(el, { x: ox * 1.35, y: oy + 900 + rnd() * 300, rotation: rot, duration: 0.5, ease: "power2.in" }, IMP + 0.26);
+            tl.to(el, { opacity: 0, duration: 0.1 }, IMP + 0.66); }
+          bricks.forEach(function (b) { fly(b.el, b.cx, b.cy, 300); });
+          letters.forEach(function (L) { fly(L.el, L.cx, L.cy, 260); });
+          tl.to(plL, { x: -320, y: -260, rotation: -50, duration: 0.26, ease: "power2.out" }, IMP); tl.to(plL, { x: -480, y: 700, rotation: -110, duration: 0.5, ease: "power2.in" }, IMP + 0.26);
+          tl.to(plR, { x: 320, y: -240, rotation: 46, duration: 0.26, ease: "power2.out" }, IMP); tl.to(plR, { x: 480, y: 720, rotation: 104, duration: 0.5, ease: "power2.in" }, IMP + 0.26);
+          tl.to([plL, plR], { opacity: 0, duration: 0.1 }, IMP + 0.66);
+          // anel branco de impacto + faíscas + poeira
+          var ring = box(stage, ICX - 120, ICY - 120, 240, 240); ring.style.border = "16px solid #fff8e6"; ring.style.boxSizing = "border-box"; gsap.set(ring, { opacity: 0, scale: 0.3 });
+          tl.set(ring, { opacity: 1 }, IMP); tl.to(ring, { scale: 2.6, duration: 0.24, ease: "power2.out" }, IMP); tl.to(ring, { opacity: 0, duration: 0.1 }, IMP + 0.16);
+          sparkBurst(stage, ICX, ICY, 18, IMP, 380, "#fff3c4"); sparkBurst(stage, ICX, ICY, 12, IMP + 0.04, 260, "#e8b547");
+          poof(300, 1300, IMP + 0.02, 1.2); poof(780, 1260, IMP + 0.04, 1.1); poof(440, 1440, IMP + 0.06, 1.0); poof(660, 1450, IMP + 0.05, 1.0); poof(540, 1000, IMP + 0.03, 0.9);
+          // tremida da tela
+          [[8, -14, 0], [-12, 10, 0.03], [10, -6, 0.06], [-6, 6, 0.09], [3, -3, 0.12], [0, 0, 0.15]].forEach(function (q) { tl.to(world, { x: q[0], y: q[1], duration: 0.03 }, IMP + q[2]); });
+          // luz do sol aparece atrás do muro
+          gsap.set("#c20-rays", { opacity: 0 }); tl.to("#c20-rays", { opacity: 1, duration: 0.3 }, IMP + 0.05);
+          // mascote ricocheteia e pousa onde era o muro (pés em y 1500)
+          tl.to(hero, { y: -470, duration: 0.12, ease: "power2.out" }, IMP);
+          tl.to(hero, { y: -220, duration: 0.2, ease: "power2.in" }, IMP + 0.12);
+          tl.to(hero, { scaleY: 0.8, scaleX: 1.12, duration: 0.05 }, IMP + 0.32); tl.to(hero, { scaleY: 1, scaleX: 1, duration: 0.08 }, IMP + 0.37);
+          var shadow2 = box(stage, 440, 1492, 200, 16, "rgba(40,60,30,0.35)"); stage.insertBefore(shadow2, hero); gsap.set(shadow2, { opacity: 0 }); tl.to(shadow2, { opacity: 1, duration: 0.06 }, IMP + 0.3);
+
+          // ---------- "na hora" (1,267–1,347): etiqueta DESTRAVADO ----------
+          var tag = document.createElement("div"); tag.className = "c20-tag"; tag.appendChild(icon("check", 6, "#2a8a3e")); span(tag, "DESTRAVADO"); tag.style.left = "540px"; tag.style.top = "1196px"; stage.appendChild(tag);
+          gsap.set(tag, { xPercent: -50, opacity: 0, scale: 0.6, transformOrigin: "50% 100%" });
+          tl.to(tag, { opacity: 1, scale: 1, duration: 0.14, ease: "back.out(2)" }, 1.29);
+          tl.to(hero, { y: -270, duration: 0.09, ease: "power2.out" }, 1.267); tl.to(hero, { y: -220, duration: 0.1, ease: "power2.in" }, 1.357);
+
+          // ---------- "criar" (1,667): lâmpadas-ideia sobem e acendem ----------
+          var BULB = ["..YYYY..", ".YWYYYY.", "YWYYYYYY", "YWYYYYYY", "YYYYYYYY", ".YYYYYY.", "..YYYY..", "..GGGG..", "..gggg..", "..GGGG..", "...gg..."];
+          var OFF = { Y: "#8d8a99", W: "#b9b6c6", G: "#6b6870", g: "#4c4a52" }, ON = { Y: "#ffd84a", W: "#fff6c8", G: "#a39e97", g: "#77726c" };
+          function bulb(cx, cy, s) { var b = box(stage, cx - 4 * s, cy - 5.5 * s, 8 * s, 11 * s), off = layer(b), on = layer(b), rays = layer(b);
+            for (var rr = 0; rr < 11; rr++) for (var cc = 0; cc < 8; cc++) { var k = BULB[rr][cc]; if (k === ".") continue; blk(off, cc, rr, s, OFF[k]); blk(on, cc, rr, s, ON[k]); }
+            [[-2.5, 2.6, 1.5, 0.8], [9, 2.6, 1.5, 0.8], [3.5, -2.6, 1, 1.6], [-1.6, -1.2, 1, 1], [8.6, -1.2, 1, 1]].forEach(function (q) { box(rays, q[0] * s, q[1] * s, q[2] * s, q[3] * s, "#fff3c4"); });
+            gsap.set(on, { opacity: 0 }); gsap.set(rays, { opacity: 0 }); return { el: b, on: on, rays: rays }; }
+          var SPOTS = [[540, 990], [380, 1090], [700, 1090], [290, 930], [790, 930], [220, 1180], [860, 1180], [150, 1010], [930, 1010], [300, 1330], [780, 1330], [140, 1380], [940, 1380]];
+          SPOTS.forEach(function (p, i) { var s = i === 0 ? 12 : 10, B = bulb(p[0], p[1], s), t0 = 1.667 + i * 0.03;
+            gsap.set(B.el, { opacity: 0, y: 180 });
+            tl.to(B.el, { opacity: 1, y: 0, duration: 0.24, ease: "back.out(1.6)" }, t0);
+            var tOn = t0 + 0.2; tl.set(B.on, { opacity: 1 }, tOn); tl.set(B.rays, { opacity: 1 }, tOn);
+            tl.to(B.el, { scale: 1.18, duration: 0.06, ease: "power2.out" }, tOn); tl.to(B.el, { scale: 1, duration: 0.1, ease: "power2.in" }, tOn + 0.06);
+            tl.set(num, { textContent: String(Math.round(30 * (i + 1) / SPOTS.length)) }, tOn);
+            for (var tf = tOn + 0.16 + (i % 3) * 0.05; tf < 2.7; tf += 0.36) { tl.to(B.el, { y: -10, duration: 0.18, ease: "sine.inOut" }, tf); tl.to(B.el, { y: 0, duration: 0.18, ease: "sine.inOut" }, tf + 0.18); }
+            for (var tb2 = tOn + 0.25; tb2 < 2.75; tb2 += 0.24) { tl.set(B.rays, { opacity: 0 }, tb2); tl.set(B.rays, { opacity: 1 }, tb2 + 0.12); } });
+          tl.to(h1, { scale: 1.12, duration: 0.07 }, 1.85); tl.to(h1, { scale: 1, duration: 0.1 }, 1.92);
+
+          // ---------- "conteúdo" (2,067): letreiro CONTEÚDO DESBLOQUEADO ----------
+          var T = 2.067; tl.set(h1, { borderColor: "#e8b547" }, T); tl.to(h1, { scale: 1.14, duration: 0.07 }, T); tl.to(h1, { scale: 1, duration: 0.12 }, T + 0.07);
+          var sign = box(root, 540, 400, 900, 252, null, "c20-sign"); gsap.set(sign, { xPercent: -50 }); var bulbs = [[], []];
+          for (var bx2 = 0; bx2 < 21; bx2++) { bulbs[bx2 % 2].push(box(sign, 8 + bx2 * 41, 8, 14, 14, "#e8b547")); bulbs[(bx2 + 1) % 2].push(box(sign, 8 + bx2 * 41, 206, 14, 14, "#e8b547")); }
+          for (var by = 1; by < 5; by++) { bulbs[by % 2].push(box(sign, 8, 8 + by * 40, 14, 14, "#e8b547")); bulbs[(by + 1) % 2].push(box(sign, 854, 8 + by * 40, 14, 14, "#e8b547")); }
+          var l1 = box(sign, 0, 26, 876, 84, null, "c20-sline"); l1.textContent = "CONTEÚDO"; var l2 = box(sign, 0, 112, 876, 84, null, "c20-sline"); l2.textContent = "DESBLOQUEADO";
+          gsap.set(sign, { opacity: 0, scale: 1.25 }); tl.to(sign, { opacity: 1, scale: 1, duration: 0.12, ease: "power3.out" }, T);
+          tl.to(sign, { x: 8, duration: 0.03 }, T + 0.12); tl.to(sign, { x: -6, duration: 0.03 }, T + 0.15); tl.to(sign, { x: 0, duration: 0.03 }, T + 0.18);
+          for (var tbl = T; tbl < 2.78; tbl += 0.1) { var on2 = Math.round((tbl - T) / 0.1) % 2; bulbs[0].forEach(function (b) { tl.set(b, { backgroundColor: on2 ? "#5a4a2a" : "#fff3c4" }, tbl); }); bulbs[1].forEach(function (b) { tl.set(b, { backgroundColor: on2 ? "#fff3c4" : "#5a4a2a" }, tbl); }); }
+          sparkBurst(root, 540, 526, 16, T, 460, "#e8b547");
+          // mascote comemora
+          [T + 0.02, T + 0.3].forEach(function (t) { tl.to(hero, { y: -270, duration: 0.1, ease: "power2.out" }, t); tl.to(hero, { y: -220, duration: 0.11, ease: "power2.in" }, t + 0.1); });
+
+          root.querySelectorAll(".c20-stage div, .c20-sign div").forEach(function (el) { el.setAttribute("data-layout-allow-overlap", ""); el.setAttribute("data-layout-allow-occlusion", ""); });
+          tl.set({}, {}, 2.783333);
+          window.__timelines["c20-trava"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

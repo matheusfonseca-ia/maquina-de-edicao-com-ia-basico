@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- c18-noventa (cena pixel em tela cheia; mundo noturno comum a c02/c14/c18) -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C18 Pixel"; src: url("../assets/fonts/Silkscreen-Bold.ttf") format("truetype"); font-weight: 700; font-display: block; }
+        @font-face { font-family: "C18 PixelR"; src: url("../assets/fonts/Silkscreen-Regular.ttf") format("truetype"); font-weight: 400; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; background: #2a1f4a; }
+        .c18-cv { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; image-rendering: pixelated; }
+        .c18-stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+        .c18-hud {
+          position: absolute; height: 84px; padding: 0 28px; background: #1c1a18; border: 6px solid #3a3330;
+          box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35); white-space: nowrap; display: flex; align-items: center; gap: 18px;
+          font-family: "C18 Pixel", monospace; font-weight: 700; color: #f4efe6; line-height: 1;
+        }
+        .c18-gold { color: #e8b547; }
+        .c18-green { color: #5fd47a; }
+        .c18-red { color: #ff6b5e; }
+        .c18-small { font-family: "C18 PixelR", monospace; font-weight: 400; color: #d8d2c8; }
+        .c18-old { font-family: "C18 PixelR", monospace; font-weight: 400; color: #a39e97; text-decoration: line-through; text-decoration-color: #ff6b5e; text-decoration-thickness: 6px; }
+        .c18-tag {
+          position: absolute; height: 72px; padding: 0 20px; background: #ffffff; border: 6px solid #1a1a1a;
+          display: flex; align-items: center; gap: 14px; white-space: nowrap;
+          font-family: "C18 Pixel", monospace; font-weight: 700; font-size: 36px; color: #1a1a1a; box-shadow: 6px 6px 0 rgba(0,0,0,0.25);
+        }
+        .c18-spark { position: absolute; width: 12px; height: 12px; background: #fff3c4; opacity: 0; }
+        .c18-coin { position: absolute; background-size: 100% 100%; image-rendering: pixelated; }
+        .c18-sign {
+          position: absolute; top: 436px; width: 760px; height: 240px; background: #1c1a18; border: 12px solid #3a3330;
+          box-shadow: 0 10px 0 rgba(0,0,0,0.35);
+        }
+        .c18-vac { position: absolute; background: #6e6a66; box-shadow: inset 0 6px 0 #a39e97, inset 0 -6px 0 #45413d; }
+      </style>
+      <div data-hf-id="hf-1na3" id="root" data-composition-id="c18-noventa" data-width="1080" data-height="1920" data-duration="1.783333">
+        <canvas data-hf-id="hf-awf5" class="c18-cv" id="c18-cv" width="270" height="480"></canvas>
+        <div data-hf-id="hf-tuhs" class="c18-stage" id="c18-stage"></div>
+      </div>
+      <script>
+        (function () {
+          var seed = 1818;
+          function rnd() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
+          function painter(cv) { var g = cv.getContext("2d"); return function (x, y, w, h, c) { g.fillStyle = c; g.fillRect(x, y, w, h); }; }
+          // ---------- mundo noturno (céu roxo, lua, colinas, grama); 1 px do canvas = 4 px ----------
+          var GY = 215; // horizonte no canvas (y 860 na tela)
+          function drawNight(cv) {
+            var px = painter(cv);
+            var SKY = ["#1d1636", "#231a40", "#2a1f4a", "#322455", "#3a2a60", "#43306b", "#4d3775", "#573e7e"];
+            for (var y = 0; y < GY; y++) px(0, y, 270, 1, SKY[Math.min(7, Math.floor(y / 27))]);
+            for (var i = 0; i < 80; i++) {
+              var sx = Math.floor(rnd() * 270), sy = Math.floor(rnd() * 175), c = rnd() < 0.3 ? "#fff3c4" : "#e9e4f5";
+              px(sx, sy, 1, 1, c);
+              if (rnd() < 0.14) { px(sx - 1, sy, 3, 1, c); px(sx, sy - 1, 1, 3, c); }
+            }
+            function cloud(x, y, w) { px(x, y, w, 3, "#5d4a8a"); px(x + 4, y - 2, w - 10, 2, "#5d4a8a"); px(x + 2, y + 3, w - 4, 1, "#4a3a75"); }
+            cloud(12, 62, 34); cloud(176, 104, 42); cloud(96, 128, 26);
+            // lua
+            for (var yy = -13; yy <= 13; yy++) for (var xx = -13; xx <= 13; xx++) {
+              var d = xx * xx + yy * yy;
+              if (d <= 169 && d > 121) px(232 + xx, 34 + yy, 1, 1, "#4f3d80");
+              else if (d <= 121) px(232 + xx, 34 + yy, 1, 1, d > 90 ? "#e2d6ae" : "#f4ecd0");
+            }
+            px(227, 30, 3, 3, "#ddd0a6"); px(236, 37, 2, 2, "#ddd0a6"); px(230, 40, 2, 2, "#ddd0a6");
+            // colinas
+            for (var x = 0; x < 270; x++) {
+              var h1 = Math.round(24 + 8 * Math.sin(x / 21) + 5 * Math.sin(x / 8));
+              px(x, GY - h1, 1, h1, "#3b2c62");
+              var h2 = Math.round(11 + 5 * Math.sin(x / 14 + 1));
+              px(x, GY - h2, 1, h2, "#2f6e45"); px(x, GY - h2, 1, 1, "#4b9a5d");
+            }
+            // grama em faixas
+            for (var gy = GY; gy < 480; gy++) {
+              var band = Math.floor((gy - GY) / 22) % 2;
+              for (var gx = 0; gx < 270; gx++) {
+                var v = rnd();
+                px(gx, gy, 1, 1, v < 0.05 ? "#3a7c3d" : v < 0.09 ? "#76c169" : band ? "#53a352" : "#5cae59");
+              }
+            }
+            px(0, GY, 270, 1, "#86d077");
+            // florzinhas
+            for (var f = 0; f < 40; f++) { var fx = Math.floor(rnd() * 268), fy = GY + 6 + Math.floor(rnd() * (480 - GY - 8)); px(fx, fy, 1, 1, rnd() < 0.5 ? "#f4efe6" : "#f6d27a"); }
+            return px;
+          }
+          // ---------- mascote em blocos (sprite 22×13; corpo em col 3, linha 4) ----------
+          var BODY = ["..BBBBBBBB..", "..BBBBBBBB..", "..BEBBBBEB..", "BBBEBBBBEBBB", "BBBBBBBBBBBB", "..BBBBBBBB..", "..B.B..B.B..", "..B.B..B.B.."];
+          var LEGB = ["..B.B..B.B..", ".B.B...B.B.."];
+          function blk(host, x, y, s, c) {
+            var p = document.createElement("div");
+            p.style.position = "absolute"; p.style.left = x * s + "px"; p.style.top = y * s + "px";
+            p.style.width = s + "px"; p.style.height = s + "px"; p.style.background = c; host.appendChild(p); return p;
+          }
+          function layer(host) { var d = document.createElement("div"); d.style.position = "absolute"; d.style.left = "0"; d.style.top = "0"; host.appendChild(d); return d; }
+          function agent(color, s, o) {
+            o = o || {};
+            var el = document.createElement("div"); el.style.position = "absolute"; el.style.width = 22 * s + "px"; el.style.height = 13 * s + "px";
+            var alive = layer(el), legsA = layer(el), legsB = layer(el), extra = layer(el);
+            for (var r = 0; r < 8; r++) for (var c = 0; c < 12; c++) {
+              var ch = BODY[r][c]; if (ch === ".") continue;
+              blk(r < 6 ? alive : legsA, c + 3, r + 4, s, ch === "E" ? "#1a1a1a" : color);
+            }
+            if (o.run) { for (var r2 = 0; r2 < 2; r2++) for (var c2 = 0; c2 < 12; c2++) if (LEGB[r2][c2] === "B") blk(legsB, c2 + 3, r2 + 10, s, color); }
+            legsB.style.opacity = "0";
+            return { el: el, alive: alive, legsA: legsA, legsB: legsB, extra: extra };
+          }
+          // ícones pixel (a fonte pixel não tem ✓ ✕ ∞ ▶ →)
+          var ICONS = {
+            check: ["......X", ".....XX", "X...XX.", "XX.XX..", ".XXX...", "..X...."],
+            x: ["X....X", "XX..XX", ".XXXX.", ".XXXX.", "XX..XX", "X....X"],
+            inf: [".XXX...XXX.", "X...X.X...X", "X....X....X", "X...X.X...X", ".XXX...XXX."],
+            play: ["X....", "XX...", "XXX..", "XXXX.", "XXX..", "XX...", "X...."],
+            arrow: ["....X...", "....XX..", "XXXXXXX.", "XXXXXXXX", "XXXXXXX.", "....XX..", "....X..."]
+          };
+          function icon(kind, s, color) {
+            var M = ICONS[kind];
+            var el = document.createElement("span"); el.style.position = "relative"; el.style.display = "inline-block";
+            el.style.width = M[0].length * s + "px"; el.style.height = M.length * s + "px"; el.style.flex = "none";
+            for (var r = 0; r < M.length; r++) for (var c = 0; c < M[r].length; c++) if (M[r][c] === "X") blk(el, c, r, s, color);
+            return el;
+          }
+          function hud(host, left, top, size) {
+            var h = document.createElement("div"); h.className = "c18-hud";
+            h.style.left = left + "px"; h.style.top = top + "px"; h.style.fontSize = size + "px"; host.appendChild(h); return h;
+          }
+          function span(host, text, cls) { var e = document.createElement("span"); if (cls) e.className = cls; e.textContent = text; host.appendChild(e); return e; }
+          function center(el) { el.style.left = "50%"; gsap.set(el, { xPercent: -50 }); }
+          function box(host, x, y, w, h, bg, cls) {
+            var d = document.createElement("div"); if (cls) d.className = cls; d.style.position = "absolute";
+            d.style.left = x + "px"; d.style.top = y + "px"; d.style.width = w + "px"; d.style.height = h + "px"; if (bg) d.style.background = bg; host.appendChild(d); return d;
+          }
+          // moeda-token pixel 8×8 (borda #B8862A, "T" no meio)
+          var COIN = ["..OOOO..", ".OHYYYO.", "OHDDDDYO", "OYYDDYYO", "OYYDDYYO", "OYYDDYSO", ".OSYYSO.", "..OOOO.."];
+          var COINC = { O: "#B8862A", Y: "#E8B547", H: "#F6D27A", D: "#8f6418", S: "#c99a2e" };
+          var coinURL = (function () {
+            var cv = document.createElement("canvas"); cv.width = 8; cv.height = 8; var g = cv.getContext("2d");
+            for (var r = 0; r < 8; r++) for (var c = 0; c < 8; c++) { var ch = COIN[r][c]; if (ch === ".") continue; g.fillStyle = COINC[ch]; g.fillRect(c, r, 1, 1); }
+            return cv.toDataURL();
+          })();
+          function coin(host, x, y, size) {
+            var d = box(host, x, y, size, size, null, "c18-coin"); d.style.backgroundImage = "url(" + coinURL + ")"; return d;
+          }
+          function sparkBurst(host, cx, cy, n, t, dist, color) {
+            for (var i = 0; i < n; i++) {
+              var a = (i / n) * Math.PI * 2 + 0.3, sp = box(host, cx - 6, cy - 6, 12, 12, color || "#fff3c4", "c18-spark");
+              var d = dist * (0.7 + 0.3 * ((i * 7) % 5) / 4);
+              tl.set(sp, { opacity: 1, x: 0, y: 0 }, t);
+              tl.to(sp, { x: Math.cos(a) * d, y: Math.sin(a) * d, duration: 0.22, ease: "power2.out" }, t);
+              tl.to(sp, { opacity: 0, duration: 0.1 }, t + 0.16);
+            }
+          }
+
+          var px = drawNight(document.getElementById("c18-cv"));
+          var root = document.getElementById("root");
+          var stage = document.getElementById("c18-stage");
+          var tl = gsap.timeline({ paused: true });
+          var COLORS = ["#4A90D9", "#3DBE5A", "#8A4AD9", "#D94A8C", "#D9B84A", "#4AD9D0"];
+          // local = global − 29,6333 · "em" 0,027 · "até" 0,267 · "90%" 0,587
+          // "%" e letreiro desenhados em blocos (o "%" da Silkscreen lê como "Z")
+          var GL = {
+            "-": [".....", ".....", ".....", "XXXXX", ".....", ".....", "....."],
+            "9": [".XXX.", "X...X", "X...X", ".XXXX", "....X", "...X.", ".XX.."],
+            "0": [".XXX.", "X...X", "X...X", "X...X", "X...X", "X...X", ".XXX."],
+            "%": ["XX....X", "XX...X.", "....X..", "...X...", "..X....", ".X...XX", "X....XX"]
+          };
+          ICONS.pct = GL["%"];
+          function pct(host, s, color) { var i = icon("pct", s, color); host.appendChild(i); return i; }
+          // aspirador: tanque nas costas do mascote
+          var tank = box(stage, 968, 1318, 100, 140, "#4f4b47"); tank.style.border = "6px solid #2a2826"; tank.style.boxSizing = "border-box";
+          var win = box(tank, 20, 18, 48, 92, "#2a2826");
+          var fill = box(win, 0, 0, 48, 92, "#E8B547"); gsap.set(fill, { scaleY: 0.12, transformOrigin: "50% 100%" });
+          // mascote (blocos de 20; pés em y 1600)
+          var hero = agent("#D97757", 20);
+          hero.el.style.left = "740px"; hero.el.style.top = (1600 - 12 * 20) + "px"; stage.appendChild(hero.el);
+          // mangueira + bocal virado pra montanha
+          box(stage, 748, 1508, 70, 28, null, "c18-vac");
+          var mouth = box(stage, 708, 1452, 44, 148, null, "c18-vac");
+          mouth.style.background = "#5e5a56"; box(mouth, 0, 14, 12, 120, "#2a2826");
+          var NX = 718, NY = 1526;
+          // montanha de moedas-token (11 fileiras, 66 moedas; sobram 7 = ~10%)
+          var CS = 64, rows = [];
+          for (var r = 10; r >= 0; r--) {
+            var cnt = 11 - r, x0 = 362 - (cnt * 58 + 6) / 2, y = 1536 - r * 46;
+            for (var c = 0; c < cnt; c++) {
+              var jx = Math.round((rnd() - 0.5) * 8), jy = Math.round((rnd() - 0.5) * 6);
+              var el = coin(stage, x0 + c * 58 + jx, y + jy, CS);
+              rows.push({ el: el, r: r, c: c, x: x0 + c * 58 + jx + CS / 2, y: y + jy + CS / 2, keep: r === 0 && c >= 2 && c <= 8 });
+            }
+          }
+          // HUD
+          var h1 = hud(root, 0, 196, 50); center(h1);
+          span(h1, "TOKENS GASTOS", "c18-small");
+          var h2 = hud(root, 0, 318, 60); center(h2);
+          var oldW = document.createElement("span"); oldW.style.display = "flex"; oldW.style.alignItems = "center"; oldW.style.gap = "6px"; oldW.style.position = "relative"; h2.appendChild(oldW);
+          span(oldW, "100", "c18-small"); pct(oldW, 6, "#a39e97");
+          var strike = box(oldW, -4, 24, 10, 6, "#ff6b5e"); strike.style.width = "calc(100% + 8px)";
+          var arr = icon("arrow", 6, "#d8d2c8"); h2.appendChild(arr);
+          var nw = document.createElement("span"); nw.style.display = "flex"; nw.style.alignItems = "center"; nw.style.gap = "6px"; h2.appendChild(nw);
+          var num = span(nw, "100", "c18-gold"); pct(nw, 6, "#e8b547");
+          gsap.set([oldW, arr], { display: "none" });
+          // "em" (0,027): aspirador liga e puxa 90% das moedas (de cima pra baixo)
+          var gone = rows.filter(function (o) { return !o.keep; });
+          gone.sort(function (a, b) { return b.r - a.r || b.c - a.c; });
+          gone.forEach(function (o, i) {
+            var t = 0.05 + i * (0.5 / gone.length);
+            tl.to(o.el, { x: NX - o.x, y: NY - o.y, scale: 0.3, duration: 0.16, ease: "power2.in" }, t);
+            tl.set(o.el, { opacity: 0 }, t + 0.16);
+          });
+          tl.to(fill, { scaleY: 1, duration: 0.55, ease: "none" }, 0.05);
+          // linhas de sucção piscando
+          var suck = [];
+          [[-40, 44], [0, 70], [40, 44]].forEach(function (q) { var s = box(stage, NX - 24 - q[1], NY + q[0] - 6, q[1], 12, "#f4efe6"); gsap.set(s, { opacity: 0 }); suck.push(s); });
+          for (var ts = 0.03; ts < 0.58; ts += 0.08) {
+            suck.forEach(function (s, i) { tl.set(s, { opacity: 0.9, x: 0 }, ts + i * 0.02); tl.to(s, { x: 40, opacity: 0, duration: 0.07 }, ts + i * 0.02); });
+          }
+          for (var tj = 0.03; tj < 0.58; tj += 0.04) tl.set(hero.el, { x: (Math.round(tj / 0.04) % 2) ? -4 : 4 }, tj);
+          tl.set(hero.el, { x: 0 }, 0.6);
+          // HUD rolando 100% → 10%
+          var steps = 18;
+          for (var k = 1; k <= steps; k++) tl.set(num, { textContent: String(Math.round(100 - 90 * k / steps)) }, 0.027 + k * (0.54 / steps));
+          // "90%" (0,587): letreiro "-90%" piscando, moedas que sobraram pulam
+          tl.set([oldW, arr], { display: "flex" }, 0.587);
+          tl.to(h2, { scale: 1.12, duration: 0.07 }, 0.587); tl.to(h2, { scale: 1, duration: 0.12 }, 0.657);
+          var sign = box(root, 0, 436, 760, 240, null, "c18-sign"); center(sign);
+          var bulbs = [[], []];
+          for (var bx = 0; bx < 17; bx++) { bulbs[bx % 2].push(box(sign, 12 + bx * 42, 8, 14, 14, "#e8b547")); bulbs[(bx + 1) % 2].push(box(sign, 12 + bx * 42, 194, 14, 14, "#e8b547")); }
+          for (var by = 1; by < 5; by++) { bulbs[by % 2].push(box(sign, 8, 8 + by * 38, 14, 14, "#e8b547")); bulbs[(by + 1) % 2].push(box(sign, 714, 8 + by * 38, 14, 14, "#e8b547")); }
+          // texto "-90%" em blocos de 20 (25 colunas × 7 linhas = 500 × 140), com sombra
+          var word = ["-", "9", "0", "%"], S = 20, txt = document.createElement("div"); txt.style.position = "absolute";
+          txt.style.left = (736 - 25 * S) / 2 - 4 + "px"; txt.style.top = (216 - 7 * S) / 2 - 4 + "px"; sign.appendChild(txt);
+          var shadowL = layer(txt), faceL = layer(txt); shadowL.style.left = "8px"; shadowL.style.top = "8px";
+          var col = 0;
+          word.forEach(function (ch) {
+            var M = GL[ch];
+            for (var rr = 0; rr < 7; rr++) for (var cc = 0; cc < M[rr].length; cc++) if (M[rr][cc] === "X") { blk(shadowL, col + cc, rr, S, "#8f6418"); blk(faceL, col + cc, rr, S, "#e8b547"); }
+            col += M[0].length + 1;
+          });
+          gsap.set(sign, { opacity: 0, scale: 1.25 });
+          tl.to(sign, { opacity: 1, scale: 1, duration: 0.12, ease: "power3.out" }, 0.587);
+          tl.to(sign, { x: 8, duration: 0.03 }, 0.707); tl.to(sign, { x: -6, duration: 0.03 }, 0.737); tl.to(sign, { x: 0, duration: 0.03 }, 0.767);
+          for (var tb = 0.587; tb < 1.78; tb += 0.1) {
+            var on = Math.round((tb - 0.587) / 0.1) % 2;
+            bulbs[0].forEach(function (b) { tl.set(b, { backgroundColor: on ? "#5a4a2a" : "#fff3c4" }, tb); });
+            bulbs[1].forEach(function (b) { tl.set(b, { backgroundColor: on ? "#fff3c4" : "#5a4a2a" }, tb); });
+          }
+          [[0.93, 0.25], [1.03, 1], [1.29, 0.25], [1.39, 1]].forEach(function (q) { tl.set(faceL, { opacity: q[1] }, q[0]); });
+          sparkBurst(root, 540, 556, 16, 0.587, 430, "#e8b547");
+          var kept = rows.filter(function (o) { return o.keep; });
+          [0.6, 0.98].forEach(function (t0) {
+            kept.forEach(function (o, i) {
+              tl.to(o.el, { y: -60, duration: 0.09, ease: "power2.out" }, t0 + i * 0.02);
+              tl.to(o.el, { y: 0, duration: 0.1, ease: "power2.in" }, t0 + 0.09 + i * 0.02);
+            });
+          });
+          var tag = document.createElement("div"); tag.className = "c18-tag"; tag.appendChild(icon("check", 6, "#2a8a3e"));
+          span(tag, "SÓ 10"); var tp = icon("pct", 5, "#1a1a1a"); tp.style.marginLeft = "-6px"; tag.appendChild(tp);
+          tag.style.top = "1420px"; tag.style.left = "362px"; stage.appendChild(tag); gsap.set(tag, { xPercent: -50 });
+          gsap.set(tag, { opacity: 0, scale: 0.6, transformOrigin: "50% 100%" });
+          tl.to(tag, { opacity: 1, scale: 1, duration: 0.12, ease: "back.out(2)" }, 0.72);
+          [0.64, 1.02].forEach(function (t) {
+            tl.to(hero.el, { y: -70, duration: 0.09, ease: "power2.out" }, t);
+            tl.to(hero.el, { y: 0, duration: 0.1, ease: "power2.in" }, t + 0.09);
+          });
+          tl.set({}, {}, 1.783333);
+          window.__timelines["c18-noventa"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C17-BUSCA (34,516666–37,066666) pixel cheia: "Ela encontra os vídeos mais virais do seu nicho" → biblioteca pixel com estante cheia de celulares (vídeos);
+         o mascote com lupa anda pelo chão ("encontra" 34,55); "vídeos" (35,14): as telas acendem em cascata; "mais virais" (35,54–35,70): 3 telas pegam fogo
+         e ganham coroa dourada (contador VIRAIS ENCONTRADOS 1 → 3); "nicho" (36,50): barra BUSCANDO NO SEU NICHO completa 100% e o mascote comemora. -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C17 Pixel"; src: url("../assets/fonts/Silkscreen-Bold.ttf") format("truetype"); font-weight: 700; font-display: block; }
+        @font-face { font-family: "C17 PixelR"; src: url("../assets/fonts/Silkscreen-Regular.ttf") format("truetype"); font-weight: 400; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; background: #3e3358; }
+        .c17-cv { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; image-rendering: pixelated; }
+        .c17-stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+        .c17-hud {
+          position: absolute; left: 540px; padding: 16px 30px; background: #1c1a18; border: 6px solid #3a3330; box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35);
+          white-space: nowrap; display: flex; flex-direction: column; align-items: center; gap: 14px; font-family: "C17 Pixel", monospace; font-weight: 700; color: #f4efe6; line-height: 1;
+        }
+        .c17-row { display: flex; align-items: center; gap: 20px; }
+        .c17-gold { color: #e8b547; }
+        .c17-small { font-family: "C17 PixelR", monospace; font-weight: 400; color: #d8d2c8; }
+        .c17-bar { position: relative; width: 520px; height: 38px; box-sizing: border-box; background: #2e2a26; border: 5px solid #4a423c; }
+        .c17-fill {
+          position: absolute; left: 0; top: 0; height: 28px; width: 0px; background-color: #e8b547;
+          background-image: repeating-linear-gradient(90deg, transparent 0 22px, rgba(28, 26, 24, 0.55) 22px 26px);
+        }
+        .c17-pct { width: 150px; text-align: right; font-size: 40px; }
+        .c17-ph { position: absolute; width: 120px; height: 180px; background: #1a1a1a; border-radius: 12px; box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35); }
+        .c17-spk { position: absolute; left: 45px; top: 7px; width: 30px; height: 5px; background: #444149; }
+        .c17-scr { position: absolute; left: 8px; top: 18px; width: 104px; height: 144px; background: #2b2833; overflow: hidden; }
+        .c17-lit { position: absolute; inset: 0; opacity: 0; }
+        .c17-play { position: absolute; left: 40px; top: 50px; width: 0; height: 0; border-top: 22px solid transparent; border-bottom: 22px solid transparent; border-left: 32px solid #ffffff; }
+        .c17-ln { position: absolute; left: 12px; height: 8px; background: rgba(255, 255, 255, 0.8); }
+        .c17-fire { position: absolute; inset: 0; opacity: 0; background: #3a140c; }
+        .c17-px { position: absolute; }
+        .c17-spark { position: absolute; width: 12px; height: 12px; background: #fff3c4; opacity: 0; }
+      </style>
+      <div data-hf-id="hf-m64l" id="root" data-composition-id="c17-busca" data-width="1080" data-height="1920" data-duration="2.55">
+        <canvas data-hf-id="hf-vbsz" class="c17-cv" id="c17-cv" width="270" height="480"></canvas>
+        <div data-hf-id="hf-ukow" class="c17-stage" id="c17-stage" data-layout-allow-overlap=""></div>
+        <div data-hf-id="hf-rljm" class="c17-hud" id="c17-h1" style="top: 92px">
+          <div data-hf-id="hf-wj3w" style="font-size: 42px">BUSCANDO NO SEU NICHO</div>
+          <div data-hf-id="hf-1ye4" class="c17-row"><div data-hf-id="hf-4fjz" class="c17-bar"><div data-hf-id="hf-lpfu" class="c17-fill" id="c17-fill"></div></div><div data-hf-id="hf-lgj7" class="c17-pct c17-gold" id="c17-pct">0%</div></div>
+        </div>
+        <div data-hf-id="hf-h85q" class="c17-hud" id="c17-h2" style="top: 276px; flex-direction: row; gap: 22px; padding: 12px 30px">
+          <span data-hf-id="hf-oq5z" class="c17-small" style="font-size: 40px">VIRAIS ENCONTRADOS</span><span data-hf-id="hf-ltq2" class="c17-gold" id="c17-num" style="font-size: 62px">0</span>
+        </div>
+      </div>
+      <script>
+        (function () {
+          var seed = 1717; function rnd() { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }
+          var g = document.getElementById("c17-cv").getContext("2d"); function P(x, y, w, h, c) { g.fillStyle = c; g.fillRect(x, y, w, h); }
+
+          // ---------- biblioteca pixel (canvas 270×480; 1 px = 4 px) ----------
+          (function draw() { var x, y;
+            // parede listrada com bolinhas
+            for (x = 0; x < 270; x++) P(x, 0, 1, 345, (x % 14) < 7 ? "#3e3358" : "#43385f");
+            for (y = 10; y < 345; y += 18) for (x = (Math.floor(y / 18) % 2) * 7 + 3; x < 270; x += 14) P(x, y, 2, 2, "#504476");
+            P(0, 0, 270, 6, "#2c2442"); P(0, 6, 270, 2, "#5a4e86");
+            // estante: moldura de madeira
+            P(10, 98, 250, 250, "#5e3b25"); P(12, 100, 246, 246, "#7a4e32"); P(12, 100, 246, 3, "#a7744d"); P(12, 100, 3, 246, "#8d5d3d"); P(255, 100, 3, 246, "#5e3b25");
+            // fundo das prateleiras (recuo escuro com tábuas verticais)
+            P(18, 106, 234, 228, "#2e2238"); for (x = 18; x < 252; x += 18) P(x, 106, 1, 228, "#352944"); P(18, 106, 234, 3, "#211829");
+            // tábuas (topo em 163, 265, 333)
+            [163, 265, 333].forEach(function (by) { P(18, by, 234, 6, "#8d5d3d"); P(18, by, 234, 1, "#b88456"); P(18, by + 5, 234, 1, "#5e3b25"); P(18, by + 6, 234, 3, "#1e1626"); });
+            // livros no vão do meio (atrás da legenda, só decoração)
+            var bx = 22; var BC = ["#9a4c6c", "#3f8a84", "#c99a2e", "#4a6fa8", "#a8553a", "#6a5aa0", "#3e9a56"];
+            while (bx < 246) { var w = 4 + Math.floor(rnd() * 4), h = 18 + Math.floor(rnd() * 10), c = BC[Math.floor(rnd() * BC.length)];
+              if (bx > 70 && bx < 200 && rnd() < 0.5) { bx += w + 2; continue; } P(bx, 219 - h, w, h, c); P(bx, 219 - h, 1, h, "rgba(255,255,255,0.18)"); P(bx, 219 - h + 3, w, 1, "#e8d9b0"); bx += w + 1; }
+            P(18, 219, 234, 3, "#6b4429"); P(18, 219, 234, 1, "#8d5d3d");
+            // rodapé + piso de tábuas
+            P(0, 345, 270, 5, "#2c2442"); P(0, 345, 270, 1, "#5a4e86");
+            for (y = 350; y < 480; y++) { var row = Math.floor((y - 350) / 10); var base = row % 2 ? "#744a2f" : "#7a4e32";
+              for (x = 0; x < 270; x++) { var v = rnd(); P(x, y, 1, 1, v < 0.05 ? "#8d5d3d" : v < 0.08 ? "#6a432a" : base); } if ((y - 350) % 10 === 0) P(0, y, 270, 1, "#5e3b25"); }
+            for (var r = 0; r < 13; r++) { var off = Math.floor(rnd() * 60); for (x = off; x < 270; x += 64 + Math.floor(rnd() * 20)) P(x, 350 + r * 10, 1, 10, "#5e3b25"); }
+            // tapete
+            P(20, 394, 230, 50, "#5a2a3a"); P(23, 397, 224, 44, "#8a3a4a"); P(28, 402, 214, 34, "#a54a58");
+            for (x = 36; x < 236; x += 14) { P(x + 4, 416, 4, 4, "#e8b547"); P(x, 404, 2, 2, "#8a3a4a"); P(x, 432, 2, 2, "#8a3a4a"); }
+            for (y = 396; y < 442; y += 3) { P(17, y, 3, 2, "#e9e4dc"); P(250, y, 3, 2, "#e9e4dc"); }
+            // vasos nas pontas do chão
+            [[6, 352], [246, 352]].forEach(function (q) { P(q[0], q[1] + 20, 18, 22, "#c15f3c"); P(q[0] - 2, q[1] + 18, 22, 4, "#d97757");
+              [[2, 0], [-4, 6], [10, 4], [4, 10], [12, 12]].forEach(function (l) { P(q[0] + l[0], q[1] + l[1] - 6, 6, 14, "#3e9a56"); P(q[0] + l[0] + 1, q[1] + l[1] - 5, 2, 6, "#62c27a"); }); });
+          })();
+
+          var root = document.getElementById("root"), stage = document.getElementById("c17-stage");
+          function box(host, x, y, w, h, bg, cls) { var d = document.createElement("div"); if (cls) d.className = cls; d.style.position = "absolute";
+            d.style.left = x + "px"; d.style.top = y + "px"; d.style.width = w + "px"; d.style.height = h + "px"; if (bg) d.style.background = bg; host.appendChild(d); return d; }
+          function sprite(host, M, s, col, x, y) { var l = box(host, x, y, M[0].length * s, M.length * s); for (var r = 0; r < M.length; r++) for (var c = 0; c < M[r].length; c++) { var ch = M[r][c]; if (ch === ".") continue; box(l, c * s, r * s, s, s, col[ch]); } return l; }
+          var tl = gsap.timeline({ paused: true });
+
+          // ---------- celulares na estante (3 fileiras × 6) ----------
+          var ROWS = [470, 880, 1152], GRAD = [["#f6c9b8", "#e88a6f"], ["#bfe3d0", "#5fb08a"], ["#c9d7f5", "#6f8fd6"], ["#f3e2a9", "#d9b84a"], ["#dccbf2", "#9a7ad6"], ["#f7c3dc", "#d97aa8"]];
+          var FIRE1 = ["...Y....", "...YY...", "..YOY.Y.", "..YOOYY.", ".YOOOOY.", "YOOROOOY", "YORRROOY", "YORRRROY", ".YORROY.", "..YYYY.."];
+          var FIRE2 = ["....Y...", "...YY.Y.", "..YOY.Y.", ".YOOOY..", ".YOOROY.", "YOORROOY", "YORRRROY", "YORRRROY", ".YORROY.", "..YYYY.."];
+          var FC = { Y: "#e8b547", O: "#f08c2e", R: "#c8102e" };
+          var CROWN = ["Y..Y..Y", "YY.Y.YY", "YYYYYYY", "YRYBYRY", "YYYYYYY"], CC = { Y: "#e8b547", R: "#c8102e", B: "#4a90d9" };
+          var phones = [], lits = [];
+          ROWS.forEach(function (top, ri) { for (var i = 0; i < 6; i++) { var x = 90 + i * 156;
+            var ph = box(stage, x, top, 120, 180, null, "c17-ph"); box(ph, 45, 7, 30, 5, null, "c17-spk"); var scr = box(ph, 8, 18, 104, 144, null, "c17-scr");
+            var lit = box(scr, 0, 0, 104, 144, null, "c17-lit"); var gr = GRAD[(i + ri * 2) % GRAD.length]; lit.style.background = "linear-gradient(170deg, " + gr[0] + " 0%, " + gr[1] + " 100%)";
+            box(lit, 40, 50, 0, 0, null, "c17-play"); box(lit, 12, 112, 56, 8, null, "c17-ln"); box(lit, 12, 124, 36, 8, null, "c17-ln");
+            phones.push({ el: ph, scr: scr, x: x, top: top, ri: ri, i: i }); lits.push(lit); } });
+          phones.forEach(function (p) { p.el.setAttribute("data-layout-allow-overlap", ""); });
+
+          // ---------- mascote com lupa (blocos de 18) ----------
+          var BODY = ["..BBBBBBBB..", "..BBBBBBBB..", "..BEBBBBEB..", "BBBEBBBBEBBB", "BBBBBBBBBBBB", "..BBBBBBBB.."], LEGA = ["..B.B..B.B..", "..B.B..B.B.."], LEGB = [".B.B....B.B.", ".B.B....B.B."];
+          var S = 22, hero = box(stage, 0, 1700 - 8 * S, 12 * S, 8 * S);
+          var bodyL = sprite(hero, BODY, S, { B: "#d97757", E: "#1a1a1a" }, 0, 0);
+          var legsA = sprite(hero, LEGA, S, { B: "#d97757" }, 0, 6 * S), legsB = sprite(hero, LEGB, S, { B: "#d97757" }, 0, 6 * S); gsap.set(legsB, { opacity: 0 });
+          // lupa (cabo + aro + vidro) presa na "mão" direita
+          var mag = box(bodyL, 250, 68, 0, 0);
+          box(mag, 0, 0, 20, 20, "#5e3b25"); box(mag, 15, -18, 20, 20, "#6b4429"); box(mag, 30, -36, 20, 20, "#8a5a3a");
+          var RING = [".XXXX.", "X....X", "X....X", "X....X", "X....X", ".XXXX."], lens = box(mag, 38, -150, 120, 120);
+          box(lens, 20, 20, 80, 80, "rgba(190,228,255,0.72)"); box(lens, 28, 28, 20, 20, "#ffffff"); box(lens, 48, 28, 10, 10, "rgba(255,255,255,0.8)"); sprite(lens, RING, 20, { X: "#e8b547" }, 0, 0); lens.style.filter = "drop-shadow(4px 4px 0 rgba(0,0,0,0.35))";
+          gsap.set(mag, { transformOrigin: "0px 0px", rotation: 0 });
+          // balão "!" sobre a cabeça
+          var bang = box(stage, 0, 0, 60, 76, "#f9f8f6"); bang.style.boxShadow = "0 0 0 6px #1a1a1a"; box(bang, 24, 12, 12, 34, "#c8102e"); box(bang, 24, 52, 12, 12, "#c8102e");
+          gsap.set(bang, { opacity: 0 });
+
+          // ---------- coroas e fogo nas 3 telas virais ----------
+          // local = global − 34,516666 · "encontra" 0,03 · "vídeos" 0,623 · "mais" 1,023 · "virais" 1,183 · "do" 1,583 · "seu" 1,743 · "nicho" 1,983
+          var VIRAL = [[0, 4, 1.023], [1, 1, 1.103], [2, 3, 1.183]], crowns = [];
+          function sparkBurst(cx, cy, n, t, dist, color) { for (var k = 0; k < n; k++) { var a = (k / n) * Math.PI * 2 + 0.4, sp = box(stage, cx - 6, cy - 6, 12, 12, color, "c17-spark"); var d = dist * (0.7 + 0.3 * ((k * 7) % 5) / 4);
+              tl.set(sp, { opacity: 1, x: 0, y: 0 }, t); tl.to(sp, { x: Math.cos(a) * d, y: Math.sin(a) * d, duration: 0.24, ease: "power2.out" }, t); tl.to(sp, { opacity: 0, duration: 0.1 }, t + 0.18); } }
+          var num = document.getElementById("c17-num"), h1 = document.getElementById("c17-h1"), h2 = document.getElementById("c17-h2");
+          gsap.set([h1, h2], { xPercent: -50 });
+          VIRAL.forEach(function (v, n) { var p = phones[v[0] * 6 + v[1]], t = v[2];
+            var fire = box(p.scr, 0, 0, 104, 144, null, "c17-fire"); var f1 = sprite(fire, FIRE1, 11, FC, 8, 17), f2 = sprite(fire, FIRE2, 11, FC, 8, 17); gsap.set(f2, { opacity: 0 });
+            var cr = sprite(stage, CROWN, 10, CC, p.x + 25, p.top - 58); cr.style.filter = "drop-shadow(0 4px 0 rgba(0,0,0,0.35))"; gsap.set(cr, { opacity: 0, y: -40 }); crowns.push(cr);
+            tl.set(fire, { opacity: 1 }, t);
+            for (var tf = t; tf < 2.55; tf += 0.08) { var odd = Math.round((tf - t) / 0.08) % 2; tl.set(f1, { opacity: odd ? 0 : 1 }, tf); tl.set(f2, { opacity: odd ? 1 : 0 }, tf); }
+            tl.to(p.el, { boxShadow: "0 0 0 6px #e8b547, 0 0 34px 10px rgba(232,181,71,0.6)", duration: 0.08 }, t);
+            tl.to(p.el, { scale: 1.16, duration: 0.08, ease: "power2.out" }, t); tl.to(p.el, { scale: 1.08, duration: 0.14, ease: "power2.inOut" }, t + 0.08);
+            tl.to(cr, { opacity: 1, y: 0, duration: 0.14, ease: "bounce.out" }, t + 0.03);
+            sparkBurst(p.x + 60, p.top + 90, 10, t, 120, "#e8b547");
+            tl.set(num, { textContent: String(n + 1) }, t); tl.to(h2, { scale: 1.12, duration: 0.035 }, t); tl.to(h2, { scale: 1, duration: 0.04 }, t + 0.036);
+          });
+          tl.set(h2, { borderColor: "#e8b547" }, 1.023);
+          // as outras telas apagam um pouco
+          var viralIdx = VIRAL.map(function (v) { return v[0] * 6 + v[1]; });
+          tl.to(phones.filter(function (p, k) { return viralIdx.indexOf(k) < 0; }).map(function (p) { return p.el; }), { opacity: 0.45, duration: 0.25 }, 1.3);
+
+          // "vídeos" (0,623): telas acendem em cascata
+          lits.forEach(function (l, k) { tl.to(l, { opacity: 1, duration: 0.08 }, 0.623 + k * 0.02); });
+
+          // ---------- barra de busca ----------
+          var fill = document.getElementById("c17-fill"), pct = document.getElementById("c17-pct");
+          tl.to(fill, { width: 459, duration: 1.95, ease: "none" }, 0.033); // 90% de 510
+          for (var tp = 0.1; tp < 1.983; tp += 0.1) tl.set(pct, { textContent: Math.round(90 * (tp - 0.033) / 1.95) + "%" }, tp);
+          // "nicho" (1,983): completa 100%, HUD dourado, festa
+          tl.to(fill, { width: 510, duration: 0.1, ease: "power2.out" }, 1.983); tl.set(pct, { textContent: "100%" }, 1.983);
+          tl.set(h1, { borderColor: "#e8b547" }, 1.983); tl.to(h1, { scale: 1.08, duration: 0.07 }, 1.983); tl.to(h1, { scale: 1, duration: 0.12 }, 2.06);
+          crowns.forEach(function (cr, k) { tl.to(cr, { y: -14, duration: 0.08, ease: "power2.out" }, 1.983 + k * 0.04); tl.to(cr, { y: 0, duration: 0.1, ease: "power2.in" }, 2.063 + k * 0.04); });
+          VIRAL.forEach(function (v, k) { var p = phones[v[0] * 6 + v[1]]; sparkBurst(p.x + 60, p.top - 30, 8, 1.99 + k * 0.04, 110, "#fff3c4"); });
+
+          // ---------- mascote andando com a lupa ----------
+          var X0 = 60, X1 = 560; gsap.set(hero, { x: X0 });
+          tl.to(hero, { x: X1, duration: 1.9, ease: "none" }, 0.033);
+          for (var tw = 0.033, s2 = 0; tw < 1.93; tw += 0.07, s2++) { var o = s2 % 2; tl.set(legsA, { opacity: o ? 0 : 1 }, tw); tl.set(legsB, { opacity: o ? 1 : 0 }, tw); tl.set(bodyL, { y: o ? -8 : 0 }, tw); }
+          tl.set(legsA, { opacity: 1 }, 1.933); tl.set(legsB, { opacity: 0 }, 1.933); tl.set(bodyL, { y: 0 }, 1.933);
+          // a lupa vasculha pra cima e pra baixo
+          [[0.033, -8], [0.3, 10], [0.6, -14], [0.9, 6], [1.2, -10], [1.5, 8], [1.8, -6]].forEach(function (q, k, arr) { if (k < arr.length - 1) tl.to(mag, { rotation: arr[k + 1][1], duration: arr[k + 1][0] - q[0], ease: "sine.inOut" }, q[0]); });
+          gsap.set(mag, { rotation: -8 });
+          // "mais" (1,023): "!" sobre a cabeça
+          tl.set(bang, { opacity: 1, x: 60 + (X1 - X0) * (1.023 - 0.033) / 1.9 + 102, y: 1700 - 8 * S - 112, scale: 0.4 }, 1.023);
+          tl.to(bang, { scale: 1, duration: 0.12, ease: "back.out(3)" }, 1.023);
+          tl.to(bang, { x: 60 + (X1 - X0) * (1.6 - 0.033) / 1.9 + 102, duration: 0.577, ease: "none" }, 1.023);
+          tl.set(bang, { opacity: 0 }, 1.6);
+          // "nicho" (1,983): pula comemorando
+          [1.983, 2.25].forEach(function (t) { tl.to(hero, { y: -90, duration: 0.1, ease: "power2.out" }, t); tl.to(hero, { y: 0, duration: 0.11, ease: "power2.in" }, t + 0.1); });
+          tl.to(mag, { rotation: -40, duration: 0.1 }, 1.983); tl.to(mag, { rotation: 0, duration: 0.14 }, 2.1);
+
+          tl.set({}, {}, 2.55);
+          window.__timelines["c17-busca"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

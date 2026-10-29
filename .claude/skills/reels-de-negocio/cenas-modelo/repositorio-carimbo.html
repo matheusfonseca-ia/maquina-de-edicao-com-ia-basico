@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C05-REPO (7,6833–10,1667) dividido: "E isso, graças a um repositório totalmente gratuito" → página real de
+         Jakeschincariol/instagram-agent-skill reconstruída (Public, aba Code, About com ★ 3.3k, 725 forks, MIT);
+         "repositório" (8,56): linhas entram em cascata; "totalmente" (9,20): MIT destacado; "gratuito" (9,60): carimbo
+         verde GRÁTIS. (base: Claude Code hackeando a TV c14-repo) -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C05 Inter"; src: url("../assets/fonts/Inter.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+        @font-face { font-family: "C05 Mono"; src: url("../assets/fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .c05-bg {
+          position: absolute; left: 0; top: 0; width: 1080px; height: 770px;
+          background-color: #efedeb;
+          background-image: linear-gradient(#e6e4e1 2px, transparent 2px), linear-gradient(90deg, #e6e4e1 2px, transparent 2px);
+          background-size: 90px 90px; background-position: -1px -1px;
+        }
+        .c05-card {
+          position: absolute; left: 90px; top: 200px; width: 900px; height: 500px;
+          border-radius: 28px; overflow: hidden; background: #ffffff; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+          font-family: "C05 Inter", sans-serif; color: #1f2328;
+        }
+        .c05-gh { position: absolute; left: 32px; top: 30px; width: 44px; height: 44px; }
+        .c05-ghring { position: absolute; left: 26px; top: 24px; width: 56px; height: 56px; box-sizing: border-box; border-radius: 50%; border: 4px solid #1a1a1a; opacity: 0; }
+        .c05-name { position: absolute; left: 90px; top: 22px; height: 60px; line-height: 60px; white-space: nowrap; font-size: 33px; letter-spacing: -0.02em; }
+        .c05-owner { color: #0969da; font-weight: 400; }
+        .c05-sep { color: #59636e; font-weight: 300; }
+        .c05-repo { color: #0969da; font-weight: 700; }
+        .c05-public {
+          display: inline-block; vertical-align: middle; margin-left: 14px; margin-top: -6px; height: 40px; line-height: 36px; box-sizing: border-box;
+          font-size: 30px; font-weight: 500; color: #59636e; border: 2px solid #d1d9e0; border-radius: 999px; padding: 0 14px; white-space: nowrap;
+        }
+        .c05-tabs { position: absolute; left: 32px; top: 96px; height: 60px; width: 840px; }
+        .c05-tab { position: absolute; top: 0; height: 56px; line-height: 56px; display: flex; align-items: center; gap: 10px; font-size: 30px; color: #59636e; white-space: nowrap; }
+        .c05-tab svg { width: 30px; height: 30px; fill: #59636e; }
+        .c05-tab.c05-on { color: #1f2328; font-weight: 600; }
+        .c05-tab.c05-on svg { fill: #1f2328; }
+        .c05-tabline { position: absolute; left: 32px; top: 152px; width: 128px; height: 5px; border-radius: 3px; background: #fd8c73; transform-origin: 0 50%; }
+        .c05-rule { position: absolute; left: 0; top: 157px; width: 900px; height: 2px; background: #d8dee4; }
+        .c05-files { position: absolute; left: 32px; top: 180px; width: 430px; border: 2px solid #d1d9e0; border-radius: 14px; overflow: hidden; }
+        .c05-head { height: 52px; display: flex; align-items: center; gap: 12px; padding-left: 16px; background: #f6f8fa; font-size: 30px; font-weight: 600; white-space: nowrap; }
+        .c05-av { width: 30px; height: 30px; border-radius: 50%; background: #d97757; flex: none; }
+        .c05-hl { width: 150px; height: 12px; border-radius: 6px; background: #d8dee4; }
+        .c05-row { position: relative; height: 50px; display: flex; align-items: center; gap: 16px; padding-left: 20px; font-size: 30px; color: #1f2328; white-space: nowrap; border-top: 2px solid #d8dee4; }
+        .c05-row svg { width: 30px; height: 30px; flex: none; }
+        .c05-dir { fill: #54aeff; }
+        .c05-file { fill: #59636e; }
+        .c05-about { position: absolute; left: 482px; top: 176px; width: 400px; }
+        .c05-about-h { padding-left: 12px; font-size: 32px; line-height: 44px; font-weight: 700; color: #1f2328; }
+        .c05-li { position: relative; margin-top: 12px; height: 52px; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-radius: 12px; font-size: 30px; color: #1f2328; font-weight: 600; white-space: nowrap; }
+        .c05-li svg { width: 30px; height: 30px; fill: #59636e; flex: none; }
+        .c05-li i { font-style: normal; color: #59636e; font-weight: 500; }
+        .c05-srow { position: absolute; left: 0; top: 0; width: 900px; height: 500px; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+        .c05-stamp {
+          margin-top: 120px; height: 156px; padding: 0 40px; box-sizing: border-box; border: 10px solid #2da44e; border-radius: 20px;
+          background: rgba(255, 255, 255, 0.94); white-space: nowrap; opacity: 0;
+          font-family: "C05 Inter", sans-serif; font-weight: 900; font-size: 112px; line-height: 136px; letter-spacing: -0.01em; color: #2da44e;
+        }
+        .c05-chip {
+          position: absolute; left: 330px; top: 106px; width: 420px; height: 70px; border-radius: 35px; background: #1a1a1a;
+          font-family: "C05 Mono", monospace; font-weight: 800; font-size: 32px; line-height: 70px; letter-spacing: 0.06em; color: #ffffff; text-align: center; white-space: nowrap;
+        }
+        .c05-chip svg { width: 32px; height: 32px; vertical-align: -6px; margin-right: 12px; }
+      </style>
+      <div data-hf-id="hf-jyw4" id="root" data-composition-id="c05-repo" data-width="1080" data-height="1920" data-duration="2.483333">
+        <div data-hf-id="hf-zjxe" class="c05-bg"></div>
+        <div data-hf-id="hf-ic7n" class="c05-chip" id="c05-chip"><svg data-hf-id="hf-ulu9" viewBox="0 0 24 24"><path data-hf-id="hf-vlwx" fill="#ffffff" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>REPOSITÓRIO</div>
+        <div data-hf-id="hf-vlfi" class="c05-card" id="c05-card">
+          <div data-hf-id="hf-0mrm" class="c05-ghring" id="c05-ghring"></div>
+          <svg data-hf-id="hf-s9me" class="c05-gh" id="c05-gh" viewBox="0 0 24 24"><path data-hf-id="hf-vi4b" fill="#1a1a1a" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
+          <div data-hf-id="hf-ddia" class="c05-name" id="c05-name"><span data-hf-id="hf-ks1l" class="c05-owner">Jakeschincariol</span><span data-hf-id="hf-4abz" class="c05-sep"> / </span><span data-hf-id="hf-1oo2" class="c05-repo">instagram-agent-skill</span><span data-hf-id="hf-15bq" class="c05-public" id="c05-public">Public</span></div>
+          <div data-hf-id="hf-bajr" class="c05-tabs">
+            <div data-hf-id="hf-w1vm" class="c05-tab c05-on" style="left: 0"><svg data-hf-id="hf-5tvn" viewBox="0 0 16 16"><path data-hf-id="hf-zl6c" d="m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z" /></svg>Code</div>
+            <div data-hf-id="hf-wm9n" class="c05-tab" style="left: 170px">Issues</div>
+            <div data-hf-id="hf-8i43" class="c05-tab" style="left: 300px">Pull requests</div>
+            <div data-hf-id="hf-sjiz" class="c05-tab" style="left: 520px">Actions</div>
+          </div>
+          <div data-hf-id="hf-xg5d" class="c05-rule"></div>
+          <div data-hf-id="hf-ynqq" class="c05-tabline" id="c05-tabline"></div>
+          <div data-hf-id="hf-wxnq" class="c05-files" id="c05-files"><div data-hf-id="hf-dtiv" class="c05-head"><div data-hf-id="hf-tx62" class="c05-av"></div>Jakeschincariol<div data-hf-id="hf-sqaz" class="c05-hl"></div></div></div>
+          <div data-hf-id="hf-t4mq" class="c05-about">
+            <div data-hf-id="hf-a3e2" class="c05-about-h">About</div>
+            <div data-hf-id="hf-zel1" class="c05-li" id="c05-star" data-layout-allow-overflow=""><svg data-hf-id="hf-51xf" viewBox="0 0 16 16"><path data-hf-id="hf-7920" id="c05-starpath" d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z" /></svg>3.3k <i data-hf-id="hf-c5cl">stars</i></div>
+            <div data-hf-id="hf-t0dp" class="c05-li" id="c05-fork"><svg data-hf-id="hf-4nme" viewBox="0 0 16 16"><path data-hf-id="hf-a0d1" d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z" /></svg>725 <i data-hf-id="hf-njkx">forks</i></div>
+            <div data-hf-id="hf-1d45" class="c05-li" id="c05-mit" data-layout-allow-overflow=""><svg data-hf-id="hf-49bd" viewBox="0 0 16 16"><path data-hf-id="hf-ttjh" d="M8.75.75V2h.985c.304 0 .603.08.867.231l1.29.736c.038.022.08.033.124.033h2.234a.75.75 0 0 1 0 1.5h-.427l2.111 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.006.005-.01.01-.045.04c-.21.176-.441.327-.686.45C14.556 10.78 13.88 11 13 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L12.178 4.5h-.162c-.305 0-.604-.079-.868-.231l-1.29-.736a.245.245 0 0 0-.124-.033H8.75V13h2.5a.75.75 0 0 1 0 1.5h-6.5a.75.75 0 0 1 0-1.5h2.5V3.5h-.984a.245.245 0 0 0-.124.033l-1.289.737c-.265.15-.564.23-.869.23h-.162l2.112 4.692a.75.75 0 0 1-.154.838l-.53-.53.529.531-.001.002-.002.002-.006.006-.016.015-.045.04c-.21.176-.441.327-.686.45C4.556 10.78 3.88 11 3 11a4.498 4.498 0 0 1-2.023-.454 3.544 3.544 0 0 1-.686-.45l-.045-.04-.016-.015-.006-.006-.004-.004v-.001a.75.75 0 0 1-.154-.838L2.178 4.5H1.75a.75.75 0 0 1 0-1.5h2.234a.249.249 0 0 0 .125-.033l1.288-.737c.265-.15.564-.23.869-.23h.984V.75a.75.75 0 0 1 1.5 0Zm2.945 8.477c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L13 6.327Zm-10 0c.285.135.718.273 1.305.273s1.02-.138 1.305-.273L3 6.327Z" /></svg>MIT license</div>
+          </div>
+          <div data-hf-id="hf-s4wi" class="c05-srow"><div data-hf-id="hf-0nj8" class="c05-stamp" id="c05-stamp" data-layout-allow-overlap="">GRÁTIS</div></div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          // tempos locais = global − 7,683333
+          var DIR = "M1.75 1A1.75 1.75 0 0 0 0 2.75v10.5C0 14.216.784 15 1.75 15h12.5A1.75 1.75 0 0 0 16 13.25v-8.5A1.75 1.75 0 0 0 14.25 3H7.5a.25.25 0 0 1-.2-.1l-.9-1.2C6.07 1.26 5.55 1 5 1H1.75Z";
+          var FILE = "M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z";
+          var ROWS = [[".claude-plugin", 1], ["skills", 1], ["templates", 1], ["LICENSE", 0], ["README.md", 0]];
+          var files = document.getElementById("c05-files"), rowEls = [];
+          ROWS.forEach(function (r) {
+            var d = document.createElement("div"); d.className = "c05-row";
+            d.innerHTML = '<svg viewBox="0 0 16 16"><path class="' + (r[1] ? "c05-dir" : "c05-file") + '" d="' + (r[1] ? DIR : FILE) + '"/></svg><span data-layout-allow-occlusion=""></span>';
+            d.lastChild.textContent = r[0];
+            files.appendChild(d); rowEls.push(d);
+          });
+
+          gsap.set(rowEls, { opacity: 0, x: -14 });
+          gsap.set(rowEls[0], { opacity: 1, x: 0 });
+          gsap.set("#c05-tabline", { scaleX: 0.15 });
+          gsap.set("#c05-stamp", { rotation: -10 });
+
+          var tl = gsap.timeline({ paused: true });
+          // "isso" (0,037): sublinhado da aba Code se abre
+          tl.to("#c05-tabline", { scaleX: 1, duration: 0.2, ease: "power2.out" }, 0.04);
+          // "graças" (0,237): logo do GitHub pulsa + anel
+          tl.to("#c05-gh", { scale: 1.3, duration: 0.09, yoyo: true, repeat: 1, ease: "power2.out" }, 0.237);
+          tl.set("#c05-ghring", { opacity: 0.9, scale: 1 }, 0.237);
+          tl.to("#c05-ghring", { scale: 2.1, opacity: 0, duration: 0.3, ease: "power2.out" }, 0.237);
+          // "um" (0,717): "Public" pisca
+          tl.to("#c05-public", { scale: 1.12, borderColor: "#d97757", color: "#c15f3c", duration: 0.08, ease: "power2.out" }, 0.6);
+          tl.to("#c05-public", { scale: 1, duration: 0.1, ease: "power2.inOut" }, 0.68);
+          // "repositório" (0,877): pastas e arquivos entram em cascata
+          [1, 2, 3, 4].forEach(function (n, j) { tl.to(rowEls[n], { opacity: 1, x: 0, duration: 0.2, ease: "power2.out" }, 0.877 + j * 0.06); });
+          tl.to("#c05-chip", { scale: 1.06, duration: 0.07, yoyo: true, repeat: 1, ease: "power2.out" }, 0.877);
+          // 1,2: estrela dourada (3.3k)
+          tl.set("#c05-star", { backgroundColor: "#fff8e5" }, 1.2);
+          tl.set("#c05-starpath", { attr: { fill: "#e3b341" } }, 1.2);
+          tl.fromTo("#c05-star", { scale: 1 }, { scale: 1.06, duration: 0.08, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 1.2);
+          // "totalmente" (1,517): MIT license em destaque
+          tl.set("#c05-mit", { backgroundColor: "#e3f4e8" }, 1.517);
+          tl.fromTo("#c05-mit", { scale: 1 }, { scale: 1.06, duration: 0.08, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 1.517);
+          // "gratuito" (1,917): carimbo GRÁTIS
+          tl.set("#c05-stamp", { opacity: 1 }, 1.917);
+          tl.fromTo("#c05-stamp", { scale: 1.6, rotation: -15 }, { scale: 1, rotation: -10, duration: 0.14, ease: "power3.in", immediateRender: false }, 1.917);
+          [[2.06, 8], [2.09, -8], [2.12, 5], [2.15, 0]].forEach(function (s) { tl.set("#c05-card", { x: s[1] }, s[0]); });
+          tl.set("#c05-chip", { textContent: "GRÁTIS · MIT", backgroundColor: "#1a7f37" }, 2.06);
+          tl.fromTo("#c05-chip", { scale: 1 }, { scale: 1.08, duration: 0.07, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 2.06);
+          tl.set({}, {}, 2.483333);
+          window.__timelines["c05-repo"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

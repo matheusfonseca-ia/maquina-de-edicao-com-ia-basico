@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C07-SO-UMA (12,283333–14,216666) dividido: "E não vai achando que é só uma skill, não (porque são)" → UMA carta de skill sozinha no centro com "×1" à esquerda; "só uma": "só uma?" manuscrito em vermelho à direita; "não": X vermelho risca a palavra e a carta treme; "porque/são": cópias da carta começam a aparecer atrás dela (prepara o ×11 do C08) -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C07 Inter"; src: url("../assets/fonts/Inter.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+        @font-face { font-family: "C07 Mono"; src: url("../assets/fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; font-display: block; }
+        @font-face { font-family: "C07 Hand"; src: url("../assets/fonts/Caveat.ttf") format("truetype"); font-weight: 400 700; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .c07-bg {
+          position: absolute; left: 0; top: 0; width: 1080px; height: 770px;
+          background-color: #efedeb;
+          background-image: linear-gradient(#e6e4e1 2px, transparent 2px), linear-gradient(90deg, #e6e4e1 2px, transparent 2px);
+          background-size: 90px 90px; background-position: -1px -1px;
+        }
+        .c07-card { position: absolute; left: 90px; top: 255px; width: 900px; height: 445px; border-radius: 28px; overflow: hidden; background: #f9f8f6; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1); }
+        /* carta de skill (desenho comum C07/C08, aqui ampliada 1,4×): 210×280, centro x 450 do cartão */
+        .c07-sk {
+          position: absolute; left: 345px; top: 82px; width: 210px; height: 280px; box-sizing: border-box; border-radius: 25px;
+          background: #f9f8f6; border: 3px solid #e6e4e1; box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+        }
+        .c07-ghost { background: #f4f2ef; }
+        .c07-tile {
+          position: absolute; left: 47px; top: 48px; width: 110px; height: 110px; border-radius: 28px;
+          background: linear-gradient(45deg, #feda75 0%, #fa7e1e 25%, #d62976 50%, #962fbf 75%, #4f5bd5 100%);
+        }
+        .c07-tile svg { position: absolute; left: 22px; top: 22px; width: 66px; height: 66px; }
+        .c07-sklabel {
+          position: absolute; left: 0; top: 190px; width: 204px; text-align: center; white-space: nowrap;
+          font-family: "C07 Mono", monospace; font-weight: 800; font-size: 34px; line-height: 44px; color: #74716d;
+        }
+        /* ×1 à esquerda (centro x 140 do cartão) e "só uma?" à direita (centro x 760): mesma distância do eixo */
+        .c07-count {
+          position: absolute; left: 20px; top: 142px; width: 240px; height: 160px; display: flex; justify-content: center; align-items: center;
+          font-family: "C07 Inter", sans-serif; font-weight: 900; font-size: 150px; line-height: 160px; letter-spacing: -0.04em; color: #1a1a1a; white-space: nowrap;
+        }
+        .c07-count span { color: #c15f3c; margin-right: 6px; }
+        .c07-hand { position: absolute; left: 640px; top: 172px; width: 240px; height: 100px; }
+        .c07-word {
+          position: absolute; left: 0; top: 0; width: 240px; height: 100px; text-align: center; white-space: nowrap;
+          font-family: "C07 Hand", cursive; font-weight: 700; font-size: 84px; line-height: 100px; color: #c8102e;
+        }
+        .c07-ink { position: absolute; left: 0; top: 0; width: 900px; height: 445px; overflow: visible; pointer-events: none; }
+      </style>
+      <div data-hf-id="hf-m927" id="root" data-composition-id="c07-so-uma" data-width="1080" data-height="1920" data-duration="1.933333">
+        <div data-hf-id="hf-yzqk" class="c07-bg"></div>
+        <div data-hf-id="hf-f33u" class="c07-card" id="c07-card">
+          <div data-hf-id="hf-f5n4" id="c07-ghosts"></div>
+          <div data-hf-id="hf-6352" class="c07-sk" id="c07-sk">
+            <div data-hf-id="hf-vz1p" class="c07-tile"><svg data-hf-id="hf-ulu9" viewBox="0 0 24 24"><path data-hf-id="hf-64ku" fill="#ffffff" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077" /></svg></div>
+            <div data-hf-id="hf-jdv7" class="c07-sklabel">1 skill</div>
+          </div>
+          <div data-hf-id="hf-mve9" class="c07-count" id="c07-count"><span data-hf-id="hf-v48y">×</span>1</div>
+          <div data-hf-id="hf-2j82" class="c07-hand" id="c07-hand"><div data-hf-id="hf-eyti" class="c07-word" id="c07-word" data-layout-allow-overlap="">só uma?</div></div>
+          <svg data-hf-id="hf-4xti" class="c07-ink" viewBox="0 0 900 445" fill="none" stroke="#c8102e" stroke-linecap="round" stroke-linejoin="round" data-layout-allow-overlap="">
+            <path data-hf-id="hf-mgk5" id="c07-arrow" d="M690 300 C 670 336, 640 348, 606 344" stroke-width="6" />
+            <path data-hf-id="hf-w1kb" id="c07-head" d="M624 328 L604 344 L622 360" stroke-width="6" />
+            <path data-hf-id="hf-3xsz" id="c07-x1" d="M648 168 L880 286" stroke-width="10" />
+            <path data-hf-id="hf-pg91" id="c07-x2" d="M878 160 L652 292" stroke-width="10" />
+          </svg>
+        </div>
+      </div>
+      <script>
+        (function () {
+          // tempos locais = global − 12,283333
+          // cópias da carta atrás dela (aparecem em "porque" e "são")
+          var gh = document.getElementById("c07-ghosts"), ghosts = [];
+          [[-16, -6], [16, 6], [-30, -11], [30, 11]].forEach(function (g) {
+            var d = document.createElement("div"); d.className = "c07-sk c07-ghost";
+            gh.appendChild(d); ghosts.push({ el: d, x: g[0], r: g[1] });
+          });
+          var INK = ["#c07-arrow", "#c07-head", "#c07-x1", "#c07-x2"];
+          INK.forEach(function (k) { var p = document.querySelector(k); var L = Math.ceil(p.getTotalLength()) + 2; p.style.strokeDasharray = L; p.style.strokeDashoffset = L; });
+
+          // estados iniciais
+          gsap.set("#c07-word", { clipPath: "inset(0% 100% 0% 0%)" });
+          gsap.set("#c07-hand", { rotation: -8, transformOrigin: "50% 50%" });
+          gsap.set("#c07-sk", { transformOrigin: "50% 100%" });
+          ghosts.forEach(function (g) { gsap.set(g.el, { opacity: 0, transformOrigin: "50% 100%" }); });
+
+          var tl = gsap.timeline({ paused: true });
+          // "E não vai" (0,037): a carta dá um pulinho
+          tl.to("#c07-sk", { y: -14, duration: 0.09, ease: "power2.out" }, 0.04);
+          tl.to("#c07-sk", { y: 0, duration: 0.11, ease: "power2.in" }, 0.13);
+          // "é" (0,487): contador ×1 pulsa
+          tl.fromTo("#c07-count", { scale: 1 }, { scale: 1.08, duration: 0.07, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 0.44);
+          // "só uma" (0,647–0,807): "só uma?" escrito à mão + seta apontando a carta
+          tl.to("#c07-word", { clipPath: "inset(0% 0% 0% 0%)", duration: 0.26, ease: "power1.inOut" }, 0.647);
+          tl.to("#c07-arrow", { strokeDashoffset: 0, duration: 0.14, ease: "power1.out" }, 0.86);
+          tl.to("#c07-head", { strokeDashoffset: 0, duration: 0.08, ease: "power1.out" }, 0.99);
+          // "skill" (0,967): carta pulsa
+          tl.fromTo("#c07-sk", { scale: 1 }, { scale: 1.06, duration: 0.08, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 0.967);
+          // "não" (1,287): X vermelho risca a palavra e a carta treme
+          tl.to("#c07-x1", { strokeDashoffset: 0, duration: 0.11, ease: "power2.out" }, 1.287);
+          tl.to("#c07-x2", { strokeDashoffset: 0, duration: 0.11, ease: "power2.out" }, 1.36);
+          [[1.29, 9, -3], [1.33, -9, 3], [1.37, 7, -2], [1.41, -5, 1.5], [1.45, 0, 0]].forEach(function (s) {
+            tl.set("#c07-sk", { x: s[1], rotation: s[2] }, s[0]);
+          });
+          // "porque" (1,447): duas cópias espiam atrás da carta; "são" (1,687): mais duas
+          ghosts.forEach(function (g, i) {
+            var t = (i < 2 ? 1.447 : 1.687) + (i % 2) * 0.04;
+            tl.set(g.el, { opacity: 1 }, t);
+            tl.fromTo(g.el, { x: 0, rotation: 0 }, { x: g.x, rotation: g.r, duration: 0.18, ease: "back.out(2)", immediateRender: false }, t);
+          });
+          tl.fromTo("#c07-count", { scale: 1 }, { scale: 1.1, duration: 0.06, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 1.687);
+          tl.set({}, {}, 1.933333);
+          window.__timelines["c07-so-uma"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

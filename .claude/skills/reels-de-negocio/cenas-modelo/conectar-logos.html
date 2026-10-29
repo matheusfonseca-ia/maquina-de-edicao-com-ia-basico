@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C03-PLUGAR (3,5833–5,1333) dividido: "o Claude ao Instagram" → à esquerda o logo do Claude em círculo creme,
+         à direita o ícone do Instagram; "Claude" (3,65): o logo pulsa e um cabo pontilhado terracota com plugue sai dele;
+         "Instagram" (4,45): o plugue encaixa, faísca, ✓ verde "conectado" no meio e dados correndo pelo cabo. -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C03 Inter"; src: url("../assets/fonts/Inter.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+        @font-face { font-family: "C03 Mono"; src: url("../assets/fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .c03-bg {
+          position: absolute; left: 0; top: 0; width: 1080px; height: 770px;
+          background-color: #efedeb;
+          background-image: linear-gradient(#e6e4e1 2px, transparent 2px), linear-gradient(90deg, #e6e4e1 2px, transparent 2px);
+          background-size: 90px 90px; background-position: -1px -1px;
+        }
+        .c03-card { position: absolute; left: 90px; top: 255px; width: 900px; height: 445px; border-radius: 28px; background: #f9f8f6; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1); }
+        /* ícones: centros em x 270 e 810 (±270 do eixo 540), y 430 */
+        .c03-claude { position: absolute; left: 170px; top: 330px; width: 200px; height: 200px; box-sizing: border-box; border-radius: 50%; background: #efedeb; border: 4px solid #e6e4e1; }
+        .c03-claude svg { position: absolute; left: 44px; top: 44px; width: 104px; height: 104px; }
+        .c03-ig { position: absolute; left: 710px; top: 330px; width: 200px; height: 200px; border-radius: 44px; background: linear-gradient(45deg, #feda75 0%, #fa7e1e 25%, #d62976 50%, #962fbf 75%, #4f5bd5 100%); box-shadow: 0 12px 26px rgba(214, 41, 118, 0.25); }
+        .c03-ig svg { position: absolute; left: 44px; top: 44px; width: 112px; height: 112px; }
+        .c03-ring { position: absolute; width: 200px; height: 200px; box-sizing: border-box; border-radius: 50%; border: 6px solid #d97757; opacity: 0; }
+        .c03-lbl { position: absolute; top: 556px; width: 300px; height: 56px; line-height: 56px; text-align: center; font-family: "C03 Inter", sans-serif; font-weight: 800; font-size: 42px; letter-spacing: -0.02em; color: #1a1a1a; white-space: nowrap; }
+        /* cabo: de x 376 a 704, y 430 */
+        .c03-cablewrap { position: absolute; left: 376px; top: 420px; width: 0; height: 20px; overflow: hidden; }
+        .c03-cable { position: absolute; left: 0; top: 0; width: 328px; height: 20px; }
+        .c03-plug { position: absolute; left: 362px; top: 410px; width: 40px; height: 40px; }
+        .c03-dot { position: absolute; left: 380px; top: 422px; width: 16px; height: 16px; background: #d97757; opacity: 0; }
+        .c03-spark { position: absolute; left: 704px; top: 430px; width: 0; height: 0; }
+        .c03-ray { position: absolute; left: -4px; top: -44px; width: 8px; height: 28px; border-radius: 4px; background: #e8b547; transform-origin: 4px 44px; opacity: 0; }
+        .c03-check { position: absolute; left: 490px; top: 380px; width: 100px; height: 100px; border-radius: 50%; background: #2da44e; box-shadow: 0 0 0 10px #f9f8f6, 0 10px 22px rgba(45, 164, 78, 0.35); }
+        .c03-check svg { position: absolute; left: 22px; top: 22px; width: 56px; height: 56px; }
+        .c03-ctext { position: absolute; left: 340px; top: 500px; width: 400px; height: 48px; line-height: 48px; text-align: center; font-family: "C03 Mono", monospace; font-weight: 800; font-size: 34px; letter-spacing: 0.06em; color: #1a7f37; white-space: nowrap; }
+        .c03-top {
+          position: absolute; left: 330px; top: 150px; width: 420px; height: 70px; border-radius: 35px; background: #f6e3da;
+          font-family: "C03 Mono", monospace; font-weight: 800; font-size: 32px; line-height: 70px; letter-spacing: 0.06em; color: #c15f3c; text-align: center; white-space: nowrap;
+        }
+      </style>
+      <div data-hf-id="hf-axnq" id="root" data-composition-id="c03-plugar" data-width="1080" data-height="1920" data-duration="1.55">
+        <div data-hf-id="hf-omcw" class="c03-bg"></div>
+        <div data-hf-id="hf-ftiq" class="c03-top" id="c03-top">CONECTANDO…</div>
+        <div data-hf-id="hf-xviy" class="c03-card" id="c03-card"></div>
+        <div data-hf-id="hf-8vba" class="c03-ring" id="c03-ring1" style="left: 170px; top: 330px"></div>
+        <div data-hf-id="hf-iex7" class="c03-ring" id="c03-ring2" style="left: 710px; top: 330px; border-radius: 44px; border-color: #2da44e"></div>
+        <div data-hf-id="hf-q1re" class="c03-claude" id="c03-claude"><svg data-hf-id="hf-ulu9" viewBox="0 0 24 24"><path data-hf-id="hf-iua3" fill="#d97757" d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z" /></svg></div>
+        <div data-hf-id="hf-0wui" class="c03-ig" id="c03-ig"><svg data-hf-id="hf-1tol" viewBox="0 0 24 24"><path data-hf-id="hf-64ku" fill="#ffffff" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077" /></svg></div>
+        <div data-hf-id="hf-8vmj" class="c03-lbl" style="left: 120px">Claude</div>
+        <div data-hf-id="hf-8jd2" class="c03-lbl" style="left: 660px">Instagram</div>
+        <div data-hf-id="hf-boer" class="c03-cablewrap" id="c03-wrap"><svg data-hf-id="hf-j19v" class="c03-cable" viewBox="0 0 328 20"><line data-hf-id="hf-liv2" id="c03-line" x1="0" y1="10" x2="328" y2="10" stroke="#d97757" stroke-width="9" stroke-dasharray="20 12" stroke-linecap="round" /></svg></div>
+        <div data-hf-id="hf-e0hw" id="c03-dots"></div>
+        <svg data-hf-id="hf-qi1m" class="c03-plug" id="c03-plug" viewBox="0 0 40 40"><rect data-hf-id="hf-mdct" x="0" y="6" width="28" height="28" rx="6" fill="#c15f3c" /><rect data-hf-id="hf-dwr8" x="28" y="11" width="12" height="5" fill="#8a8783" /><rect data-hf-id="hf-seeg" x="28" y="24" width="12" height="5" fill="#8a8783" /></svg>
+        <div data-hf-id="hf-ffym" class="c03-spark" id="c03-spark"></div>
+        <div data-hf-id="hf-y93w" class="c03-check" id="c03-check" data-layout-allow-overlap=""><svg data-hf-id="hf-30lo" viewBox="0 0 24 24"><path data-hf-id="hf-3lko" d="M4.5 12.5 L9.5 17.5 L19.5 6.5" fill="none" stroke="#ffffff" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+        <div data-hf-id="hf-77q9" class="c03-ctext"><span data-hf-id="hf-mo6q" id="c03-ct"></span></div>
+      </div>
+      <script>
+        (function () {
+          // tempos locais = global − 3,583333
+          var sp = document.getElementById("c03-spark"), rays = [];
+          for (var i = 0; i < 8; i++) { var r = document.createElement("div"); r.className = "c03-ray"; sp.appendChild(r); rays.push(r); gsap.set(r, { rotation: i * 45, scaleY: 0.3 }); }
+          var dh = document.getElementById("c03-dots"), dots = [];
+          for (var j = 0; j < 3; j++) { var d = document.createElement("div"); d.className = "c03-dot"; dh.appendChild(d); dots.push(d); }
+          gsap.set("#c03-check", { opacity: 0, scale: 0.3 });
+          gsap.set("#c03-ig", { opacity: 0.55, scale: 0.94 });
+
+          var tl = gsap.timeline({ paused: true });
+          // "Claude" (0,067): logo do Claude pulsa + anel
+          tl.to("#c03-claude", { scale: 1.15, duration: 0.09, ease: "power2.out" }, 0.067);
+          tl.to("#c03-claude", { scale: 1, duration: 0.12, ease: "power2.inOut" }, 0.157);
+          tl.set("#c03-ring1", { opacity: 0.9, scale: 1 }, 0.067);
+          tl.to("#c03-ring1", { opacity: 0, scale: 1.6, duration: 0.35, ease: "power2.out" }, 0.067);
+          // 0,2 → 0,867: cabo sai do Claude e corre até o Instagram (plugue na ponta)
+          tl.to("#c03-wrap", { width: 328, duration: 0.62, ease: "power1.inOut" }, 0.22);
+          tl.to("#c03-plug", { x: 314, duration: 0.62, ease: "power1.inOut" }, 0.22);
+          tl.to("#c03-plug", { y: -12, duration: 0.15, yoyo: true, repeat: 3, ease: "sine.inOut" }, 0.24);
+          // "ao" (0,547): o Instagram acorda (cor cheia)
+          tl.to("#c03-ig", { opacity: 1, scale: 1, duration: 0.2, ease: "power2.out" }, 0.547);
+          // "Instagram" (0,867): encaixa → faísca, ícone bate, anel verde
+          rays.forEach(function (r, k) {
+            tl.set(r, { opacity: 1, scaleY: 0.3 }, 0.867);
+            tl.to(r, { scaleY: 1.3, duration: 0.12, ease: "power2.out" }, 0.867);
+            tl.to(r, { opacity: 0, duration: 0.12, ease: "power1.in" }, 0.987);
+          });
+          tl.to("#c03-ig", { scale: 1.12, duration: 0.07, ease: "power2.out" }, 0.867);
+          tl.to("#c03-ig", { scale: 1, duration: 0.12, ease: "power2.inOut" }, 0.937);
+          tl.set("#c03-ring2", { opacity: 0.9, scale: 1 }, 0.9);
+          tl.to("#c03-ring2", { opacity: 0, scale: 1.5, duration: 0.35, ease: "power2.out" }, 0.9);
+          // 0,95: ✓ verde no meio + "conectado" digitado
+          tl.to("#c03-check", { opacity: 1, scale: 1, duration: 0.2, ease: "back.out(2.6)" }, 0.95);
+          var W = "CONECTADO";
+          for (var k = 1; k <= W.length; k++) tl.set("#c03-ct", { textContent: W.slice(0, k) }, 1.0 + (k - 1) * 0.03);
+          tl.set("#c03-top", { textContent: "CLAUDE + INSTAGRAM", backgroundColor: "#e3f4e8", color: "#1a7f37" }, 0.95);
+          tl.to("#c03-top", { scale: 1.06, duration: 0.07, yoyo: true, repeat: 1, ease: "power2.out" }, 0.95);
+          // 1,1 →: dados correndo pelo cabo + tracejado andando
+          tl.to("#c03-line", { strokeDashoffset: -96, duration: 0.45, ease: "none" }, 1.1);
+          dots.forEach(function (d, n) {
+            var t = 1.1 + n * 0.12;
+            tl.set(d, { opacity: 1, x: 0 }, t);
+            tl.to(d, { x: 300, duration: 0.3, ease: "none" }, t);
+            tl.set(d, { opacity: 0 }, t + 0.3);
+          });
+          tl.set({}, {}, 1.55);
+          window.__timelines["c03-plugar"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

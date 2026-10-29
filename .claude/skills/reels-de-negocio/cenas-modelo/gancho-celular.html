@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C01-GANCHO (0–2,0) dividido: "O Claude acabou de matar o Instagram." → cenário pixel ao entardecer com um celular
+         de pé rodando o feed do Instagram; o mascote do Claude Code salta com uma espada (Claude), golpeia (matar):
+         corte diagonal, tela trinca, glitch RGB, curtidas despencam, a tela apaga; o celular tomba e sobe uma lápide
+         pixel "RIP" com o logo do Instagram cinza (Instagram) + flores e carimbo vermelho MORTO (~1,6). -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C01 Inter"; src: url("../assets/fonts/Inter.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+        @font-face { font-family: "C01 Mono"; src: url("../assets/fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; font-display: block; }
+        @font-face { font-family: "C01 Pixel"; src: url("../assets/fonts/Silkscreen-Bold.ttf") format("truetype"); font-weight: 700; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .c01-bg {
+          position: absolute; left: 0; top: 0; width: 1080px; height: 770px;
+          background-color: #efedeb;
+          background-image: linear-gradient(#e6e4e1 2px, transparent 2px), linear-gradient(90deg, #e6e4e1 2px, transparent 2px);
+          background-size: 90px 90px; background-position: -1px -1px;
+        }
+        /* status acima do cartão, centrado em x 540 */
+        .c01-pill {
+          position: absolute; left: 260px; top: 110px; width: 560px; height: 70px; border-radius: 35px; background: #1a1a1a;
+          font-family: "C01 Mono", monospace; font-weight: 800; font-size: 32px; line-height: 70px; letter-spacing: 0.06em; color: #ffffff;
+          text-align: center; white-space: nowrap; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+        }
+        .c01-dot { display: inline-block; width: 18px; height: 18px; border-radius: 50%; background: #3dbe5a; margin-right: 14px; vertical-align: 2px; }
+        /* cartão-cena: x 90–990, y 205–700 */
+        .c01-stage {
+          position: absolute; left: 90px; top: 205px; width: 900px; height: 495px; border-radius: 28px; overflow: hidden;
+          background: #2e2340; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+        }
+        .c01-sky { position: absolute; left: 0; top: 0; width: 900px; height: 495px; image-rendering: pixelated; }
+        .c01-shadow { position: absolute; left: 320px; top: 438px; width: 260px; height: 26px; border-radius: 50%; background: rgba(20, 10, 14, 0.45); }
+        /* celular: centro x 450 local = 540 global */
+        .c01-phone { position: absolute; left: 335px; top: 26px; width: 230px; height: 424px; box-sizing: border-box; padding: 10px; border-radius: 42px; background: #111111; transform-origin: 230px 424px; }
+        .c01-screen { position: relative; width: 210px; height: 404px; border-radius: 32px; overflow: hidden; background: #0b0b0b; }
+        .c01-ui { position: absolute; left: 0; top: 0; width: 210px; height: 404px; background: #ffffff; transform-origin: 105px 202px; }
+        .c01-island { position: absolute; left: 72px; top: 10px; width: 66px; height: 20px; border-radius: 10px; background: #111111; }
+        .c01-bar { position: absolute; left: 0; top: 36px; width: 210px; height: 44px; }
+        .c01-bar svg { position: absolute; left: 14px; top: 7px; width: 30px; height: 30px; }
+        .c01-word { position: absolute; left: 52px; top: 0; height: 44px; line-height: 44px; font-family: "C01 Inter", sans-serif; font-weight: 700; font-style: italic; font-size: 30px; letter-spacing: -0.02em; color: #1a1a1a; white-space: nowrap; }
+        .c01-story { position: absolute; top: 86px; width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(45deg, #feda75 0%, #fa7e1e 25%, #d62976 50%, #962fbf 75%, #4f5bd5 100%); }
+        .c01-story i { position: absolute; left: 4px; top: 4px; width: 46px; height: 46px; border-radius: 50%; background: #ffffff; }
+        .c01-story b { position: absolute; left: 8px; top: 8px; width: 38px; height: 38px; border-radius: 50%; }
+        .c01-view { position: absolute; left: 0; top: 150px; width: 210px; height: 254px; overflow: hidden; }
+        .c01-feed { position: absolute; left: 0; top: 0; width: 210px; }
+        .c01-post { position: relative; width: 210px; height: 236px; }
+        .c01-av { position: absolute; left: 12px; top: 6px; width: 28px; height: 28px; border-radius: 50%; }
+        .c01-ln { position: absolute; left: 50px; top: 14px; width: 92px; height: 12px; border-radius: 6px; background: #dedbd7; }
+        .c01-img { position: absolute; left: 12px; top: 42px; width: 186px; height: 148px; border-radius: 10px; }
+        .c01-icons { position: absolute; left: 12px; top: 198px; width: 186px; height: 30px; }
+        .c01-icons svg { position: absolute; top: 0; width: 28px; height: 28px; }
+        .c01-gbar { position: absolute; left: 0; width: 210px; opacity: 0; }
+        .c01-flash { position: absolute; left: 0; top: 0; width: 210px; height: 404px; background: #ffffff; opacity: 0; }
+        .c01-crack { position: absolute; left: 0; top: 0; width: 210px; height: 404px; }
+        .c01-crt { position: absolute; left: 0; top: 200px; width: 210px; height: 4px; background: #ffffff; opacity: 0; }
+        /* bolha de curtidas à direita (centro x 664 local) */
+        .c01-bub { position: absolute; left: 578px; top: 92px; width: 172px; height: 72px; border-radius: 22px; background: #ff3040; box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25); }
+        .c01-tail { position: absolute; left: -9px; top: 26px; width: 20px; height: 20px; background: #ff3040; transform: rotate(45deg); }
+        .c01-bub svg { position: absolute; left: 18px; top: 19px; width: 34px; height: 34px; }
+        .c01-num { position: absolute; left: 60px; top: 0; height: 72px; line-height: 72px; font-family: "C01 Inter", sans-serif; font-weight: 800; font-size: 34px; color: #ffffff; white-space: nowrap; }
+        .c01-heart { position: absolute; width: 40px; height: 40px; }
+        /* golpe */
+        .c01-slash { position: absolute; left: 0; top: 0; width: 900px; height: 495px; overflow: visible; }
+        /* mascote 12×8 blocos de 16 px; pés no chão (y 450 local) */
+        .c01-mascot { position: absolute; left: 140px; top: 322px; width: 192px; height: 128px; transform-origin: 96px 128px; }
+        .c01-px { position: absolute; }
+        .c01-sword { position: absolute; left: 160px; top: -52px; width: 48px; height: 132px; transform-origin: 24px 108px; }
+        .c01-glint { position: absolute; left: 4px; top: -26px; width: 40px; height: 40px; }
+        /* lápide */
+        .c01-tombwrap { position: absolute; left: 340px; top: 150px; width: 220px; height: 300px; overflow: hidden; }
+        .c01-tomb { position: absolute; left: 10px; top: 50px; width: 200px; height: 250px; }
+        .c01-tomb canvas { position: absolute; left: 0; top: 0; width: 200px; height: 250px; image-rendering: pixelated; }
+        .c01-rip { position: absolute; left: 0; top: 34px; width: 200px; text-align: center; font-family: "C01 Pixel", monospace; font-weight: 700; font-size: 52px; line-height: 56px; color: #3e3c3a; }
+        .c01-ghost { position: absolute; left: 66px; top: 104px; width: 68px; height: 68px; }
+        .c01-dirt { position: absolute; width: 14px; height: 14px; background: #6e4639; opacity: 0; }
+        .c01-flower { position: absolute; width: 36px; height: 60px; transform-origin: 18px 60px; }
+        .c01-stamp {
+          position: absolute; left: 620px; top: 470px; width: 340px; height: 112px; box-sizing: border-box; border: 8px solid #c8102e; border-radius: 14px;
+          background: rgba(249, 248, 246, 0.94); font-family: "C01 Inter", sans-serif; font-weight: 900; font-size: 76px; line-height: 96px;
+          letter-spacing: 0.02em; color: #c8102e; text-align: center;
+        }
+      </style>
+      <div data-hf-id="hf-oifs" id="root" data-composition-id="c01-gancho" data-width="1080" data-height="1920" data-duration="2">
+        <div data-hf-id="hf-gviu" class="c01-bg"></div>
+        <div data-hf-id="hf-4ste" class="c01-pill" id="c01-pill"><span data-hf-id="hf-esbv" class="c01-dot" id="c01-dot"></span><span data-hf-id="hf-t8w2" id="c01-pt">INSTAGRAM ONLINE</span></div>
+        <div data-hf-id="hf-02o8" class="c01-stage" id="c01-stage">
+          <canvas data-hf-id="hf-cq8n" class="c01-sky" id="c01-sky" width="180" height="99"></canvas>
+          <div data-hf-id="hf-jiw6" class="c01-shadow" id="c01-shadow"></div>
+          <div data-hf-id="hf-6eb1" class="c01-tombwrap">
+            <div data-hf-id="hf-s7dy" class="c01-tomb" id="c01-tomb">
+              <canvas data-hf-id="hf-ocyu" id="c01-tombc" width="20" height="25"></canvas>
+              <div data-hf-id="hf-n0db" class="c01-rip">RIP</div>
+              <svg data-hf-id="hf-4j3e" class="c01-ghost" viewBox="0 0 24 24"><path data-hf-id="hf-95uc" fill="#6a6865" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077" /></svg>
+            </div>
+          </div>
+          <div data-hf-id="hf-ylzs" id="c01-dirts"></div>
+          <div data-hf-id="hf-fxsu" id="c01-flowers"></div>
+          <div data-hf-id="hf-y8hc" class="c01-phone" id="c01-phone">
+            <div data-hf-id="hf-5eqy" class="c01-screen" id="c01-screen">
+              <div data-hf-id="hf-e8r2" class="c01-ui" id="c01-ui">
+                <div data-hf-id="hf-zclk" class="c01-island"></div>
+                <div data-hf-id="hf-myqy" class="c01-bar">
+                  <svg data-hf-id="hf-ulu9" viewBox="0 0 24 24"><defs data-hf-id="hf-mh0t"><lineargradient data-hf-id="hf-jtwh" id="c01-igg" x1="0" y1="1" x2="1" y2="0"><stop data-hf-id="hf-4fwu" offset="0" stop-color="#feda75" /><stop data-hf-id="hf-9oti" offset="0.25" stop-color="#fa7e1e" /><stop data-hf-id="hf-z2gb" offset="0.5" stop-color="#d62976" /><stop data-hf-id="hf-ulvv" offset="0.75" stop-color="#962fbf" /><stop data-hf-id="hf-4jq9" offset="1" stop-color="#4f5bd5" /></lineargradient></defs><path data-hf-id="hf-d6mq" fill="url(#c01-igg)" d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077" /></svg>
+                  <div data-hf-id="hf-54kl" class="c01-word">Instagram</div>
+                </div>
+                <div data-hf-id="hf-ou1y" class="c01-story" style="left: 12px"><i data-hf-id="hf-wt6k"></i><b data-hf-id="hf-xq86" style="background: #f6b6a0"></b></div>
+                <div data-hf-id="hf-pcfy" class="c01-story" style="left: 78px"><i data-hf-id="hf-zeb8"></i><b data-hf-id="hf-vas9" style="background: #a8c8f0"></b></div>
+                <div data-hf-id="hf-rfro" class="c01-story" style="left: 144px"><i data-hf-id="hf-y7e5"></i><b data-hf-id="hf-fe52" style="background: #b8e0b0"></b></div>
+                <div data-hf-id="hf-h5j8" class="c01-view"><div data-hf-id="hf-jjma" class="c01-feed" id="c01-feed"></div></div>
+                <div data-hf-id="hf-otmf" id="c01-gbars"></div>
+              </div>
+              <svg data-hf-id="hf-ygkk" class="c01-crack" viewBox="0 0 210 404" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                <path data-hf-id="hf-2n02" id="c01-k1" d="M110 196 L70 150 L52 160 L14 110" />
+                <path data-hf-id="hf-w84j" id="c01-k2" d="M110 196 L150 140 L176 150 L204 92" />
+                <path data-hf-id="hf-7pa9" id="c01-k3" d="M110 196 L64 250 L40 254 L8 320" />
+                <path data-hf-id="hf-1j5x" id="c01-k4" d="M110 196 L156 262 L184 266 L206 340" />
+                <path data-hf-id="hf-8je8" id="c01-k5" d="M110 196 L102 120 L118 70 L106 20" />
+                <path data-hf-id="hf-ncpp" id="c01-k6" d="M110 196 L118 290 L100 350 L110 400" />
+              </svg>
+              <div data-hf-id="hf-he3c" class="c01-flash" id="c01-flash"></div>
+              <div data-hf-id="hf-exgm" class="c01-crt" id="c01-crt"></div>
+            </div>
+          </div>
+          <div data-hf-id="hf-6ah6" class="c01-bub" id="c01-bub">
+            <div data-hf-id="hf-7kxa" class="c01-tail" id="c01-tail"></div>
+            <svg data-hf-id="hf-1tol" viewBox="0 0 24 24"><path data-hf-id="hf-qnnr" fill="#ffffff" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
+            <div data-hf-id="hf-k55p" id="c01-nums"></div>
+          </div>
+          <div data-hf-id="hf-z9td" id="c01-hearts"></div>
+          <div data-hf-id="hf-yrki" class="c01-mascot" id="c01-mascot">
+            <div data-hf-id="hf-si8a" class="c01-sword" id="c01-sword">
+              <svg data-hf-id="hf-e42g" class="c01-glint" id="c01-glint" viewBox="0 0 40 40"><path data-hf-id="hf-by86" fill="#fff6d8" d="M20 0 L24 16 L40 20 L24 24 L20 40 L16 24 L0 20 L16 16 Z" /></svg>
+            </div>
+          </div>
+          <svg data-hf-id="hf-9t89" class="c01-slash" viewBox="0 0 900 495" fill="none" stroke-linecap="round">
+            <path data-hf-id="hf-12xn" id="c01-sl2" d="M640 40 L250 470" stroke="#ff6b4a" stroke-width="30" opacity="0.55" />
+            <path data-hf-id="hf-2rsu" id="c01-sl" d="M640 40 L250 470" stroke="#ffffff" stroke-width="14" />
+          </svg>
+        </div>
+        <div data-hf-id="hf-t8of" class="c01-stamp" id="c01-stamp" data-layout-allow-overlap="">MORTO</div>
+      </div>
+      <script>
+        (function () {
+          var seed = 71071;
+          function rnd() { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; var t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }
+
+          // ---- cenário pixel (180×99, escala 5) ----
+          var cv = document.getElementById("c01-sky"), g = cv.getContext("2d");
+          var SKY = ["#2e2340", "#3b2a4c", "#4f2f55", "#6a3557", "#8a3f56", "#ad4d52", "#cb6550", "#e08458", "#eca468"];
+          for (var y = 0; y < 64; y++) {
+            var f = y / 64 * SKY.length, b = Math.floor(f), fr = f - b;
+            for (var x = 0; x < 180; x++) {
+              var c = SKY[Math.min(b, SKY.length - 1)];
+              if (fr > 0.6 && b + 1 < SKY.length && ((x + y) % 2 === 0)) c = SKY[b + 1];
+              g.fillStyle = c; g.fillRect(x, y, 1, 1);
+            }
+          }
+          // sol
+          for (var sy = -12; sy <= 12; sy++) for (var sx = -12; sx <= 12; sx++) {
+            var d2 = sx * sx + sy * sy;
+            if (d2 <= 144 && 44 + sy < 62) { g.fillStyle = d2 < 60 ? "#fbe3a8" : "#f4c47e"; g.fillRect(146 + sx, 44 + sy, 1, 1); }
+          }
+          // nuvens
+          [[12, 14, 26, "#c9615a"], [20, 16, 18, "#d9775a"], [62, 22, 30, "#a84a55"], [70, 24, 18, "#c35d58"], [110, 10, 22, "#7e3a57"], [128, 30, 24, "#e48d5f"], [36, 38, 20, "#e8955f"]].forEach(function (cl) {
+            g.fillStyle = cl[3]; g.fillRect(cl[0], cl[1], cl[2], 2); g.fillRect(cl[0] + 3, cl[1] - 1, cl[2] - 8, 1);
+          });
+          // silhueta: cerca, cruzes e árvore seca no horizonte
+          g.fillStyle = "#2a1c2b";
+          g.fillRect(0, 61, 180, 3);
+          for (var fx = 0; fx < 180; fx += 4) { g.fillRect(fx, 57, 1, 4); }
+          g.fillRect(0, 58, 180, 1);
+          [[18, 55], [40, 56], [96, 55], [122, 56]].forEach(function (p) { g.fillRect(p[0], p[1], 3, 6); g.fillRect(p[0] - 1, p[1] + 1, 5, 1); });
+          [[28, 56], [58, 57], [84, 56], [108, 57]].forEach(function (p) { g.fillRect(p[0], p[1], 4, 5); g.fillRect(p[0] + 1, p[1] - 1, 2, 1); });
+          g.fillRect(164, 40, 3, 22); g.fillRect(160, 44, 4, 1); g.fillRect(158, 42, 2, 2); g.fillRect(167, 46, 5, 1); g.fillRect(171, 43, 1, 3); g.fillRect(165, 36, 1, 4); g.fillRect(162, 38, 3, 1);
+          // chão
+          for (var gy = 64; gy < 99; gy++) for (var gx = 0; gx < 180; gx++) {
+            var r = rnd(), col = "#5b3a31";
+            if (gy === 64) col = "#3e2a26"; else if (r < 0.07) col = "#6e4639"; else if (r < 0.12) col = "#4a2e27";
+            g.fillStyle = col; g.fillRect(gx, gy, 1, 1);
+          }
+
+          // ---- lápide (20×25, escala 10) ----
+          var tc = document.getElementById("c01-tombc").getContext("2d");
+          var T = [
+            "......OOOOOOOO......", "....OOLLLLLLMMOO....", "...OLLLLLLLLLMMMO...", "..OLLLLLLLLLLLMMMO..", ".OLLLLLLLLLLLLLMMMO.",
+            ".OLLLLLLLLLLLLLMMMO.", "OLLLLLLLLLLLLLLLMMMO", "OLLLLLLLLLLLLLLLMMMO", "OLLLLLLLLLLLLLLLMMMO", "OLLLLLLLLLLLLLLLMMMO",
+            "OLLLLLLLLLLLLLLLMMMO", "OLLLLLLLLLLLLLLLMMMO", "OLLLLLLLLLLLLLLLMMMO", "OLLLLLLLLLLLLLLLMMMO", "OLLLLLLLLLLLLLLLMMMO",
+            "OLLLLLLLLLLLLLLLMMMO", "OLLLLLLLLLLLLLLLMMMO", "OLLLLLLLLLLLLLLLMMMO", "OLLLLLLLLLLLLLLLMMMO", "OLLLLLLLLLLLLLLLMMMO",
+            "OLLLLLLLLLLLLLLLMMMO", "OLLLLLLLLLLLLLLLMMMO", "OSSSSSSSSSSSSSSSSSSO", "OSSSSSSSSSSSSSSSSSSO", "OOOOOOOOOOOOOOOOOOOO"
+          ];
+          var TCOL = { O: "#4e4c49", L: "#b3b0ab", M: "#96938e", S: "#7d7a76" };
+          T.forEach(function (row, ty) { for (var tx = 0; tx < row.length; tx++) { var ch = row[tx]; if (ch === ".") continue; tc.fillStyle = TCOL[ch]; tc.fillRect(tx, ty, 1, 1); } });
+          tc.fillStyle = "#c8c5c0"; tc.fillRect(2, 7, 1, 12); tc.fillRect(3, 4, 1, 2);
+
+          // ---- sprites em blocos ----
+          function sprite(host, rows, size, cols, x0, y0) {
+            rows.forEach(function (row, yy) {
+              for (var xx = 0; xx < row.length; xx++) {
+                var ch = row[xx]; if (ch === ".") continue;
+                var d = document.createElement("div"); d.className = "c01-px";
+                d.style.left = (x0 || 0) + xx * size + "px"; d.style.top = (y0 || 0) + yy * size + "px";
+                d.style.width = size + "px"; d.style.height = size + "px"; d.style.background = cols[ch];
+                host.appendChild(d);
+              }
+            });
+          }
+          var mascot = document.getElementById("c01-mascot");
+          var MS = ["..BBBBBBBB..", "..BBBBBBBB..", "..BEBBBBEB..", "BBBEBBBBEBBB", "BBBBBBBBBBBB", "..BBBBBBBB..", "..B.B..B.B..", "..B.B..B.B.."];
+          sprite(mascot, MS, 16, { B: "#d97757", E: "#1a1a1a" });
+          mascot.appendChild(document.getElementById("c01-sword"));
+          // espada: lâmina 12 px, guarda dourada, cabo marrom
+          var sword = document.getElementById("c01-sword");
+          sprite(sword, [".W", ".W", ".W", ".W", ".W", ".W", ".W"], 12, { W: "#f2f0ed" }, 6, 0);
+          sprite(sword, ["GGGG"], 12, { G: "#e8b547" }, 0, 84);
+          sprite(sword, [".K", ".K"], 12, { K: "#6b4a2e" }, 6, 96);
+          sprite(sword, [".G"], 12, { G: "#e8b547" }, 6, 120);
+          sword.appendChild(document.getElementById("c01-glint"));
+          var edge = document.createElement("div"); edge.className = "c01-px";
+          edge.style.cssText = "left:24px;top:0;width:4px;height:84px;background:#bdb9b4";
+          sword.appendChild(edge);
+
+          // flores pixel (12 px), simétricas em torno de x 450 local
+          var fh = document.getElementById("c01-flowers"), flowers = [];
+          [[286, "#d94a8c"], [328, "#e8b547"], [536, "#e8b547"], [578, "#d94a8c"]].forEach(function (fl) {
+            var d = document.createElement("div"); d.className = "c01-flower"; d.style.left = fl[0] + "px"; d.style.top = "396px";
+            sprite(d, [".P.", "PYP", ".P.", ".G.", "GG."], 12, { P: fl[1], Y: fl[1] === "#e8b547" ? "#f9f8f6" : "#f4d35e", G: "#3dbe5a" });
+            fh.appendChild(d); flowers.push(d);
+          });
+          // terra que voa quando a lápide sobe
+          var dh = document.getElementById("c01-dirts"), dirts = [], dv = [];
+          for (var k = 0; k < 8; k++) {
+            var d = document.createElement("div"); d.className = "c01-dirt"; d.style.left = (360 + k * 24) + "px"; d.style.top = "440px";
+            dh.appendChild(d); dirts.push(d); dv.push([(k - 3.5) * (20 + rnd() * 18), -(60 + rnd() * 70)]);
+          }
+          // corações subindo do celular
+          var hh = document.getElementById("c01-hearts"), hearts = [];
+          for (var h = 0; h < 5; h++) {
+            var e = document.createElement("div"); e.className = "c01-heart"; e.style.left = (520 + (h % 2) * 26) + "px"; e.style.top = "170px";
+            e.innerHTML = '<svg viewBox="0 0 24 24" width="40" height="40"><path fill="#ff3040" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+            hh.appendChild(e); hearts.push(e);
+          }
+          // feed com posts genéricos
+          var feed = document.getElementById("c01-feed");
+          var POSTS = [["#f08c6e", "linear-gradient(135deg,#fbd3c4,#f6a5c0)"], ["#4a90d9", "linear-gradient(135deg,#c9e4ff,#d8c8ff)"], ["#3dbe5a", "linear-gradient(135deg,#ffe8a8,#ffc2a8)"], ["#8a4ad9", "linear-gradient(135deg,#c8f0da,#a8d8f0)"]], HEART = '<svg viewBox="0 0 24 24" style="left:0"><path fill="#ff3040" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+          var COM = '<svg viewBox="0 0 24 24" style="left:40px"><path fill="none" stroke="#1a1a1a" stroke-width="2.2" stroke-linejoin="round" d="M20.7 16.2A9 9 0 1 0 17 19.9L21.5 21z"/></svg>';
+          var SEND = '<svg viewBox="0 0 24 24" style="left:80px"><path fill="none" stroke="#1a1a1a" stroke-width="2.2" stroke-linejoin="round" d="M22 3 9.2 10.1M22 3l-7 18-3.8-8L3 9.2z"/></svg>';
+          POSTS.forEach(function (p) {
+            var d = document.createElement("div"); d.className = "c01-post";
+            d.innerHTML = '<div class="c01-av" style="background:' + p[0] + '"></div><div class="c01-ln"></div><div class="c01-img" style="background:' + p[1] + '"></div><div class="c01-icons">' + HEART + COM + SEND + "</div>";
+            feed.appendChild(d);
+          });
+          // barras de glitch
+          var gb = document.getElementById("c01-gbars"), bars = [];
+          var BC = ["rgba(255,0,80,0.6)", "rgba(0,230,255,0.6)", "rgba(255,255,255,0.75)", "rgba(255,0,80,0.6)", "rgba(0,230,255,0.6)", "rgba(30,30,30,0.7)"];
+          for (var i = 0; i < 6; i++) {
+            var bb = document.createElement("div"); bb.className = "c01-gbar";
+            bb.style.top = Math.floor(30 + rnd() * 340) + "px"; bb.style.height = Math.floor(10 + rnd() * 22) + "px"; bb.style.background = BC[i];
+            gb.appendChild(bb); bars.push(bb);
+          }
+          // traços (rachaduras e golpe)
+          var K = ["#c01-k1", "#c01-k2", "#c01-k3", "#c01-k4", "#c01-k5", "#c01-k6", "#c01-sl", "#c01-sl2"];
+          K.forEach(function (k) { var p = document.querySelector(k); var L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; });
+
+          // ---- estados iniciais ----
+          gsap.set("#c01-mascot", { x: -100 }); gsap.set("#c01-sword", { scale: 0, rotation: 10 }); gsap.set("#c01-glint", { scale: 0 });
+          gsap.set("#c01-tomb", { y: 260 }); gsap.set(flowers, { scale: 0 }); gsap.set(hearts, { opacity: 0 });
+          gsap.set("#c01-stamp", { opacity: 0, scale: 1.6, rotation: -10 });
+
+          var tl = gsap.timeline({ paused: true });
+          // feed rolando sozinho (Instagram vivo)
+          tl.to("#c01-feed", { y: -330, duration: 0.8, ease: "none" }, 0);
+          // corações subindo + contador de curtidas
+          hearts.forEach(function (e, j) {
+            var t = 0.02 + j * 0.14;
+            tl.set(e, { opacity: 1, y: 0, x: 0, scale: 0.6 }, t);
+            tl.to(e, { y: -150, x: (j % 2 ? 26 : -18), scale: 1, duration: 0.45, ease: "power1.out" }, t);
+            tl.to(e, { opacity: 0, duration: 0.15, ease: "power1.in" }, t + 0.3);
+          });
+          // contador: números pré-montados (GSAP leria "4.120" como número), um visível por vez
+          var NV = [["1.284", 0], ["2.910", 0.13], ["4.377", 0.26], ["6.052", 0.39], ["7.718", 0.52], ["9.341", 0.65], ["4.120", 0.86], ["870", 0.93], ["12", 1.0], ["0", 1.07]];
+          var nh = document.getElementById("c01-nums"), nums = [];
+          NV.forEach(function (n, j) { var d = document.createElement("div"); d.className = "c01-num"; d.textContent = n[0]; nh.appendChild(d); nums.push(d); if (j) gsap.set(d, { opacity: 0 }); });
+          NV.forEach(function (n, j) { if (!j) return; tl.set(nums[j - 1], { opacity: 0 }, n[1]); tl.set(nums[j], { opacity: 1 }, n[1]); });
+          [0.13, 0.39, 0.65].forEach(function (t) { tl.to("#c01-bub", { scale: 1.08, duration: 0.05, yoyo: true, repeat: 1, ease: "power1.out" }, t); });
+
+          // "Claude" (0,03): o mascote salta pra frente do celular, espada aparece
+          tl.to("#c01-mascot", { x: 0, duration: 0.3, ease: "none" }, 0.03);
+          tl.to("#c01-mascot", { y: -130, duration: 0.15, ease: "power2.out" }, 0.03);
+          tl.to("#c01-mascot", { y: 0, duration: 0.15, ease: "power2.in" }, 0.18);
+          tl.to("#c01-sword", { scale: 1, duration: 0.16, ease: "back.out(3)" }, 0.06);
+          tl.to("#c01-mascot", { scaleY: 0.82, scaleX: 1.1, duration: 0.05, ease: "power1.out" }, 0.33); tl.to("#c01-mascot", { scaleY: 1, scaleX: 1, duration: 0.1, ease: "power1.out" }, 0.38);
+          // "acabou" (0,33): ergue a espada; brilho na ponta
+          tl.to("#c01-sword", { rotation: -38, duration: 0.2, ease: "power2.out" }, 0.4);
+          tl.to("#c01-glint", { scale: 1, rotation: 90, duration: 0.1, ease: "power2.out" }, 0.52);
+          tl.to("#c01-glint", { scale: 0, rotation: 180, duration: 0.12, ease: "power2.in" }, 0.62);
+          // "de" (0,73): agacha pra pegar impulso
+          tl.to("#c01-mascot", { scaleY: 0.88, scaleX: 1.06, duration: 0.06, ease: "power1.out" }, 0.73);
+          // "matar" (0,81): golpe → corte diagonal, flash, tela trinca, celular treme
+          tl.to("#c01-mascot", { scaleY: 1, scaleX: 1, x: 60, y: -30, duration: 0.07, ease: "power2.out" }, 0.81);
+          tl.to("#c01-sword", { rotation: 135, duration: 0.07, ease: "power3.out" }, 0.81);
+          tl.to("#c01-sl2", { strokeDashoffset: 0, duration: 0.07, ease: "power2.out" }, 0.81);
+          tl.to("#c01-sl", { strokeDashoffset: 0, duration: 0.07, ease: "power2.out" }, 0.81);
+          tl.to("#c01-sl, #c01-sl2", { opacity: 0, duration: 0.18, ease: "power1.in" }, 0.96);
+          tl.set("#c01-flash", { opacity: 1 }, 0.83); tl.to("#c01-flash", { opacity: 0, duration: 0.14, ease: "power1.out" }, 0.85);
+          K.slice(0, 6).forEach(function (k, j) { tl.to(k, { strokeDashoffset: 0, duration: 0.16, ease: "power2.out" }, 0.84 + j * 0.02); });
+          [[0.84, 12], [0.88, -12], [0.92, 8], [0.96, -5], [1.0, 0]].forEach(function (s) { tl.set("#c01-phone", { x: s[1] }, s[0]); });
+          // status e curtidas despencam
+          tl.set("#c01-pill", { backgroundColor: "#c8102e" }, 0.81);
+          tl.set("#c01-dot", { opacity: 0, width: 0, marginRight: 0 }, 0.81);
+          tl.set("#c01-pt", { textContent: "⚠ ERRO CRÍTICO" }, 0.81);
+          [[0.81, 8], [0.85, -8], [0.89, 5], [0.93, 0]].forEach(function (s) { tl.set("#c01-pill", { x: s[1] }, s[0]); });
+          tl.set("#c01-bub, #c01-tail", { backgroundColor: "#8a8783" }, 0.84);
+          tl.to("#c01-bub", { y: 18, rotation: 8, duration: 0.25, ease: "power2.in" }, 0.86);
+          // glitch RGB no feed
+          var GL = [[0.86, 14, "drop-shadow(6px 0 0 rgba(255,0,80,0.9)) drop-shadow(-6px 0 0 rgba(0,230,255,0.9))", -6],
+                    [0.91, -18, "hue-rotate(110deg) saturate(1.8)", 8], [0.96, 10, "drop-shadow(-8px 0 0 rgba(255,0,80,0.9)) drop-shadow(8px 0 0 rgba(0,230,255,0.9))", -4],
+                    [1.01, -8, "invert(1)", 6], [1.06, 16, "hue-rotate(-80deg) saturate(2)", -8], [1.11, 0, "none", 0]];
+          GL.forEach(function (s) { tl.set("#c01-ui", { x: s[1], filter: s[2], skewX: s[3] }, s[0]); });
+          bars.forEach(function (bb, j) {
+            tl.set(bb, { opacity: 1, x: (j % 2 ? 18 : -18) }, 0.86 + (j % 3) * 0.05);
+            tl.set(bb, { opacity: 0 }, 0.96 + (j % 3) * 0.05);
+            tl.set(bb, { opacity: 1, x: (j % 2 ? -24 : 24) }, 1.02 + (j % 2) * 0.04);
+            tl.set(bb, { opacity: 0 }, 1.12);
+          });
+          // mascote recua
+          tl.to("#c01-mascot", { x: -40, y: 0, duration: 0.18, ease: "power2.out" }, 0.98);
+          tl.to("#c01-sword", { rotation: 20, duration: 0.2, ease: "power2.out" }, 1.0);
+          // 1,15: tela apaga (efeito de TV desligando)
+          tl.to("#c01-ui", { scaleY: 0.01, duration: 0.07, ease: "power2.in" }, 1.14);
+          tl.set("#c01-crt", { opacity: 1 }, 1.21); tl.to("#c01-crt", { scaleX: 0, duration: 0.12, ease: "power2.in" }, 1.21); tl.set("#c01-crt", { opacity: 0 }, 1.34);
+          // "Instagram" (1,37): o celular tomba, a lápide sobe do chão
+          tl.set("#c01-pill", { backgroundColor: "#3a3836" }, 1.37);
+          tl.set("#c01-dot", { opacity: 1, width: 18, marginRight: 14, backgroundColor: "#8a8783" }, 1.37);
+          tl.set("#c01-pt", { textContent: "INSTAGRAM OFFLINE" }, 1.37);
+          tl.to("#c01-bub", { opacity: 0, y: 60, duration: 0.16, ease: "power2.in" }, 1.37);
+          tl.to("#c01-phone", { rotation: 82, y: 20, duration: 0.26, ease: "power2.in" }, 1.37);
+          tl.to("#c01-phone", { opacity: 0, duration: 0.1, ease: "power1.in" }, 1.55);
+          tl.to("#c01-shadow", { opacity: 0, duration: 0.15, ease: "power1.in" }, 1.4);
+          tl.to("#c01-tomb", { y: 0, duration: 0.24, ease: "back.out(1.4)" }, 1.42);
+          dirts.forEach(function (d, j) {
+            tl.set(d, { opacity: 1, x: 0, y: 0 }, 1.42);
+            tl.to(d, { x: dv[j][0], y: dv[j][1], duration: 0.2, ease: "power2.out" }, 1.42);
+            tl.to(d, { y: dv[j][1] + 60, opacity: 0, duration: 0.18, ease: "power2.in" }, 1.62);
+          });
+          // flores em cascata
+          [0, 3, 1, 2].forEach(function (n, j) { tl.to(flowers[n], { scale: 1, duration: 0.18, ease: "back.out(2.5)" }, 1.56 + j * 0.05); });
+          // ~1,6: carimbo vermelho MORTO
+          tl.to("#c01-stamp", { opacity: 1, scale: 1, duration: 0.13, ease: "power4.in" }, 1.6);
+          [[1.73, 6], [1.76, -6], [1.79, 3], [1.82, 0]].forEach(function (s) { tl.set("#c01-stamp", { x: s[1] }, s[0]); });
+          tl.to("#c01-stage", { y: 5, duration: 0.04, ease: "power1.out" }, 1.73); tl.to("#c01-stage", { y: 0, duration: 0.05, ease: "power1.in" }, 1.775);
+          // mascote baixa a espada e dá um pulinho
+          tl.to("#c01-sword", { rotation: 0, duration: 0.15, ease: "power2.out" }, 1.5);
+          tl.to("#c01-mascot", { y: -26, duration: 0.09, ease: "power2.out" }, 1.82); tl.to("#c01-mascot", { y: 0, duration: 0.08, ease: "power2.in" }, 1.915);
+          tl.to(flowers, { rotation: 6, duration: 0.15, ease: "sine.inOut" }, 1.82);
+          tl.set({}, {}, 2);
+          window.__timelines["c01-gancho"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

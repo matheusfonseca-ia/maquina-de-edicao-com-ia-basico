@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C23-CTA (48,9167–53,6833) dividido: "E se você quer receber o link dessa skill, é só comentar a palavra Instagram que eu te envio na DM" → CTA seguir + comentar INSTAGRAM + te envio na DM; o link fica trancado acima do cartão e chega como DM no fim (base: Claude Code hackeando a TV c18-cta) -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C23 Inter"; src: url("../assets/fonts/Inter.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+        @font-face { font-family: "C23 Mono"; src: url("../assets/fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .c23-bg {
+          position: absolute; left: 0; top: 0; width: 1080px; height: 770px;
+          background-color: #efedeb;
+          background-image: linear-gradient(#e6e4e1 2px, transparent 2px), linear-gradient(90deg, #e6e4e1 2px, transparent 2px);
+          background-size: 90px 90px; background-position: -1px -1px;
+        }
+        .c23-card {
+          position: absolute; left: 90px; top: 268px; width: 900px; height: 420px; border-radius: 28px; background: #f9f8f6;
+          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1); font-family: "C23 Inter", sans-serif; color: #1a1a1a;
+        }
+        .c23-num { position: absolute; left: 34px; width: 58px; height: 58px; border-radius: 50%; background: #d97757; color: #fff; font-weight: 800; font-size: 32px; line-height: 58px; text-align: center; }
+        .c23-ring { position: absolute; left: 116px; top: 30px; width: 112px; height: 112px; border-radius: 50%; background: conic-gradient(#feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5, #feda75); }
+        .c23-ava { position: absolute; left: 7px; top: 7px; width: 98px; height: 98px; border-radius: 50%; border: 5px solid #f9f8f6; overflow: hidden; box-sizing: border-box; background: #ddd; }
+        .c23-ava img { width: 100%; height: 100%; object-fit: cover; }
+        .c23-follow { position: absolute; left: 250px; top: 36px; font-weight: 800; font-size: 54px; letter-spacing: -0.02em; }
+        .c23-handle { position: absolute; left: 252px; top: 100px; font-weight: 600; font-size: 30px; color: #74716d; }
+        .c23-btn { position: absolute; right: 30px; top: 58px; width: 216px; height: 66px; border-radius: 14px; background: #0095f6; color: #fff; font-weight: 800; font-size: 32px; line-height: 66px; text-align: center; }
+        .c23-sep { position: absolute; left: 0; top: 172px; width: 900px; height: 2px; background: #ece9e4; }
+        .c23-com { position: absolute; left: 116px; top: 216px; font-weight: 800; font-size: 54px; letter-spacing: -0.02em; }
+        .c23-field { position: absolute; left: 418px; top: 200px; width: 452px; height: 100px; border-radius: 18px; background: #ffffff; border: 4px solid #e4e0da; box-sizing: border-box; }
+        .c23-typed { position: absolute; left: 26px; top: 0; font-weight: 800; font-size: 56px; line-height: 92px; letter-spacing: 0.02em; color: #1a1a1a; white-space: nowrap; }
+        .c23-caret { display: inline-block; width: 5px; height: 56px; background: #0095f6; vertical-align: -9px; margin-left: 3px; }
+        .c23-dm { position: absolute; left: 116px; top: 336px; width: 400px; height: 40px; font-weight: 700; font-size: 32px; line-height: 40px; color: #74716d; }
+        .c23-dmtxt { position: absolute; left: 50px; top: 0; white-space: nowrap; }
+        .c23-plane { position: absolute; left: 0; top: 2px; width: 36px; height: 36px; }
+        .c23-plane svg { display: block; width: 36px; height: 36px; }
+        /* link trancado (acima do cartão), vira a DM no fim */
+        .c23-lock {
+          position: absolute; left: 540px; top: 126px; height: 80px; padding: 0 30px 0 24px; border-radius: 40px; background: #ffffff; border: 3px dashed #cfcac3; box-sizing: border-box;
+          display: flex; align-items: center; gap: 14px; white-space: nowrap; font-family: "C23 Mono", monospace; font-weight: 700; font-size: 30px; color: #74716d;
+        }
+        .c23-lock svg { width: 36px; height: 36px; flex: none; }
+        /* aviso de mensagem direta (acima do cartão) */
+        .c23-note {
+          position: absolute; left: 130px; top: 98px; width: 820px; height: 132px; border-radius: 26px; background: #ffffff;
+          box-shadow: 0 14px 34px rgba(0, 0, 0, 0.12); font-family: "C23 Inter", sans-serif; color: #1a1a1a;
+        }
+        .c23-note-ava { position: absolute; left: 24px; top: 24px; width: 84px; height: 84px; border-radius: 50%; overflow: hidden; background: #ddd url("../assets/img/perfil.webp") center / cover no-repeat; }
+        .c23-note-name { position: absolute; left: 132px; top: 22px; font-weight: 800; font-size: 32px; }
+        .c23-note-time { position: absolute; right: 30px; top: 26px; font-weight: 600; font-size: 28px; color: #8a8783; }
+        .c23-note-msg { position: absolute; left: 132px; top: 70px; width: 660px; font-weight: 500; font-size: 32px; color: #3a3836; white-space: nowrap; }
+        .c23-hl { display: inline-block; margin-left: 13px; font-weight: 800; color: #c15f3c; }
+        .c23-badge { position: absolute; left: 86px; top: 14px; width: 34px; height: 34px; border-radius: 50%; background: #ff3040; border: 4px solid #ffffff; color: #fff; font-weight: 800; font-size: 20px; line-height: 27px; text-align: center; box-sizing: border-box; }
+      </style>
+      <div data-hf-id="hf-d9b5" id="root" data-composition-id="c23-cta" data-width="1080" data-height="1920" data-duration="4.766666">
+        <div data-hf-id="hf-j1pq" class="c23-bg"></div>
+        <div data-hf-id="hf-5f0q" class="c23-lock" id="c23-lock"><svg data-hf-id="hf-h7yi" id="c23-lockico" viewBox="0 0 24 24"><rect data-hf-id="hf-cc61" x="4.5" y="10.5" width="15" height="11" rx="2.5" fill="#8a8783" /><path data-hf-id="hf-yh5r" d="M8 10.5V7.5a4 4 0 0 1 8 0v3" fill="none" stroke="#8a8783" stroke-width="2.4" stroke-linecap="round" /><rect data-hf-id="hf-5544" x="11" y="14" width="2" height="4" rx="1" fill="#ffffff" /></svg>instagram-agent-skill</div>
+        <div data-hf-id="hf-61si" class="c23-note" id="c23-note">
+          <div data-hf-id="hf-k5aa" class="c23-note-ava"></div>
+          <div data-hf-id="hf-bysd" class="c23-badge" id="c23-badge">1</div>
+          <div data-hf-id="hf-j56r" class="c23-note-name">matheusfonseca.ia</div>
+          <div data-hf-id="hf-a6vx" class="c23-note-time">agora</div>
+          <div data-hf-id="hf-tox9" class="c23-note-msg">Segue o link:<span data-hf-id="hf-qc05" class="c23-hl" id="c23-hl">instagram-agent-skill</span></div>
+        </div>
+        <div data-hf-id="hf-vhoq" class="c23-card" id="c23-card">
+          <div data-hf-id="hf-ezyj" class="c23-num" id="c23-n1" style="top: 57px">1</div>
+          <div data-hf-id="hf-zk39" class="c23-ring"><div data-hf-id="hf-ojhv" class="c23-ava"><img data-hf-id="hf-jcdp" src="../assets/img/perfil.webp" alt=""></div></div>
+          <div data-hf-id="hf-ihej" class="c23-follow">Seguir</div>
+          <div data-hf-id="hf-bgut" class="c23-handle">@matheusfonseca.ia</div>
+          <div data-hf-id="hf-0453" class="c23-btn" id="c23-btn">Seguir</div>
+          <div data-hf-id="hf-g03t" class="c23-sep"></div>
+          <div data-hf-id="hf-hhby" class="c23-num" id="c23-n2" style="top: 221px">2</div>
+          <div data-hf-id="hf-p9oz" class="c23-com">Comente</div>
+          <div data-hf-id="hf-93f0" class="c23-field" id="c23-field"><div data-hf-id="hf-x2qd" class="c23-typed"><span data-hf-id="hf-gl77" id="c23-t"></span><span data-hf-id="hf-0igj" class="c23-caret" id="c23-caret"></span></div></div>
+          <div data-hf-id="hf-zozm" class="c23-dm" id="c23-dm"><span data-hf-id="hf-4e1d" class="c23-plane" id="c23-plane"><svg data-hf-id="hf-uo4y" viewBox="0 0 24 24" fill="none" stroke="#74716d" stroke-width="2" stroke-linejoin="round"><path data-hf-id="hf-f5l9" d="M22 2 L11 13" /><path data-hf-id="hf-khl2" d="M22 2 L15 22 L11 13 L2 9 Z" /></svg></span><span data-hf-id="hf-cl9x" class="c23-dmtxt">Te envio na DM</span></div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          // tempos locais = global − 48,9167 · "quer" 0,223 · "receber" 0,463 · "link" 0,943 · "skill" 1,423 · "só" 1,903 · "comentar" 2,063
+          //   "palavra" 2,463 · "Instagram" 2,863 · "envio" 3,823 · "DM" 4,383
+          gsap.set("#c23-dm", { opacity: 0, y: 10 });
+          gsap.set("#c23-note", { opacity: 0, y: -24, scale: 0.96 });
+          gsap.set("#c23-badge", { scale: 0 });
+          gsap.set("#c23-hl", { transformOrigin: "0% 60%" });
+          gsap.set("#c23-lock", { xPercent: -50, opacity: 0, y: 10, scale: 0.96 });
+          var tl = gsap.timeline({ paused: true });
+          // cursor piscando no campo (fica aceso enquanto digita)
+          for (var c = 0.2; c < 2.0; c += 0.4) { tl.set("#c23-caret", { opacity: 0 }, c); tl.set("#c23-caret", { opacity: 1 }, c + 0.2); }
+          for (var c2 = 3.45; c2 < 4.7; c2 += 0.4) { tl.set("#c23-caret", { opacity: 0 }, c2); tl.set("#c23-caret", { opacity: 1 }, c2 + 0.2); }
+          // "quer" (0,223): círculo 1 pulsa
+          tl.to("#c23-n1", { scale: 1.18, duration: 0.07, ease: "power2.out" }, 0.223); tl.to("#c23-n1", { scale: 1, duration: 0.1, ease: "power2.in" }, 0.298);
+          // "receber" (0,463): botão Seguir → Seguindo
+          tl.to("#c23-btn", { scale: 0.9, duration: 0.05, ease: "power1.out" }, 0.463);
+          tl.to("#c23-btn", { scale: 1, duration: 0.05, ease: "power1.out" }, 0.518);
+          tl.set("#c23-btn", { textContent: "Seguindo", backgroundColor: "#efefef", color: "#1a1a1a" }, 0.513);
+          // "link" (0,943): o link da skill aparece trancado acima do cartão
+          tl.to("#c23-lock", { opacity: 1, y: 0, scale: 1, duration: 0.25, ease: "power2.out" }, 0.943);
+          // "skill" (1,423): o cadeado treme
+          [[1.423, -14], [1.473, 12], [1.523, -8], [1.573, 0]].forEach(function (q) { tl.to("#c23-lockico", { rotation: q[1], duration: 0.05, ease: "sine.inOut" }, q[0]); });
+          // "só" (1,903): círculo 2 pulsa
+          tl.to("#c23-n2", { scale: 1.18, duration: 0.07, ease: "power2.out" }, 1.903); tl.to("#c23-n2", { scale: 1, duration: 0.1, ease: "power2.in" }, 1.978);
+          // "comentar" (2,063): o campo dá um toque e o cursor fica aceso
+          tl.set("#c23-caret", { opacity: 1 }, 2.063);
+          tl.to("#c23-field", { scale: 1.04, duration: 0.07, ease: "power2.out" }, 2.063); tl.to("#c23-field", { scale: 1, duration: 0.09, ease: "power2.in" }, 2.133);
+          // "palavra" (2,463): o campo ganha contorno terracota
+          tl.to("#c23-field", { borderColor: "#d97757", duration: 0.1 }, 2.463);
+          // "Instagram" (2,863): INSTAGRAM digitado
+          var W = "INSTAGRAM";
+          for (var k = 1; k <= W.length; k++) tl.set("#c23-t", { textContent: W.slice(0, k) }, 2.863 + (k - 1) * 0.05);
+          tl.to("#c23-field", { scale: 1.05, duration: 0.08, ease: "power2.out" }, 3.29);
+          tl.to("#c23-field", { scale: 1, duration: 0.08, ease: "power2.in" }, 3.38);
+          // "envio" (3,823): ✈ Te envio na DM
+          tl.to("#c23-dm", { opacity: 1, y: 0, duration: 0.22, ease: "power2.out" }, 3.823);
+          tl.fromTo("#c23-plane", { x: 0, y: 0 }, { x: 10, y: -8, duration: 0.12, ease: "power2.out", immediateRender: false }, 3.97);
+          tl.to("#c23-plane", { x: 0, y: 0, duration: 0.14 }, 4.095);
+          // "DM" (4,383): o link destranca e chega como mensagem no direct
+          tl.to("#c23-lock", { opacity: 0, scale: 0.9, duration: 0.1, ease: "power2.in" }, 4.383);
+          tl.to("#c23-note", { opacity: 1, y: 0, scale: 1, duration: 0.25, ease: "back.out(1.6)" }, 4.403);
+          tl.to("#c23-badge", { scale: 1, duration: 0.16, ease: "back.out(2.4)" }, 4.54);
+          tl.fromTo("#c23-hl", { scale: 1 }, { scale: 1.1, duration: 0.1, ease: "power2.out", immediateRender: false }, 4.6);
+          tl.to("#c23-hl", { scale: 1, duration: 0.06, ease: "power2.in" }, 4.7);
+          tl.set({}, {}, 4.766666);
+          window.__timelines["c23-cta"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

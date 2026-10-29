@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C21-COPIAR (44,9167–47,1167) dividido: "E para instalar, basta copiar esse link aqui" → navegador na página do repositório; "instalar": etiqueta INSTALAR; "basta": campo em foco + cursor; "copiar": seleção azul cobre a URL; "link aqui": clique no botão de copiar (pulso terracota) e balão "Copiado ✓" -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C21 Inter"; src: url("../assets/fonts/Inter.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+        @font-face { font-family: "C21 Mono"; src: url("../assets/fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .c21-bg {
+          position: absolute; left: 0; top: 0; width: 1080px; height: 770px;
+          background-color: #efedeb;
+          background-image: linear-gradient(#e6e4e1 2px, transparent 2px), linear-gradient(90deg, #e6e4e1 2px, transparent 2px);
+          background-size: 90px 90px; background-position: -1px -1px;
+        }
+        .c21-step { position: absolute; left: 540px; top: 132px; height: 64px; padding: 0 26px; border-radius: 32px; background: #f6e3da; display: flex; align-items: center; gap: 14px; white-space: nowrap;
+          font-family: "C21 Mono", monospace; font-weight: 800; font-size: 32px; letter-spacing: 0.08em; color: #c15f3c; }
+        .c21-step svg { width: 34px; height: 34px; }
+        .c21-card {
+          position: absolute; left: 90px; top: 226px; width: 900px; height: 474px;
+          border-radius: 28px; background: #f9f8f6; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+          font-family: "C21 Inter", sans-serif; color: #1a1a1a;
+        }
+        .c21-bar { position: absolute; left: 0; top: 0; width: 900px; height: 82px; border-radius: 28px 28px 0 0; background: #ebe8e4; }
+        .c21-light { position: absolute; top: 33px; width: 18px; height: 18px; border-radius: 50%; }
+        .c21-tab { position: absolute; left: 128px; top: 16px; width: 560px; height: 66px; border-radius: 16px 16px 0 0; background: #f9f8f6; }
+        .c21-tabt { position: absolute; left: 70px; top: 0; width: 470px; height: 66px; line-height: 64px; font-weight: 600; font-size: 30px; color: #3a3836; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .c21-favgh { position: absolute; left: 24px; top: 17px; width: 32px; height: 32px; }
+        /* campo de endereço (2 linhas) + botão copiar */
+        .c21-field { position: absolute; left: 34px; top: 110px; width: 710px; height: 168px; box-sizing: border-box; border-radius: 28px; background: #ffffff; border: 4px solid #e3e0dc; }
+        .c21-url { position: absolute; left: 30px; top: 22px; font-family: "C21 Mono", monospace; font-weight: 600; font-size: 38px; line-height: 58px; color: #1a1a1a; white-space: nowrap; }
+        .c21-ln { position: relative; display: block; width: fit-content; }
+        .c21-sel { position: absolute; left: -4px; top: 4px; height: 50px; border-radius: 6px; background: #b6d4fe; }
+        .c21-txt { position: relative; }
+        .c21-dim { color: #8a8783; }
+        .c21-copy { position: absolute; left: 764px; top: 110px; width: 102px; height: 168px; box-sizing: border-box; border-radius: 28px; background: #ffffff; border: 4px solid #e3e0dc; }
+        .c21-copy svg { position: absolute; left: 21px; top: 54px; width: 52px; height: 52px; }
+        .c21-pulse { position: absolute; left: 764px; top: 110px; width: 102px; height: 168px; box-sizing: border-box; border-radius: 28px; border: 6px solid #d97757; }
+        /* linha do repositório */
+        .c21-repo { position: absolute; left: 34px; top: 306px; width: 832px; height: 136px; box-sizing: border-box; border-radius: 20px; background: #ffffff; border: 2px solid #e3e0dc; color: #1f2328; }
+        .c21-gh { position: absolute; left: 28px; top: 30px; width: 76px; height: 76px; }
+        .c21-name { position: absolute; left: 128px; top: 16px; height: 54px; line-height: 54px; white-space: nowrap; font-size: 38px; letter-spacing: -0.015em; }
+        .c21-owner { color: #0969da; font-weight: 400; }
+        .c21-sep { color: #59636e; font-weight: 300; }
+        .c21-rname { color: #0969da; font-weight: 700; }
+        .c21-meta { position: absolute; left: 130px; top: 74px; height: 44px; display: flex; align-items: center; gap: 12px; font-size: 30px; line-height: 44px; color: #1f2328; font-weight: 600; white-space: nowrap; }
+        .c21-meta svg { width: 30px; height: 30px; fill: #e3b341; }
+        .c21-meta i { font-style: normal; color: #59636e; font-weight: 500; }
+        /* cursor e balão */
+        .c21-cur { position: absolute; left: 0; top: 0; width: 54px; height: 66px; }
+        .c21-tip { position: absolute; left: 670px; top: 14px; width: 290px; height: 76px; border-radius: 18px; background: #1a1a1a; color: #ffffff; display: flex; align-items: center; justify-content: center; gap: 12px;
+          font-family: "C21 Inter", sans-serif; font-weight: 800; font-size: 34px; white-space: nowrap; box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18); }
+        .c21-tip svg { width: 34px; height: 34px; }
+        .c21-tri { position: absolute; left: 131px; top: 74px; width: 0; height: 0; border-left: 14px solid transparent; border-right: 14px solid transparent; border-top: 14px solid #1a1a1a; }
+      </style>
+      <div data-hf-id="hf-wffe" id="root" data-composition-id="c21-copiar" data-width="1080" data-height="1920" data-duration="2.2">
+        <div data-hf-id="hf-xaqw" class="c21-bg"></div>
+        <div data-hf-id="hf-dyks" class="c21-step" id="c21-step"><svg data-hf-id="hf-ulu9" viewBox="0 0 24 24"><path data-hf-id="hf-1rum" d="M12 3v12M7 10.5l5 5 5-5M4 20h16" fill="none" stroke="#c15f3c" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" /></svg>INSTALAR</div>
+        <div data-hf-id="hf-kg9y" class="c21-card" id="c21-card">
+          <div data-hf-id="hf-loiw" class="c21-bar">
+            <div data-hf-id="hf-fwr8" class="c21-light" style="left: 30px; background: #ff5f57"></div>
+            <div data-hf-id="hf-iwhu" class="c21-light" style="left: 58px; background: #febc2e"></div>
+            <div data-hf-id="hf-mizv" class="c21-light" style="left: 86px; background: #28c840"></div>
+            <div data-hf-id="hf-ssqy" class="c21-tab">
+              <svg data-hf-id="hf-a92j" class="c21-favgh" viewBox="0 0 24 24"><path data-hf-id="hf-vi4b" fill="#1a1a1a" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
+              <div data-hf-id="hf-stzx" class="c21-tabt">Jakeschincariol/instagram-agent-skill</div>
+            </div>
+          </div>
+          <div data-hf-id="hf-h1ug" class="c21-field" id="c21-field">
+            <div data-hf-id="hf-b9xc" class="c21-url">
+              <div data-hf-id="hf-57vb" class="c21-ln"><div data-hf-id="hf-9l1l" class="c21-sel" id="c21-sel1"></div><span data-hf-id="hf-dtl1" class="c21-txt"><span data-hf-id="hf-jh9r" class="c21-dim">github.com/</span>Jakeschincariol/</span></div>
+              <div data-hf-id="hf-k9p3" class="c21-ln"><div data-hf-id="hf-dj5m" class="c21-sel" id="c21-sel2"></div><span data-hf-id="hf-4me0" class="c21-txt">instagram-agent-skill</span></div>
+            </div>
+          </div>
+          <div data-hf-id="hf-tb0y" class="c21-copy" id="c21-copy">
+            <svg data-hf-id="hf-aoyf" id="c21-ico" viewBox="0 0 24 24"><rect data-hf-id="hf-ft24" x="8.5" y="8.5" width="12" height="12" rx="2.5" fill="none" stroke="#3a3836" stroke-width="2.2" /><path data-hf-id="hf-k0xq" d="M15.5 5.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8.5a2 2 0 0 0 2 2h.5" fill="none" stroke="#3a3836" stroke-width="2.2" stroke-linecap="round" /></svg>
+            <svg data-hf-id="hf-f09u" id="c21-done" viewBox="0 0 24 24"><path data-hf-id="hf-cqgz" d="M4 12.5l5 5L20 6.5" fill="none" stroke="#ffffff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </div>
+          <div data-hf-id="hf-p1la" class="c21-pulse" id="c21-pulse"></div>
+          <div data-hf-id="hf-dw6l" class="c21-repo">
+            <svg data-hf-id="hf-kcz0" class="c21-gh" viewBox="0 0 24 24"><path data-hf-id="hf-6pnp" fill="#1a1a1a" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.930 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.910 1.23 3.220 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" /></svg>
+            <div data-hf-id="hf-ljqc" class="c21-name"><span data-hf-id="hf-s4e7" class="c21-owner">Jakeschincariol</span><span data-hf-id="hf-w3yl" class="c21-sep"> / </span><span data-hf-id="hf-k34x" class="c21-rname">instagram-agent-skill</span></div>
+            <div data-hf-id="hf-hjf1" class="c21-meta"><svg data-hf-id="hf-5tvn" viewBox="0 0 16 16"><path data-hf-id="hf-vtk0" d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.970.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.980a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.280l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z" /></svg>3.3k <i data-hf-id="hf-orwx">·</i> 725 forks <i data-hf-id="hf-vd8l">·</i> MIT <i data-hf-id="hf-wk5o">·</i> Public</div>
+          </div>
+          <div data-hf-id="hf-rtqx" class="c21-tip" id="c21-tip" data-layout-allow-overlap=""><svg data-hf-id="hf-1tol" viewBox="0 0 24 24"><path data-hf-id="hf-vux3" d="M4 12.5l5 5L20 6.5" fill="none" stroke="#3fd16b" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" /></svg>Copiado<div data-hf-id="hf-zje8" class="c21-tri"></div></div>
+          <svg data-hf-id="hf-os7t" class="c21-cur" id="c21-cur" viewBox="0 0 18 22"><path data-hf-id="hf-dyis" d="M1.5 1.5v16.2l4.3-4.1 2.9 6.6 2.9-1.3-2.9-6.5h6z" fill="#1a1a1a" stroke="#ffffff" stroke-width="1.4" stroke-linejoin="round" /></svg>
+        </div>
+      </div>
+      <script>
+        (function () {
+          // tempos locais = global − 44,9167 · "instalar" 0,123 · "basta" 0,683 · "copiar" 1,003 · "esse" 1,483 · "link" 1,643 · "aqui" 1,883
+          gsap.set("#c21-step", { xPercent: -50, opacity: 0, y: 10, scale: 0.96 });
+          gsap.set(["#c21-sel1", "#c21-sel2"], { width: 0 });
+          gsap.set("#c21-done", { opacity: 0 });
+          gsap.set("#c21-pulse", { opacity: 0 });
+          gsap.set("#c21-tip", { opacity: 0, y: 10, scale: 0.9, transformOrigin: "145px 90px" });
+          gsap.set("#c21-cur", { x: 420, y: 470, opacity: 0 });
+          var tl = gsap.timeline({ paused: true });
+          // "instalar" (0,123): etiqueta INSTALAR entra acima do cartão
+          tl.to("#c21-step", { opacity: 1, y: 0, scale: 1, duration: 0.25, ease: "power2.out" }, 0.123);
+          // "basta" (0,683): campo em foco + cursor entra e vai pro começo da URL
+          tl.to("#c21-field", { borderColor: "#d97757", duration: 0.08 }, 0.683);
+          tl.to("#c21-cur", { opacity: 1, duration: 0.1 }, 0.683);
+          tl.to("#c21-cur", { x: 64, y: 140, duration: 0.3, ease: "power2.inOut" }, 0.683);
+          // "copiar" (1,003): seleção azul cobre a URL (arrastando o cursor)
+          // JetBrains Mono: 0,6 em por letra (38 px → 22,8 px): 27 e 21 letras
+          var w1 = Math.round(27 * 22.8) + 8, w2 = Math.round(21 * 22.8) + 8;
+          tl.to("#c21-sel1", { width: w1, duration: 0.2, ease: "none" }, 1.003);
+          tl.to("#c21-cur", { x: 64 + w1 - 10, duration: 0.2, ease: "none" }, 1.003);
+          tl.to("#c21-sel2", { width: w2, duration: 0.14, ease: "none" }, 1.21);
+          tl.to("#c21-cur", { x: 64 + w2 - 10, y: 198, duration: 0.14, ease: "none" }, 1.21);
+          // cursor vai até o botão de copiar ("esse" 1,483)
+          tl.to("#c21-cur", { x: 810, y: 186, duration: 0.26, ease: "power2.inOut" }, 1.37);
+          // "link" (1,643): clique, pulso terracota, ícone vira ✓
+          tl.to("#c21-cur", { scale: 0.82, duration: 0.05 }, 1.643); tl.to("#c21-cur", { scale: 1, duration: 0.07 }, 1.693);
+          tl.to("#c21-copy", { scale: 0.92, duration: 0.05 }, 1.643); tl.to("#c21-copy", { scale: 1, duration: 0.08 }, 1.693);
+          tl.set("#c21-copy", { backgroundColor: "#d97757", borderColor: "#d97757" }, 1.66);
+          tl.set("#c21-ico", { opacity: 0 }, 1.66); tl.set("#c21-done", { opacity: 1 }, 1.66);
+          tl.set("#c21-pulse", { opacity: 1, scale: 1 }, 1.66);
+          tl.to("#c21-pulse", { scale: 1.35, opacity: 0, duration: 0.2, ease: "power2.out" }, 1.66);
+          // balão "Copiado ✓"
+          tl.to("#c21-tip", { opacity: 1, y: 0, scale: 1, duration: 0.17, ease: "back.out(2)" }, 1.7);
+          // "aqui" (1,883): segundo pulso
+          tl.set("#c21-pulse", { opacity: 1, scale: 1 }, 1.883);
+          tl.to("#c21-pulse", { scale: 1.35, opacity: 0, duration: 0.3, ease: "power2.out" }, 1.883);
+          tl.to("#c21-tip", { scale: 1.06, duration: 0.06 }, 1.883); tl.to("#c21-tip", { scale: 1, duration: 0.08 }, 1.943);
+          tl.set({}, {}, 2.2);
+          window.__timelines["c21-copiar"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

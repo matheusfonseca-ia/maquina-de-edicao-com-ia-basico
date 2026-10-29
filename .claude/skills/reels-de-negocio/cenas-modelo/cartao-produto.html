@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C04 (5,75–7,0833) dividido: "Free Claude Code" → cartão de produto com nome digitado -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C04 Inter"; src: url("../assets/fonts/Inter.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+        @font-face { font-family: "C04 Mono"; src: url("../assets/fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; font-display: block; }
+        @font-face { font-family: "C04 Pixel"; src: url("../assets/fonts/Silkscreen-Bold.ttf") format("truetype"); font-weight: 700; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .c04-bg {
+          position: absolute; left: 0; top: 0; width: 1080px; height: 770px;
+          background-color: #efedeb;
+          background-image: linear-gradient(#e6e4e1 2px, transparent 2px), linear-gradient(90deg, #e6e4e1 2px, transparent 2px);
+          background-size: 90px 90px; background-position: -1px -1px;
+        }
+        .c04-card {
+          position: absolute; left: 90px; top: 255px; width: 900px; height: 445px;
+          border-radius: 28px; overflow: hidden; background: #f9f8f6; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+        }
+        .c04-mound { position: absolute; left: -110px; top: 300px; width: 540px; height: 300px; border-radius: 50%; background: #e3c48e; }
+        .c04-mound2 { position: absolute; left: -70px; top: 316px; width: 480px; height: 40px; border-radius: 50%; background: #ebd19f; }
+        .c04-hero { position: absolute; left: 36px; top: 112px; width: 360px; height: 320px; }
+        .c04-px { position: absolute; }
+        .c04-tag { position: absolute; left: 190px; top: 132px; width: 128px; height: 70px; }
+        .c04-tagbox {
+          position: absolute; left: 0; top: 18px; width: 128px; height: 52px; box-sizing: border-box; background: #ffffff;
+          border: 5px solid #1a1a1a; font-family: "C04 Pixel", monospace; font-weight: 700; font-size: 30px; line-height: 42px; text-align: center; color: #23863e;
+        }
+        .c04-chip {
+          position: absolute; left: 392px; top: 50px; height: 56px; padding: 0 20px; border-radius: 10px; background: #f6e3da;
+          font-family: "C04 Mono", monospace; font-weight: 700; font-size: 32px; line-height: 56px; color: #c15f3c; white-space: nowrap;
+        }
+        .c04-title { position: absolute; left: 388px; width: 500px; height: 96px; font-family: "C04 Inter", sans-serif; font-weight: 800; font-size: 86px; line-height: 96px; letter-spacing: -0.035em; color: #1a1a1a; white-space: nowrap; }
+        .c04-caret { display: inline-block; width: 8px; height: 74px; background: #d97757; vertical-align: -8px; margin-left: 6px; }
+        .c04-sub { position: absolute; left: 392px; top: 340px; display: flex; align-items: center; gap: 10px; font-family: "C04 Inter", sans-serif; font-weight: 500; font-size: 34px; line-height: 44px; color: #74716d; white-space: nowrap; }
+        .c04-sub svg { width: 36px; height: 36px; fill: #e8b547; }
+        .c04-sub b { color: #1a1a1a; font-weight: 700; }
+        .c04-star { position: absolute; width: 16px; height: 16px; background: #e8b547; opacity: 0; }
+      </style>
+      <div data-hf-id="hf-05bb" id="root" data-composition-id="c04-produto" data-width="1080" data-height="1920" data-duration="1.333333">
+        <div data-hf-id="hf-liwx" class="c04-bg"></div>
+        <div data-hf-id="hf-g88i" class="c04-card" id="c04-card">
+          <div data-hf-id="hf-1cp2" class="c04-mound" data-layout-allow-overflow=""></div>
+          <div data-hf-id="hf-xn1a" class="c04-mound2" data-layout-allow-overflow=""></div>
+          <div data-hf-id="hf-f2pe" class="c04-hero" id="c04-hero">
+            <div data-hf-id="hf-v8w2" class="c04-tag" id="c04-tag"><div data-hf-id="hf-5d4p" class="c04-tagbox">FREE</div></div>
+          </div>
+          <div data-hf-id="hf-hn58" class="c04-chip" id="c04-chip">/free-claude-code</div>
+          <div data-hf-id="hf-qzkh" class="c04-title" style="top: 118px"><span data-hf-id="hf-0q87" id="c04-t1"></span><span data-hf-id="hf-uh60" class="c04-caret" id="c04-c1"></span></div>
+          <div data-hf-id="hf-rkuu" class="c04-title" style="top: 214px"><span data-hf-id="hf-puqk" id="c04-t2"></span><span data-hf-id="hf-351v" class="c04-caret" id="c04-c2"></span></div>
+          <div data-hf-id="hf-9x5e" class="c04-sub" id="c04-sub"><svg data-hf-id="hf-5tvn" viewBox="0 0 16 16"><path data-hf-id="hf-2y1k" d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z" /></svg><span data-hf-id="hf-9zhl"><b data-hf-id="hf-ovym">61,8 mil</b> no GitHub</span></div>
+        </div>
+      </div>
+      <script>
+        (function () {
+          var BODY = ["..BBBBBBBB..", "..BBBBBBBB..", "..BEBBBBEB..", "BBBEBBBBEBBB", "BBBBBBBBBBBB", "..BBBBBBBB..", "..B.B..B.B..", "..B.B..B.B.."];
+          var S = 18;
+          var hero = document.getElementById("c04-hero"), tag = document.getElementById("c04-tag");
+          function px(host, x, y, w, h, c, before) {
+            var p = document.createElement("div"); p.className = "c04-px";
+            p.style.left = x + "px"; p.style.top = y + "px"; p.style.width = w + "px"; p.style.height = h + "px"; p.style.background = c;
+            if (before) host.insertBefore(p, before); else host.appendChild(p); return p;
+          }
+          // mascote terracota (blocos de 16 px), em cima do montinho de areia
+          var OX = 0, OY = 50;
+          for (var r = 0; r < 8; r++) for (var c = 0; c < 12; c++) {
+            var ch = BODY[r][c]; if (ch === ".") continue;
+            px(hero, OX + c * S, OY + r * S, S, S, ch === "E" ? "#1a1a1a" : "#d97757", tag);
+          }
+          // cordão da etiqueta (pixel, 8 px) saindo do "pescoço"
+          px(tag, 20, -6, 8, 24, "#1a1a1a");
+          tag.appendChild(tag.firstElementChild);
+          gsap.set(tag, { transformOrigin: "24px 0px", rotation: -6 });
+          // brilhinhos em volta do mascote
+          var stars = [];
+          [[60, 130], [300, 150], [340, 230]].forEach(function (p) {
+            var st = document.createElement("div"); st.className = "c04-star"; st.style.left = p[0] + "px"; st.style.top = p[1] + "px";
+            document.getElementById("c04-card").appendChild(st); stars.push(st);
+          });
+
+          var tl = gsap.timeline({ paused: true });
+          gsap.set(["#c04-c2", "#c04-sub"], { opacity: 0 });
+          // "Free" (0,03): mascote pula, etiqueta FREE balança, "Free" digitado
+          tl.to("#c04-hero", { y: -20, duration: 0.1, ease: "power2.out" }, 0.03);
+          tl.to("#c04-hero", { y: 0, duration: 0.12, ease: "power2.in" }, 0.13);
+          tl.to(tag, { rotation: -18, duration: 0.08, ease: "power1.out" }, 0.05);
+          tl.to(tag, { rotation: 8, duration: 0.1, ease: "power1.inOut" }, 0.13);
+          tl.to(tag, { rotation: -4, duration: 0.1, ease: "power1.inOut" }, 0.23);
+          tl.to(tag, { rotation: -6, duration: 0.08, ease: "power1.in" }, 0.33);
+          var A = "Free";
+          for (var k = 1; k <= A.length; k++) tl.set("#c04-t1", { textContent: A.slice(0, k) }, 0.03 + (k - 1) * 0.04);
+          tl.fromTo("#c04-chip", { scale: 1 }, { scale: 1.07, duration: 0.07, yoyo: true, repeat: 1, ease: "power2.out", immediateRender: false }, 0.06);
+          // "Claude Code" (0,35–0,83): segunda linha digitada
+          tl.set("#c04-c1", { opacity: 0 }, 0.34); tl.set("#c04-c2", { opacity: 1 }, 0.34);
+          var B = "Claude Code";
+          for (var m = 1; m <= B.length; m++) tl.set("#c04-t2", { textContent: B.slice(0, m) }, 0.35 + (m - 1) * 0.044);
+          // 6,75 (1,0): subtítulo "★ 61,8 mil no GitHub"
+          tl.fromTo("#c04-sub", { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.22, ease: "power2.out", immediateRender: false }, 1.0);
+          tl.set("#c04-c2", { opacity: 0 }, 0.9);
+          tl.set("#c04-c2", { opacity: 1 }, 1.06);
+          tl.set("#c04-c2", { opacity: 0 }, 1.22);
+          // brilho final no mascote
+          stars.forEach(function (st, j) {
+            var t0 = 1.02 + j * 0.06;
+            tl.set(st, { opacity: 1, scale: 0.4, rotation: 0 }, t0);
+            tl.to(st, { scale: 1.2, rotation: 45, duration: 0.1 }, t0);
+            tl.to(st, { opacity: 0, duration: 0.1 }, t0 + 0.12);
+          });
+          tl.set({}, {}, 1.333333);
+          window.__timelines["c04-produto"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>

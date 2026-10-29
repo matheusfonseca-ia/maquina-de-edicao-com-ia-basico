@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <!-- C01 (0–1,85) dividido (pedido na revisão: começar em tela dividida com gancho visual forte):
+         "Tem gente hackeando a própria TV" → TV entupida de anúncio sofre glitch, vira terminal, a tela racha,
+         o mascote do Claude Code salta pra fora da tela e o carimbo vermelho "HACKEADA" bate em "TV". -->
+  </head>
+  <body>
+    <template>
+      <style>
+        @font-face { font-family: "C01 Inter"; src: url("../assets/fonts/Inter.ttf") format("truetype"); font-weight: 100 900; font-display: block; }
+        @font-face { font-family: "C01 Mono"; src: url("../assets/fonts/JetBrainsMono.ttf") format("truetype"); font-weight: 100 800; font-display: block; }
+        #root { position: absolute; inset: 0; overflow: hidden; }
+        .c01-bg {
+          position: absolute; left: 0; top: 0; width: 1080px; height: 770px;
+          background-color: #efedeb;
+          background-image: linear-gradient(#e6e4e1 2px, transparent 2px), linear-gradient(90deg, #e6e4e1 2px, transparent 2px);
+          background-size: 90px 90px; background-position: -1px -1px;
+        }
+        .c01-card {
+          position: absolute; left: 90px; top: 205px; width: 900px; height: 495px; border-radius: 28px; background: #f9f8f6;
+          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.1);
+        }
+        /* alerta acima do cartão, centrado em x 540 */
+        .c01-alert {
+          position: absolute; left: 300px; top: 108px; width: 480px; height: 70px; border-radius: 35px; background: #c8102e;
+          font-family: "C01 Mono", monospace; font-weight: 800; font-size: 32px; line-height: 70px; letter-spacing: 0.06em; color: #ffffff; text-align: center;
+          box-shadow: 0 10px 24px rgba(200, 16, 46, 0.28);
+        }
+        /* TV: centro em x 540 → left 260 (largura 560) */
+        .c01-tv { position: absolute; left: 260px; top: 238px; width: 560px; height: 315px; border-radius: 14px; background: #111111; }
+        .c01-stand { position: absolute; left: 510px; top: 553px; width: 60px; height: 44px; background: #3a3836; }
+        .c01-foot { position: absolute; left: 430px; top: 593px; width: 220px; height: 14px; border-radius: 7px; background: #3a3836; }
+        .c01-screen { position: absolute; left: 14px; top: 14px; width: 532px; height: 287px; border-radius: 4px; overflow: hidden; background: #1b2a4a; }
+        .c01-ads { position: absolute; inset: 0; }
+        .c01-ban { position: absolute; height: 48px; border-radius: 8px; font-family: "C01 Inter", sans-serif; font-weight: 900; font-size: 30px; line-height: 48px; text-align: center; letter-spacing: 0.01em; }
+        .c01-icons { position: absolute; left: 31px; width: 470px; height: 170px; display: grid; grid-template-columns: repeat(5, 78px); grid-auto-rows: 78px; column-gap: 20px; row-gap: 14px; }
+        .c01-ic { border-radius: 16px; }
+        .c01-slice { position: absolute; left: 0; width: 532px; overflow: hidden; }
+        .c01-term { position: absolute; inset: 0; background: #151513; opacity: 0; padding: 26px 26px; font-family: "C01 Mono", monospace; font-weight: 700; font-size: 30px; line-height: 44px; color: #e8e6e3; white-space: nowrap; }
+        .c01-term .c01-p { color: #d97757; }
+        .c01-term .c01-ok { color: #3dbe5a; }
+        .c01-caret { display: inline-block; width: 16px; height: 32px; background: #d97757; vertical-align: -5px; margin-left: 4px; }
+        .c01-scan { position: absolute; inset: 0; opacity: 0; background: repeating-linear-gradient(0deg, rgba(255,255,255,0.08) 0 2px, transparent 2px 6px); }
+        .c01-crack { position: absolute; left: 0; top: 0; width: 532px; height: 287px; }
+        /* mascote: 12×8 blocos de 20 px = 240×160, centro em x 540 */
+        .c01-mascot { position: absolute; left: 420px; top: 300px; width: 240px; height: 160px; transform-origin: 120px 130px; filter: drop-shadow(0 0 0 #f9f8f6) drop-shadow(0 0 4px rgba(249,248,246,0.9)); }
+        .c01-px { position: absolute; width: 20px; height: 20px; }
+        .c01-stamp {
+          position: absolute; left: 330px; top: 470px; width: 420px; height: 112px; border: 8px solid #c8102e; border-radius: 14px; background: rgba(249, 248, 246, 0.92);
+          font-family: "C01 Inter", sans-serif; font-weight: 900; font-size: 70px; line-height: 96px; letter-spacing: 0.02em; color: #c8102e; text-align: center;
+        }
+      </style>
+      <div id="root" data-composition-id="c01-gancho" data-width="1080" data-height="1920" data-duration="1.85">
+        <div class="c01-bg"></div>
+        <div class="c01-card" id="c01-card"></div>
+        <div class="c01-alert" id="c01-alert">⚠ INVASÃO NA TV</div>
+        <div class="c01-stand"></div>
+        <div class="c01-foot"></div>
+        <div class="c01-tv" id="c01-tv">
+          <div class="c01-screen" id="c01-screen">
+            <div class="c01-ads" id="c01-ads">
+              <div class="c01-slice" id="c01-s1" style="top: 0; height: 96px">
+                <div class="c01-ban" id="c01-b1" style="left: 31px; top: 24px; width: 230px; background: #ffd23f; color: #1a1a1a">ANÚNCIO</div>
+                <div class="c01-ban" id="c01-b2" style="left: 281px; top: 24px; width: 220px; background: #e5484d; color: #ffffff">−50%</div>
+              </div>
+              <div class="c01-slice" id="c01-s2" style="top: 96px; height: 191px">
+                <div class="c01-icons" style="top: 0">
+                  <div class="c01-ic" style="background: #e5484d"></div><div class="c01-ic" style="background: #3dbe5a"></div><div class="c01-ic" style="background: #ffd23f"></div><div class="c01-ic" style="background: #4a90d9"></div><div class="c01-ic" style="background: #d94a8c"></div>
+                  <div class="c01-ic" style="background: #8a4ad9"></div><div class="c01-ic" style="background: #f08c2e"></div><div class="c01-ic" style="background: #4ad9d0"></div><div class="c01-ic" style="background: #d9b84a"></div><div class="c01-ic" style="background: #ff6b6b"></div>
+                </div>
+              </div>
+            </div>
+            <div class="c01-term" id="c01-term">
+              <div><span class="c01-p">$</span> <span id="c01-cmd"></span><span class="c01-caret" id="c01-caret"></span></div>
+              <div id="c01-l2">› achando a TV na rede…</div>
+              <div id="c01-l3" class="c01-ok">✓ acesso liberado</div>
+            </div>
+            <div class="c01-scan" id="c01-scan"></div>
+            <svg class="c01-crack" viewBox="0 0 532 287" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+              <path id="c01-k1" d="M266 150 L200 110 L150 118 L84 60" />
+              <path id="c01-k2" d="M266 150 L330 104 L392 112 L452 48" />
+              <path id="c01-k3" d="M266 150 L214 196 L160 214 L96 262" />
+              <path id="c01-k4" d="M266 150 L322 200 L380 206 L446 268" />
+              <path id="c01-k5" d="M266 150 L258 70 L282 18" />
+              <path id="c01-k6" d="M266 150 L276 230 L256 284" />
+            </svg>
+          </div>
+        </div>
+        <div class="c01-mascot" id="c01-mascot"></div>
+        <div class="c01-stamp" id="c01-stamp" data-layout-allow-overlap>HACKEADA</div>
+      </div>
+      <script>
+        (function () {
+          // mascote Claude Code com óculos escuros de hacker (linha dos olhos vira faixa preta)
+          var M = ["..BBBBBBBB..", "..BBBBBBBB..", ".EEEEEEEEEE.", "BBBBBBBBBBBB", "BBBBBBBBBBBB", "..BBBBBBBB..", "..B.B..B.B..", "..B.B..B.B.."];
+          var host = document.getElementById("c01-mascot");
+          M.forEach(function (row, y) {
+            for (var x = 0; x < row.length; x++) {
+              var c = row[x];
+              if (c === ".") continue;
+              var d = document.createElement("div");
+              d.className = "c01-px";
+              d.style.left = x * 20 + "px"; d.style.top = y * 20 + "px";
+              d.style.background = c === "B" ? "#d97757" : "#3dbe5a";
+              host.appendChild(d);
+            }
+          });
+          var K = ["#c01-k1", "#c01-k2", "#c01-k3", "#c01-k4", "#c01-k5", "#c01-k6"];
+          K.forEach(function (k) { var p = document.querySelector(k); var L = p.getTotalLength(); p.style.strokeDasharray = L; p.style.strokeDashoffset = L; });
+          gsap.set("#c01-alert", { opacity: 0, y: 10, scale: 0.96 });
+          gsap.set("#c01-mascot", { opacity: 0, scale: 0.3, y: 30 });
+          gsap.set("#c01-stamp", { opacity: 0, scale: 1.6, rotation: -10 });
+          gsap.set("#c01-l2, #c01-l3", { opacity: 0 });
+
+          var tl = gsap.timeline({ paused: true });
+          // "Tem gente" (0): TV entupida de anúncio, os banners pulsam
+          tl.to("#c01-b1, #c01-b2", { scale: 1.06, duration: 0.12, ease: "power1.inOut" }, 0.1);
+          tl.to("#c01-b1, #c01-b2", { scale: 1, duration: 0.12, ease: "power1.inOut" }, 0.22);
+          // "hackeando" (0,37): alerta vermelho + glitch (fatias deslocadas, linhas de varredura)
+          tl.to("#c01-alert", { opacity: 1, y: 0, scale: 1, duration: 0.2, ease: "back.out(2)" }, 0.37);
+          tl.set("#c01-scan", { opacity: 1 }, 0.37);
+          [[0.37, 28, -22], [0.42, -34, 18], [0.47, 16, -30], [0.52, -10, 12], [0.57, 0, 0]].forEach(function (g) {
+            tl.set("#c01-s1", { x: g[1] }, g[0]); tl.set("#c01-s2", { x: g[2] }, g[0]);
+          });
+          tl.set("#c01-screen", { filter: "hue-rotate(90deg) saturate(1.6)" }, 0.42);
+          tl.set("#c01-screen", { filter: "none" }, 0.52);
+          [[0.37, 8], [0.41, -8], [0.45, 6], [0.49, 0]].forEach(function (s) { tl.set("#c01-tv", { x: s[1] }, s[0]); });
+          // 0,57: a tela vira terminal e o comando é digitado
+          tl.set("#c01-term", { opacity: 1 }, 0.57);
+          tl.set("#c01-ads", { opacity: 0 }, 0.57);
+          var CMD = "claude hack tv";
+          for (var i = 1; i <= CMD.length; i++) tl.set("#c01-cmd", { textContent: CMD.slice(0, i) }, 0.57 + (i - 1) * 0.022);
+          tl.set("#c01-l2", { opacity: 1 }, 0.9);
+          tl.set("#c01-l3", { opacity: 1 }, 1.05);
+          [[0.95, 0], [1.05, 1], [1.15, 0], [1.25, 1]].forEach(function (b) { tl.set("#c01-caret", { opacity: b[1] }, b[0]); });
+          // "a própria" (1,17): a tela racha a partir do centro e o texto do terminal apaga
+          tl.to("#c01-term > div", { opacity: 0.12, duration: 0.12, ease: "power1.out" }, 1.12);
+          K.forEach(function (k, j) { tl.to(k, { strokeDashoffset: 0, duration: 0.22, ease: "power2.out" }, 1.12 + j * 0.02); });
+          tl.to("#c01-tv", { y: 6, duration: 0.05, ease: "power1.out" }, 1.12);
+          tl.to("#c01-tv", { y: 0, duration: 0.05, ease: "power1.in" }, 1.175);
+          // 1,2: o mascote salta pra fora da tela
+          tl.to("#c01-mascot", { opacity: 1, scale: 1.18, y: -12, duration: 0.18, ease: "power3.out" }, 1.2);
+          tl.to("#c01-mascot", { scale: 1, y: 0, duration: 0.14, ease: "power2.inOut" }, 1.38);
+          // "TV" (1,57): carimbo vermelho HACKEADA
+          tl.to("#c01-stamp", { opacity: 1, scale: 1, duration: 0.14, ease: "power4.in" }, 1.57);
+          [[1.71, 5], [1.74, -5], [1.77, 3], [1.8, 0]].forEach(function (s) { tl.set("#c01-stamp", { x: s[1] }, s[0]); });
+          tl.to("#c01-card, #c01-tv", { y: 4, duration: 0.04, ease: "power1.out" }, 1.71);
+          tl.to("#c01-card, #c01-tv", { y: 0, duration: 0.04, ease: "power1.in" }, 1.755);
+          tl.set({}, {}, 1.85);
+          window.__timelines["c01-gancho"] = tl;
+        })();
+      </script>
+    </template>
+  </body>
+</html>
