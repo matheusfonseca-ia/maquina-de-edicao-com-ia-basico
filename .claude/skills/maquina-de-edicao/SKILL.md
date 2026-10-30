@@ -44,6 +44,12 @@ Preferências salvas do usuário (criado pela própria skill depois do primeiro 
 
 ---
 
+## Configuração universal: pessoa sempre centralizada
+
+Em todo projeto, formato, nível e estilo visual, mantenha o centro da cabeça da pessoa exatamente no centro horizontal da área visível da câmera, sem deslocamento para a esquerda ou para a direita. Em câmera cheia, o alvo é metade da largura da imagem; em tela dividida, cartão ou recorte, é metade da largura da área reservada à pessoa. Isso não exige centralizar a cabeça na altura.
+
+Aplique automaticamente, inclusive ao repetir preferências salvas. Esta regra prevalece sobre enquadramentos de formatos, estilos, referências e preferências antigas. Ajuste o recorte/posicionamento a cada tomada e acompanhe os movimentos; centralizar o arquivo ou usar `object-position: center` sozinho não garante que a cabeça esteja centralizada. Confira antes do Studio e no MP4 final; corrija qualquer desvio. Os detalhes de medição estão no bloco 2A de `referencias/instrucoes-base.md`.
+
 ## Fase 0: Checar a pasta
 
 Antes de qualquer pergunta, liste os arquivos da pasta atual.

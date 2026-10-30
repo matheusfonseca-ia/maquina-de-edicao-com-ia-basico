@@ -98,6 +98,16 @@ Resolva intervalos excessivos cortando antes ou sobrepondo as caudas. Nunca acre
 
 Defina END como o final exclusivo da faixa de voz, imediatamente após seu último quadro. Todas as camadas terminam exatamente em END.
 
+## 2A. Centralização horizontal obrigatória [TODOS]
+
+Esta configuração universal vale para todos os projetos e vídeos editados, em qualquer proporção, nível, formato ou estilo, inclusive preferências reutilizadas. Prevalece sobre posições de câmera de formatos, estilos, variações e referências.
+
+- Sempre que a pessoa aparecer, o centro horizontal da cabeça deve coincidir exatamente com o centro horizontal da área visível da câmera: `x_cabeca = x_area + largura_area / 2`, em coordenadas da composição final. Em câmera cheia, `x_area = 0` e `largura_area = largura_video`. Em tela dividida, cartão, janela ou recorte, use a área destinada à pessoa. Não desloque a pessoa para abrir espaço para texto ou gráficos; reorganize esses elementos. A altura da cabeça segue o layout e a área segura.
+- Meça a cabeça nos quadros da fonte, após considerar rotação e escala. Ajuste crop, deslocamento horizontal e/ou posição da camada para colocar o centro medido no alvo. Não confunda o centro do arquivo, do corpo ou da caixa do elemento com o centro da cabeça; `object-position: center` só basta se a medição confirmar o alinhamento.
+- Recalcule para cada tomada, corte e mudança de layout ou escala. Se houver movimento lateral, acompanhe a cabeça ao longo do trecho com rastreamento e keyframes determinísticos, inspecionando o intervalo todo. O alvo continua fixo no centro; não aceite um desvio intencional nem enquadramento apenas aproximadamente centralizado. Isso corrige o enquadramento, sem acrescentar zoom dramático.
+- Aplique o mesmo ajuste à câmera e à máscara de cabeça/ombros, mantendo as duas versões sincronizadas e alinhadas. Garanta que o recorte não corte a cabeça nem revele bordas vazias; se necessário, adapte a escala ou o layout preservando a centralização.
+- Registre em `edit/plano.md` a área da câmera, o alvo horizontal e os ajustes por trecho. Confira início, meio e fim de cada tomada, ambos os lados dos cortes, transições e extremos de movimentos; examine todos os quadros dos trechos com deslocamento. Sobreponha temporariamente uma guia vertical no centro para medir, removendo-a da entrega. Corrija qualquer desvio detectado antes de abrir o Studio e confira novamente no MP4 renderizado. Registre o resultado em `edit/relatorio.md`.
+
 ## 3. Contato visual [IMAGENS+]
 
 Inspecione aproximadamente oito quadros de cada tomada selecionada.
@@ -115,7 +125,7 @@ Nos níveis Com imagens e Completo, o vídeo alterna entre os três layouts abai
 ### A. Câmera em tela cheia [TODOS]
 
 Use o vídeo do usuário preenchendo a tela por recorte proporcional.
-Se a fonte for horizontal, preserve a faixa central necessária para preencher o formato vertical.
+Se a fonte for horizontal, ajuste a faixa recortada pela posição real da cabeça para preencher o formato vertical com a pessoa centralizada, conforme o bloco 2A.
 
 ### B. Composição dividida, com a câmera embaixo e a cabeça ultrapassando o cartão [IMAGENS+]
 
@@ -442,12 +452,14 @@ Sem renderizar o vídeo final, use `npx hyperframes check` e quadros soltos (sna
 6. Cabeça recortada presente desde o PRIMEIRO quadro de cada trecho dividido e alinhada ao cartão em movimentos rápidos. [IMAGENS+]
 7. Efeitos e riser posicionados nos eventos certos, de acordo com a tabela de cortes.
 8. Nenhuma junção com silêncio acima de 150 ms (medido na faixa de voz).
+9. Centro da cabeça exatamente no centro horizontal da área da câmera em todas as tomadas, cortes e movimentos, conforme o bloco 2A. Corrija qualquer desvio, inclusive em tela dividida e na máscara.
 
 Corrija o que falhar antes de abrir o Studio.
 
 ### 9B. Verificação final (depois do render)
 
 Inspecione quadros reais do `final.mp4`.
+Repita a medição de centralização do bloco 2A no vídeo renderizado: cabeça no centro horizontal da área da câmera, sem desvio à esquerda ou à direita, inclusive em movimentos e mudanças de layout.
 Confira os dois lados de cada corte: a nova tomada aparece desde o primeiro quadro previsto, e a anterior fica até o último quadro previsto.
 Verifique se a cabeça e o cartão continuam alinhados durante movimentos rápidos. [IMAGENS+]
 Gere uma prancha de quadros do vídeo completo e confira os itens 1 a 6 da verificação prévia, mais continuidade visual e ausência de erros de máscara.
