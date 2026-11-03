@@ -33,6 +33,7 @@ Arquivos de apoio (leia antes da fase 2):
 - `referencias/kit-noite.md`: o kit visual escuro (fundo preto, brilho laranja, cards de vidro, Inter + Instrument Serif) que vários formatos usam no visual original e o estilo Noite Laranja usa.
 - `referencias/painel.md`: como abrir o painel de escolhas (a página local da fase 1), o que mandar pra ele e como ler o que volta.
 - `referencias/broll-da-internet.md`: como buscar clipes de apoio e imagens na internet (qualquer fonte) quando a pessoa não trouxe os dela.
+- `referencias/efeitos-sonoros.md`: como tirar todos os efeitos sonoros e o efeito crescente do earshot, posicionar, mixar e conferir pela escuta.
 
 Formatos prontos: cada um numa pasta ao lado desta skill, `<pasta de skills>/<nome-do-formato>/formato.md` (a pasta de skills é a pasta-mãe desta). O catálogo está em `referencias/formatos-prontos.md`.
 
@@ -69,11 +70,12 @@ Na fase 0 não pergunte nada no chat (nem qual vídeo, nem o que é o áudio): o
 
 ## Fase 0b: Conferir as ferramentas
 
-Antes de abrir o painel, confira o que a edição vai precisar, nesta ordem: `node --version`, `ffmpeg -version` e `ffprobe -version`, `python --version` (ou `python3`), e `npx hyperframes --version`.
+Antes de abrir o painel, confira o que a edição vai precisar, nesta ordem: `node --version`, `ffmpeg -version` e `ffprobe -version`, `python --version` (ou `python3`), `npx hyperframes --version` e o earshot dos efeitos sonoros (`<EARSHOT_PY> -m earshot sfx list --kind hit`, com o Python de `~/.maquina-de-edicao/earshot/.venv`; veja `referencias/efeitos-sonoros.md`).
 
 - Se faltar algum, avise em linguagem simples ("Falta instalar o FFmpeg, que é o programa que corta o vídeo") e guie a instalação pelo jeito mais fácil do sistema da pessoa (no Windows, `winget`; no Mac, `brew`). Programas do sistema a pessoa instala; pacotes npm e Python continuam locais no projeto (bloco 0 das instruções base).
 - Depois de instalar, confira de novo. Só siga com tudo respondendo.
 - Anote as versões: elas vão pro contexto do painel.
+- O earshot é pré-requisito: todos os efeitos sonoros saem dele. Se faltar, rode de novo o instalador do pacote principal ou siga a instalação manual de `referencias/efeitos-sonoros.md`. Não siga com efeitos sintetizados no lugar.
 - O painel precisa do Node: se ele faltar, a instalação é obrigatória antes de seguir. Só faça a fase 1 pelo chat se a pessoa disser que não quer ou não pode instalar.
 - `yt-dlp --version` é opcional: serve pra baixar clipes e vídeos de referência da internet. Se faltar, ofereça instalar (`winget install yt-dlp` / `brew install yt-dlp`), mas não trave a edição por isso.
 

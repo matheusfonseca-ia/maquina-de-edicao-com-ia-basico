@@ -78,11 +78,11 @@ Usado no topo das telas gráficas.
 
 ## Efeitos sonoros do kit
 
-Paleta suave, todos sintetizados:
+Paleta suave, todos tirados do banco do earshot (`efeitos-sonoros.md`):
 
-- "tic" de vidro (seno curto ~2,2 kHz com ataque de 2 ms e cauda de 60 ms) na entrada de card ou pílula;
-- "pop" grave abafado na entrada de número grande;
-- sinal de duas notas na confirmação (verde);
-- whoosh de ruído filtrado só em trocas de tela cheia de animação (no máximo 3 por vídeo).
+- "tic" de vidro curto e agudo (`pro_tap/glass` ou `fit/tick/domino`) na entrada de card ou pílula;
+- "pop" grave abafado (`pro_pop_in/deep` ou `ui_pop/soft`) na entrada de número grande;
+- sinal de duas notas na confirmação (verde), com `notify` ou `mallet` em duas alturas;
+- whoosh (`fit/whoosh.short/bamboo_swish` ou `whoosh_fast/crisp`) só em trocas de tela cheia de animação (no máximo 3 por vídeo).
 
 Quantidade e níveis: o padrão universal do bloco 7 do motor (só nos eventos fortes, no máximo 1 a cada 0,6 s, bem abaixo da voz). O "tic" fica só no card ou pílula principal da tela, não em cada item.

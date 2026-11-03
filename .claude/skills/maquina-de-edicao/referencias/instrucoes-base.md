@@ -1,6 +1,6 @@
 # Instruções base de edição
 
-Estas são as instruções completas para o padrão: **saída vertical 9:16, gravação horizontal, áudio limpo separado, nível Completo, estilo claro tecnológico, legenda padrão, música eletrônica sintetizada e efeitos completos.**
+Estas são as instruções completas para o padrão: **saída vertical 9:16, gravação horizontal, áudio limpo separado, nível Completo, estilo claro tecnológico, legenda padrão, música eletrônica sintetizada e efeitos completos do earshot.**
 
 Qualquer escolha diferente do usuário é aplicada com `variacoes.md`, que substitui ou remove blocos daqui.
 
@@ -22,9 +22,9 @@ Transforme a gravação bruta do usuário falando para a câmera num vídeo fina
 
 Faça todo o processo por código, usando FFmpeg, Python, Node e HyperFrames. Não use aplicativos de edição de vídeo.
 
-Sintetize por código toda a música e todos os efeitos sonoros. O áudio da voz do usuário é fornecido, mas não há arquivos externos de música ou efeitos.
+Sintetize por código toda a música. Os efeitos sonoros e o efeito crescente da introdução vêm sempre do banco do **earshot** (https://github.com/Leonxlnx/earshot), instalado junto com a Máquina; o passo a passo está em `efeitos-sonoros.md`. O áudio da voz do usuário é fornecido, mas não há arquivos externos de música ou efeitos.
 
-Instale as dependências necessárias dentro deste projeto: pacotes npm na pasta do projeto e pacotes Python num ambiente virtual local. Nunca instale programas globalmente no sistema.
+Instale as dependências necessárias dentro deste projeto: pacotes npm na pasta do projeto e pacotes Python num ambiente virtual local. Nunca instale programas globalmente no sistema. A única exceção é o earshot, que fica em `~/.maquina-de-edicao/earshot` com ambiente Python próprio e serve todos os vídeos.
 
 Baixe as fontes usadas (Poppins e Instrument Serif, do Google Fonts) para dentro do projeto e carregue-as localmente nas composições.
 
@@ -333,7 +333,8 @@ Não acrescente painel, fundo, texto de plataforma ou pedido de mensagem privada
 
 ## 7. Áudio [TODOS]
 
-Sintetize os elementos sonoros com NumPy e SciPy, ou com Web Audio API renderizada offline por OfflineAudioContext.
+Sintetize a música com NumPy e SciPy, ou com Web Audio API renderizada offline por OfflineAudioContext.
+Efeitos sonoros e efeito crescente saem sempre do earshot (`efeitos-sonoros.md`): kit montado a partir do banco, tomadas posicionadas pelos tempos medidos no `kit.lock.json` e escuta final com `earshot timeline`. Não sintetize efeitos à mão.
 O resultado deve soar limpo, moderno e sofisticado.
 
 Gere os quatro stems antes da revisão e coloque-os na composição como faixas de áudio, para o usuário ouvir no Studio. A medição final e o master acontecem na exportação.
@@ -346,9 +347,9 @@ Normalize para −14 LUFS integrados.
 
 ### Efeitos sonoros
 
-Arquivo: `stems/sfx.wav`.
+Arquivo: `stems/sfx.wav`, montado com as tomadas do earshot (`efeitos-sonoros.md`).
 
-**Padrão universal: poucos efeitos e bem mais baixos que a voz.** Vale pra todo formato e todo estilo visual, por cima do que o `formato.md`, o arquivo do estilo, o Kit Noite ou `variacoes.md` disserem sobre quantidade e volume. As paletas de efeitos descritas neles definem só o timbre de cada som. Só muda se a pessoa pedir (observação, revisão ou ajuste fixo).
+**Padrão universal: poucos efeitos e bem mais baixos que a voz.** Vale pra todo formato e todo estilo visual, por cima do que o `formato.md`, o arquivo do estilo, o Kit Noite ou `variacoes.md` disserem sobre quantidade e volume. As paletas de efeitos descritas neles definem só o timbre de cada som, e o timbre decide qual som do banco do earshot usar. Só muda se a pessoa pedir (observação, revisão ou ajuste fixo).
 
 - Efeito só nos eventos fortes: carimbo, confirmação, clique em botão, moeda e a entrada do elemento principal de cada cena. Elementos secundários, cascatas e itens de lista entram em silêncio.
 - No máximo um efeito a cada 0,6 s. Se dois eventos caírem mais perto que isso, fica só o mais forte.
@@ -360,7 +361,7 @@ Os sons que sobram:
 2. Impacto abafado para a chegada do elemento principal (cartão, bloco, dispositivo) ou de um carimbo. [IMAGENS+]
 3. Sinal delicado de duas notas para resposta, confirmação ou abertura de janela.
 4. Moeda (duas notas curtas) pra um ganho, um prêmio ou um resultado.
-5. Som suave de passagem feito com ruído filtrado, somente nos movimentos rápidos de câmera. [COMPLETO]
+5. Som suave de passagem (whoosh do earshot), somente nos movimentos rápidos de câmera. [COMPLETO]
 
 O pico do som de passagem coincide exatamente com o meio do movimento.
 No máximo um som de passagem por trecho e três no vídeo inteiro.
@@ -376,7 +377,7 @@ Picos em relação ao pico da voz (padrão universal, a voz sempre bem na frente
 ### Efeito crescente da introdução
 
 Arquivo: `stems/riser.wav`.
-Som grave crescente de aproximadamente dois a três segundos.
+Som grave crescente de aproximadamente dois a três segundos, do banco do earshot (`riser/dark` ou outro membro da categoria `riser`).
 O término audível coincide exatamente com a junção em que o gancho termina e o primeiro ponto começa.
 É o único som que pode crescer até um corte.
 Pico 22 dB abaixo do pico da voz (8 dB abaixo do antigo padrão, como os efeitos).
@@ -465,7 +466,7 @@ Verifique se a cabeça e o cartão continuam alinhados durante movimentos rápid
 Gere uma prancha de quadros do vídeo completo e confira os itens 1 a 6 da verificação prévia, mais continuidade visual e ausência de erros de máscara.
 
 Áudio:
-1. Cada efeito coincide com seu evento visual.
+1. Cada efeito coincide com seu evento visual, conferido com `earshot timeline` e os cues do vídeo (offset dentro de um quadro).
 2. Os sons de passagem aparecem só no meio dos movimentos rápidos. [COMPLETO]
 3. O efeito crescente termina na junção correta da introdução.
 4. Nenhuma junção contém silêncio acima de 150 ms.
@@ -487,7 +488,7 @@ Entregue só depois que a verificação estiver concluída.
 4. Descrição do que cada composição gráfica apresenta. [IMAGENS+]
 5. Fatos verificados e respectivas fontes. [IMAGENS+, se a verificação estava ligada]
 6. Divergências entre a fala e as fontes. [IMAGENS+, se a verificação estava ligada]
-7. Lista dos efeitos sonoros com seus tempos.
+7. Lista dos efeitos sonoros com seus tempos, id do banco do earshot e pico em relação à voz, mais o resultado da escuta com `earshot timeline`.
 8. LUFS integrados e pico verdadeiro de cada faixa e do master.
 9. Reconstruções de interface, alternativas técnicas e decisões relevantes tomadas na execução.
 10. Ajustes pedidos pelo usuário na revisão.

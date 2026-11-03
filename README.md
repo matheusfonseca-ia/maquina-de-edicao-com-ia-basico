@@ -25,6 +25,16 @@ O pacote inclui formatos verticais para Reels, TikTok e Shorts, cortes de vídeo
 
 ## Instalar
 
+### Pré-requisitos
+
+Antes de rodar o instalador, tenha no computador:
+
+- **Git** (no Windows: `winget install Git.Git`; no Mac: `xcode-select --install`)
+- **Python 3.10 ou mais novo** (no Windows: `winget install Python.Python.3.12`; no Mac: `brew install python`)
+- **FFmpeg** (no Windows: `winget install Gyan.FFmpeg`; no Mac: `brew install ffmpeg`)
+
+O instalador confere o Git e o Python e para com a instrução de instalação se faltar algum.
+
 Extraia o ZIP inteiro, incluindo a pasta `.claude`, e abra um terminal nesta pasta.
 
 Windows (PowerShell):
@@ -39,7 +49,7 @@ Mac/Linux:
 bash instalar.sh
 ```
 
-O instalador copia sete skills para `~/.claude/skills/` (o motor e os seis formatos). Se houver versões antigas das mesmas skills, elas ficam em `~/.claude/skills-backup/`. Preferências, estilos pessoais e outros formatos já instalados são preservados.
+O instalador copia sete skills para `~/.claude/skills/` (o motor e os seis formatos) e instala o [earshot](https://github.com/Leonxlnx/earshot), que a Máquina usa em todos os efeitos sonoros. O earshot fica em `~/.maquina-de-edicao/earshot`, com ambiente Python próprio, e vem com a skill `/earshot`. Na primeira instalação ele baixa cerca de 1,5 GB (PyTorch e os modelos de escuta), então pode levar alguns minutos. Se houver versões antigas das mesmas skills, elas ficam em `~/.claude/skills-backup/`. Preferências, estilos pessoais e outros formatos já instalados são preservados.
 
 Feche e abra o Claude Code depois da instalação.
 
@@ -47,7 +57,7 @@ Feche e abra o Claude Code depois da instalação.
 
 Crie uma pasta própria para cada vídeo, fora desta pasta de instalação, e coloque a gravação nela. Abra o Claude Code nessa pasta e digite `/maquina-de-edicao` ou o comando de um formato. É necessário acesso ao Claude Code.
 
-Na primeira edição, o Claude confere Node.js, FFmpeg, Python e HyperFrames e orienta a instalação do que faltar. Um painel local abre no navegador para você escolher o formato e o visual. Depois da montagem, assista no HyperFrames Studio e peça ajustes. Para gerar o MP4 final, diga **pode exportar**. A saída fica em `edit/final.mp4`.
+Na primeira edição, o Claude confere Node.js, FFmpeg, Python, HyperFrames e o earshot e orienta a instalação do que faltar. Um painel local abre no navegador para você escolher o formato e o visual. Depois da montagem, assista no HyperFrames Studio e peça ajustes. Para gerar o MP4 final, diga **pode exportar**. A saída fica em `edit/final.mp4`.
 
 ## Atualizar e adicionar formatos
 
@@ -61,6 +71,10 @@ cd maquina-de-edicao-com-ia-basico
 ```
 
 Depois execute o instalador do seu sistema conforme as instruções acima. Para atualizar a cópia clonada, rode `git pull` e execute o instalador novamente.
+
+### Efeitos sonoros com o earshot
+
+Todos os efeitos sonoros (cliques, impactos, confirmações, passagens e o som crescente da abertura) saem do banco de sons do earshot, em todos os formatos e estilos. A Máquina monta o kit de efeitos do vídeo, posiciona cada som no quadro do evento e confere pela escuta do earshot se cada efeito caiu no tempo certo. A música continua sendo criada por código.
 
 ### Enquadramento em todos os vídeos
 
