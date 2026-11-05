@@ -867,8 +867,8 @@ function fxMira(ctx, tag, em) {
 
 function fxSeta(ctx, frente, texto, cor, em) {
   const pausa = h('div', caixa(60, 90, 84, 84, { background: 'rgba(20,20,22,.8)', borderRadius: '18px', display: 'grid', placeItems: 'center', color: '#fff', fontSize: '40px', fontFamily: 'Inter, Archivo, sans-serif', fontWeight: 900 }), '❚❚');
-  const rot = h('div', { position: 'absolute', left: '650px', top: '110px', fontFamily: "'Permanent Marker', 'Caveat', cursive", fontSize: '70px', color: cor }, texto);
-  const seta = h('div', caixa(0, 0, 1080, 1920), `<svg viewBox="0 0 1080 1920" width="1080" height="1920" style="position:absolute;inset:0;overflow:visible"><path d="M700 200 C 620 260 600 340 650 420" fill="none" stroke="${cor}" stroke-width="10" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/><path d="M648 375 L650 420 L610 399" fill="none" stroke="${cor}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0"/></svg>`);
+  const rot = h('div', { position: 'absolute', left: '0', width: '1080px', textAlign: 'center', top: '140px', fontFamily: "'Permanent Marker', 'Caveat', cursive", fontSize: '70px', color: cor }, texto);
+  const seta = h('div', caixa(0, 0, 1080, 1920), `<svg viewBox="0 0 1080 1920" width="1080" height="1920" style="position:absolute;inset:0;overflow:visible"><path d="M540 255 C 575 305 575 365 540 420" fill="none" stroke="${cor}" stroke-width="10" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/><path d="M579 398 L540 420 L540 375" fill="none" stroke="${cor}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0"/></svg>`);
   frente.append(pausa, rot, seta);
   ctx.anima(pausa, [{ opacity: 0 }, { opacity: 1 }], { em, dur: .1, som: 'clique' });
   ctx.anima(rot, [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'none' }], { em: em + .1, dur: .25 });
