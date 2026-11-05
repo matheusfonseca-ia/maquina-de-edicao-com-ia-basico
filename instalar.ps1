@@ -16,6 +16,13 @@ $earshotVersao = 'v0.4.0'
 $earshotPasta = Join-Path $env:USERPROFILE '.maquina-de-edicao/earshot'
 $earshotPython = Join-Path $earshotPasta '.venv/Scripts/python.exe'
 
+# Efeitos de video (formatos de efeito): o motor usa o fx.py do claude-video-effects
+# (github.com/Vibha-Ramprakash/claude-video-effects), que fica dentro da skill do motor.
+# O ambiente Python dele fica fora da skill pra sobreviver as atualizacoes.
+$efeitosPasta = Join-Path $env:USERPROFILE '.maquina-de-edicao/efeitos'
+$efeitosPython = Join-Path $efeitosPasta '.venv/Scripts/python.exe'
+$efeitosPacotes = @('numpy', 'opencv-python', 'pillow', 'mediapipe==1.2.2')
+
 function Find-Python310 {
     foreach ($candidato in @(@('py', '-3'), @('python'), @('python3'))) {
         if (-not (Get-Command $candidato[0] -ErrorAction SilentlyContinue)) { continue }
@@ -36,6 +43,9 @@ if ($manifesto.requerMotor -and -not (Test-Path -LiteralPath (Join-Path $destino
 }
 if ($manifesto.requerMotor -and -not (Test-Path -LiteralPath $earshotPython)) {
     throw 'Falta o earshot (efeitos sonoros). Rode de novo o instalador do pacote principal e depois este.'
+}
+if ($manifesto.requerMotor -and -not (Test-Path -LiteralPath $efeitosPython)) {
+    throw 'Falta o motor de efeitos de video. Rode de novo o instalador do pacote principal (versao nova) e depois este.'
 }
 $python = $null
 if (-not $manifesto.requerMotor) {
@@ -92,6 +102,16 @@ if (-not $manifesto.requerMotor) {
         Write-Host 'Aviso: o earshot nao conseguiu baixar os modelos de escuta agora (sem internet ou sem FFmpeg). Eles baixam sozinhos na primeira edicao.' -ForegroundColor Yellow
     }
     Install-Skill 'earshot' (Join-Path $earshotPasta 'skills/earshot')
+
+    Write-Host 'Instalando o motor de efeitos de video (rastreamento do rosto e recorte da pessoa)...'
+    New-Item -ItemType Directory -Force -Path $efeitosPasta | Out-Null
+    if (-not (Test-Path -LiteralPath $efeitosPython)) {
+        $resto = @($python | Select-Object -Skip 1) + @('-m', 'venv', (Join-Path $efeitosPasta '.venv'))
+        Invoke-Passo 'criar o ambiente Python dos efeitos de video' { & $python[0] @resto }
+    }
+    Invoke-Passo 'atualizar o pip dos efeitos de video' { & $efeitosPython -m pip install -q --disable-pip-version-check --upgrade pip }
+    Invoke-Passo 'instalar os pacotes dos efeitos de video' { & $efeitosPython -m pip install -q --disable-pip-version-check @efeitosPacotes }
+    Invoke-Passo 'testar os efeitos de video' { & $efeitosPython -c 'import mediapipe, cv2, PIL, numpy' }
 }
 
 Write-Host "Pronto! $($manifesto.skills.Count) skills instaladas ($($manifesto.id))." -ForegroundColor Green

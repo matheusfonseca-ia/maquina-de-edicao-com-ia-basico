@@ -53,7 +53,7 @@ Tudo que a fase 0 descobriu. Campos ausentes viram "não tem".
 
 - `videos`: todos os vídeos da pasta, com o que o `ffprobe` mostrou. Se houver mais de um, a pessoa escolhe na página.
 - `audios`: os arquivos de áudio da pasta. A página pergunta o que é cada um (voz, música ou não usar).
-- `formatos`: as pastas de formato que existem ao lado desta skill, com `SKILL.md` e `formato.md`. São seis após instalar o principal e 12 com o complemento; `[]` significa nenhum. O servidor confere essa lista no disco. Não inclua pastas de formatos extras ainda não instalados. Se omitir o campo, o servidor detecta as skills vizinhas.
+- `formatos`: as pastas de formato que existem ao lado desta skill, com `SKILL.md` e `formato.md`. São dez após instalar o principal e 20 com o complemento; `[]` significa nenhum. O servidor confere essa lista no disco. Não inclua pastas de formatos extras ainda não instalados. Se omitir o campo, o servidor detecta as skills vizinhas.
 - `estilosVisuais`: os de `estilos-visuais/` (origem `maquina`) e os de `~/.maquina-de-edicao/estilos-visuais/` (origem `pessoa`). Nos da pessoa, preencha `cores` com os valores do arquivo (fundo das telas gráficas, cor de destaque, texto principal, card): é o que a prévia usa pra desenhar.
 - `preferencias`: `null` se não existir `preferencias.md`. Se existir:
 

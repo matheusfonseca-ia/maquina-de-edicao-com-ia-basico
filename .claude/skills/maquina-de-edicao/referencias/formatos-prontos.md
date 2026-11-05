@@ -1,10 +1,12 @@
 # Formatos prontos
 
-Catálogo de 12 formatos, dividido entre seis da oferta principal e seis do complemento (order bump). O formato é a estrutura do vídeo: layouts, posições, ritmo e o que aparece em cada momento. Cada um é uma skill própria; depois de instalado, fica ao lado desta (`<pasta de skills>/<nome-do-formato>/`), com a especificação completa em `formato.md`.
+Catálogo de 20 formatos, dividido entre dez da oferta principal e dez do complemento (order bump). O formato é a estrutura do vídeo: layouts, posições, ritmo e o que aparece em cada momento. Cada um é uma skill própria; depois de instalado, fica ao lado desta (`<pasta de skills>/<nome-do-formato>/`), com a especificação completa em `formato.md`.
 
-**Oferta principal:** Reels de Negócio, Tela Dividida Explicativa, Legenda Encaixada, Telas em Profundidade, Cortes de Vídeo Longo e YouTube Educativo.
+**Oferta principal:** Reels de Negócio, Tela Dividida Explicativa, Legenda Encaixada, Telas em Profundidade, Cortes de Vídeo Longo, YouTube Educativo, Palavra Atrás da Cabeça, Checklist na Tela, Zoom na Palavra e Marcações.
 
-**Complemento:** Reels com B-roll, Ensaio Visual, Nuvem de Imagens, Recorte com Imagens, Formato Ranking e Aula em Tela Dividida.
+**Complemento:** Reels com B-roll, Ensaio Visual, Nuvem de Imagens, Recorte com Imagens, Formato Ranking, Aula em Tela Dividida, Widgets de Vidro, Cards em Órbita, Capa de Revista e Grade do Perfil.
+
+**Formatos de efeito:** Palavra Atrás da Cabeça, Checklist na Tela, Zoom na Palavra, Marcações, Widgets de Vidro, Cards em Órbita, Capa de Revista e Grade do Perfil aplicam efeitos direto na imagem da câmera com o `fx.py` original do claude-video-effects. Além do `formato.md`, eles seguem `efeitos-de-video.md`.
 
 Depois do formato, a pessoa escolhe o **estilo visual** (a aparência). Ver `estilos-visuais.md`.
 
@@ -27,16 +29,24 @@ Use esta lista na pergunta de formato da fase 1, filtrando primeiro pelas skills
 | 7 | Recorte com Imagens | `recorte-com-imagens` | Você recortado na frente de imagens em tela cheia que trocam a cada ideia |
 | 8 | Telas em Profundidade | `telas-em-profundidade` | Você em tela cheia com interfaces e telas reais atrás da sua cabeça |
 | 9 | Formato Ranking | `formato-ranking` | Tier list que vai se preenchendo conforme você ranqueia |
-| 10 | Cortes de Vídeo Longo | `cortes-de-video-longo` | Entra um vídeo longo ou uma call, saem cortes verticais ranqueados |
+| 10 | Palavra Atrás da Cabeça | `palavra-atras-da-cabeca` | Uma palavra gigante cai atrás da sua cabeça nas palavras mais fortes |
+| 11 | Checklist na Tela | `checklist-na-tela` | A lista do que você fala aparece e cada item ganha ✓ na hora certa |
+| 12 | Zoom na Palavra | `zoom-na-palavra` | Aproximação rápida nas palavras fortes e mira travando no seu rosto |
+| 13 | Marcações | `marcacoes` | Imagem congela com seta à mão, fita no peito, caixa que aumenta o número |
+| 14 | Widgets de Vidro | `widgets-de-vidro` | Widgets de vidro em volta da cabeça e gráficos de vidro subindo |
+| 15 | Cards em Órbita | `cards-em-orbita` | Seus posts girando em volta da cabeça, em carrossel 3D ou em leque |
+| 16 | Capa de Revista | `capa-de-revista` | Você vira capa de revista e as frases fortes viram colagem vermelha |
+| 17 | Grade do Perfil | `grade-do-perfil` | Você no centro da grade do perfil, com os reels e as visualizações em volta |
+| 18 | Cortes de Vídeo Longo | `cortes-de-video-longo` | Entra um vídeo longo ou uma call, saem cortes verticais ranqueados |
 
 ### Horizontal 16:9 (YouTube)
 
 | # | Nome | Pasta | Descrição curta |
 |---|---|---|---|
-| 11 | YouTube Educativo | `youtube-educativo` | Vídeo longo com cards sobre a câmera, tela dividida e animações explicativas |
-| 12 | Aula em Tela Dividida | `aula-em-tela-dividida` | O documento da aula rola na esquerda e você fica na direita; o documento é gerado junto |
+| 19 | YouTube Educativo | `youtube-educativo` | Vídeo longo com cards sobre a câmera, tela dividida e animações explicativas |
+| 20 | Aula em Tela Dividida | `aula-em-tela-dividida` | O documento da aula rola na esquerda e você fica na direita; o documento é gerado junto |
 
-Se a pasta de um formato não existir com `SKILL.md` e `formato.md`, não ofereça esse formato. A ausência dos extras é esperada na oferta principal: não trate como instalação incompleta nem mande reinstalar o principal para obter os 12. Se a pessoa pedir um extra ausente, explique que ele pertence ao complemento e precisa ser instalado pelo pacote correspondente.
+Se a pasta de um formato não existir com `SKILL.md` e `formato.md`, não ofereça esse formato. A ausência dos extras é esperada na oferta principal: não trate como instalação incompleta nem mande reinstalar o principal para obter os 20. Se a pessoa pedir um extra ausente, explique que ele pertence ao complemento e precisa ser instalado pelo pacote correspondente.
 
 ---
 

@@ -27,12 +27,22 @@ earshot_versao='v0.4.0'
 earshot_pasta="$HOME/.maquina-de-edicao/earshot"
 earshot_python="$earshot_pasta/.venv/bin/python"
 
+# Efeitos de video (formatos de efeito): o motor usa o fx.py do claude-video-effects
+# (github.com/Vibha-Ramprakash/claude-video-effects), que fica dentro da skill do motor.
+# O ambiente Python dele fica fora da skill pra sobreviver as atualizacoes.
+efeitos_pasta="$HOME/.maquina-de-edicao/efeitos"
+efeitos_python="$efeitos_pasta/.venv/bin/python"
+
 if [ "$requer_motor" = true ] && [ ! -f "$destino/maquina-de-edicao/SKILL.md" ]; then
   echo 'Instale primeiro o pacote principal da Maquina de Edicao. Depois rode este instalador de novo.'
   exit 1
 fi
 if [ "$requer_motor" = true ] && [ ! -x "$earshot_python" ]; then
   echo 'Falta o earshot (efeitos sonoros). Rode de novo o instalador do pacote principal e depois este.'
+  exit 1
+fi
+if [ "$requer_motor" = true ] && [ ! -x "$efeitos_python" ]; then
+  echo 'Falta o motor de efeitos de video. Rode de novo o instalador do pacote principal (versao nova) e depois este.'
   exit 1
 fi
 python=''
@@ -97,6 +107,13 @@ if [ "$requer_motor" = false ]; then
     echo 'Aviso: o earshot nao conseguiu baixar os modelos de escuta agora (sem internet ou sem FFmpeg). Eles baixam sozinhos na primeira edicao.'
   fi
   instalar_skill earshot "$earshot_pasta/skills/earshot"
+
+  echo 'Instalando o motor de efeitos de video (rastreamento do rosto e recorte da pessoa)...'
+  mkdir -p "$efeitos_pasta"
+  if [ ! -x "$efeitos_python" ]; then "$python" -m venv "$efeitos_pasta/.venv"; fi
+  "$efeitos_python" -m pip install -q --disable-pip-version-check --upgrade pip
+  "$efeitos_python" -m pip install -q --disable-pip-version-check numpy opencv-python pillow 'mediapipe==1.2.2'
+  "$efeitos_python" -c 'import mediapipe, cv2, PIL, numpy'
 fi
 
 echo "Pronto! $total skills instaladas."

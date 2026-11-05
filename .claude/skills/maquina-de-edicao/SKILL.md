@@ -1,6 +1,6 @@
 ---
 name: maquina-de-edicao
-description: Edita gravações faladas com FFmpeg, Python, Node e HyperFrames, do zero ou com um formato instalado. Oferece seis formatos no pacote principal e mais seis quando o complemento está instalado, cada um com skill própria. Abre um painel local para escolher formato e estilo visual, monta o vídeo, abre o Studio para revisão e exporta o MP4 após aprovação. Salva preferências e cria estilos visuais a partir de referências. Use ao chamar /maquina-de-edicao, pedir para editar uma gravação, transformar um vídeo em reels, consultar formatos instalados ou copiar o visual de um vídeo.
+description: Edita gravações faladas com FFmpeg, Python, Node e HyperFrames, do zero ou com um formato instalado. Oferece dez formatos no pacote principal e mais dez quando o complemento está instalado, cada um com skill própria. Abre um painel local para escolher formato e estilo visual, monta o vídeo, abre o Studio para revisão e exporta o MP4 após aprovação. Salva preferências e cria estilos visuais a partir de referências. Use ao chamar /maquina-de-edicao, pedir para editar uma gravação, transformar um vídeo em reels, consultar formatos instalados ou copiar o visual de um vídeo.
 ---
 
 # Máquina de Edição
@@ -8,7 +8,7 @@ description: Edita gravações faladas com FFmpeg, Python, Node e HyperFrames, d
 Você vai transformar a gravação bruta do usuário num vídeo finalizado. Existem dois caminhos, e a pessoa escolhe logo no começo:
 
 - **Do zero**: a pessoa responde algumas perguntas (nível, legenda, visual, música) e o vídeo sai do jeito que ela montou. A proporção segue a gravação.
-- **Formato pronto**: a pessoa escolhe **primeiro o formato**, entre as skills instaladas, e **depois o estilo visual** (a aparência: cores, fontes, legenda, música). São seis formatos na oferta principal e seis adicionais no complemento. O vídeo sai naquele formato e naquele visual, quase sem perguntas.
+- **Formato pronto**: a pessoa escolhe **primeiro o formato**, entre as skills instaladas, e **depois o estilo visual** (a aparência: cores, fontes, legenda, música). São dez formatos na oferta principal e dez adicionais no complemento. O vídeo sai naquele formato e naquele visual, quase sem perguntas.
 
 Formato e estilo visual são independentes: qualquer formato combina com qualquer estilo visual. Ex: Formato Ranking + Pixelado = tier list com cara de videogame.
 
@@ -28,12 +28,13 @@ Arquivos de apoio (leia antes da fase 2):
 
 - `referencias/instrucoes-base.md`: as instruções completas de edição, divididas em blocos marcados por nível.
 - `referencias/variacoes.md`: o que muda em cada bloco conforme as respostas (proporção horizontal, câmera vertical, visual, legendas, música, efeitos).
-- `referencias/formatos-prontos.md`: o catálogo dos 12 formatos, onde fica cada um e como um formato se aplica por cima das instruções base.
+- `referencias/formatos-prontos.md`: o catálogo dos 20 formatos, onde fica cada um e como um formato se aplica por cima das instruções base.
 - `referencias/estilos-visuais.md`: o que é um estilo visual, onde ficam, como aparecem na pergunta e como se aplicam por cima de um formato.
 - `referencias/kit-noite.md`: o kit visual escuro (fundo preto, brilho laranja, cards de vidro, Inter + Instrument Serif) que vários formatos usam no visual original e o estilo Noite Laranja usa.
 - `referencias/painel.md`: como abrir o painel de escolhas (a página local da fase 1), o que mandar pra ele e como ler o que volta.
 - `referencias/broll-da-internet.md`: como buscar clipes de apoio e imagens na internet (qualquer fonte) quando a pessoa não trouxe os dela.
 - `referencias/efeitos-sonoros.md`: como tirar todos os efeitos sonoros e o efeito crescente do earshot, posicionar, mixar e conferir pela escuta.
+- `referencias/efeitos-de-video.md`: os oito formatos de efeito (Palavra Atrás da Cabeça, Checklist na Tela, Zoom na Palavra, Marcações, Widgets de Vidro, Cards em Órbita, Capa de Revista, Grade do Perfil), que usam o `fx.py` original do claude-video-effects, em `efeitos/`: passo a passo, opções de cada efeito e o que muda no motor.
 
 Formatos prontos: cada um numa pasta ao lado desta skill, `<pasta de skills>/<nome-do-formato>/formato.md` (a pasta de skills é a pasta-mãe desta). O catálogo está em `referencias/formatos-prontos.md`.
 
@@ -60,7 +61,7 @@ Antes de qualquer pergunta, liste os arquivos da pasta atual.
 - Rode `ffprobe` em cada vídeo e anote: orientação (horizontal ou vertical), resolução, fps e duração. Não pergunte a orientação da gravação ao usuário; detecte.
 - Se o arquivo estiver corrompido ou ilegível, pare e avise.
 - Verifique se existe `~/.maquina-de-edicao/preferencias.md`. Se existir, leia.
-- Leia `referencias/formatos-prontos.md` e confira quais pastas de formato existem ao lado desta skill, com `SKILL.md` e `formato.md`. Ofereça somente essas; não procure formatos dentro do repositório ou de `order-bump/`. Os seis extras só aparecem depois da instalação do complemento. Uma lista vazia significa nenhum formato instalado.
+- Leia `referencias/formatos-prontos.md` e confira quais pastas de formato existem ao lado desta skill, com `SKILL.md` e `formato.md`. Ofereça somente essas; não procure formatos dentro do repositório ou de `order-bump/`. Os dez extras só aparecem depois da instalação do complemento. Uma lista vazia significa nenhum formato instalado.
 - Liste os estilos visuais (`estilos-visuais/*.md` desta skill e `~/.maquina-de-edicao/estilos-visuais/*.md`, sem os que começam com `_`). De cada um, leia só o título e as linhas "Resumo:" e "Combina com:".
 - **Se a skill foi chamada por uma skill de formato** (ex: a pessoa digitou `/reels-de-negocio`), o formato já está escolhido: mande ele como `formatoFixo` no contexto do painel (no chat: pule a pergunta "Como quer editar este vídeo?" e a pergunta de formato, e siga direto pro passo 2 do "Caminho formato pronto" na fase 1).
 - A pasta precisa ter o que o formato pede na seção "Entradas extras" do `formato.md` (ex: o Reels com B-roll procura uma pasta `broll/`). Essa checagem acontece depois que o formato é escolhido.
@@ -70,7 +71,7 @@ Na fase 0 não pergunte nada no chat (nem qual vídeo, nem o que é o áudio): o
 
 ## Fase 0b: Conferir as ferramentas
 
-Antes de abrir o painel, confira o que a edição vai precisar, nesta ordem: `node --version`, `ffmpeg -version` e `ffprobe -version`, `python --version` (ou `python3`), `npx hyperframes --version` e o earshot dos efeitos sonoros (`<EARSHOT_PY> -m earshot sfx list --kind hit`, com o Python de `~/.maquina-de-edicao/earshot/.venv`; veja `referencias/efeitos-sonoros.md`).
+Antes de abrir o painel, confira o que a edição vai precisar, nesta ordem: `node --version`, `ffmpeg -version` e `ffprobe -version`, `python --version` (ou `python3`), `npx hyperframes --version` e o earshot dos efeitos sonoros (`<EARSHOT_PY> -m earshot sfx list --kind hit`, com o Python de `~/.maquina-de-edicao/earshot/.venv`; veja `referencias/efeitos-sonoros.md`). Se o formato escolhido for um formato de efeito, confira também o ambiente dos efeitos de vídeo (`referencias/efeitos-de-video.md`, "Onde fica").
 
 - Se faltar algum, avise em linguagem simples ("Falta instalar o FFmpeg, que é o programa que corta o vídeo") e guie a instalação pelo jeito mais fácil do sistema da pessoa (no Windows, `winget`; no Mac, `brew`). Programas do sistema a pessoa instala; pacotes npm e Python continuam locais no projeto (bloco 0 das instruções base).
 - Depois de instalar, confira de novo. Só siga com tudo respondendo.
@@ -316,6 +317,8 @@ Atualizado em: AAAA-MM-DD (vídeo: nome-do-arquivo.mp4)
 - Cor principal: (só se informada)
 - Fundo: (só se informado)
 - Fonte: (só se informada)
+- Nome: (só se informado)
+- @ do perfil: (só se informado)
 
 ## Ajustes fixos
 - Legendas 15% maiores que o padrão
@@ -339,7 +342,7 @@ Os arquivos `formato.md` e os estilos visuais que vêm com a Máquina nunca são
 
 Quando a pessoa mandar um link (Instagram, TikTok, YouTube) ou arquivo de vídeo e pedir pra analisar a edição e salvar como estilo. Não edita vídeo nenhum: só cria o estilo.
 
-O que se copia é a **aparência** (cores, fontes, legenda, materiais, movimento, motions e música), pra usar em cima de qualquer um dos 12 formatos. A estrutura (layouts, posições, ritmo de cortes) é sempre a do formato que a pessoa escolher. Se ela pedir pra copiar a estrutura também, explique isso e sugira o formato mais parecido com o vídeo.
+O que se copia é a **aparência** (cores, fontes, legenda, materiais, movimento, motions e música), pra usar em cima de qualquer um dos 20 formatos. A estrutura (layouts, posições, ritmo de cortes) é sempre a do formato que a pessoa escolher. Se ela pedir pra copiar a estrutura também, explique isso e sugira o formato mais parecido com o vídeo.
 
 1. Baixe o vídeo com `yt-dlp` numa pasta temporária. Se o download pedir login, avise e peça o arquivo.
 2. Extraia: quadros nas trocas de cena e folhas de contato a 4 quadros por segundo (`fps=4,scale=240:-1,tile=6x4`), transcrição com tempos, loudness (`ebur128`). Meça cores direto nos quadros em resolução cheia, não no olho.

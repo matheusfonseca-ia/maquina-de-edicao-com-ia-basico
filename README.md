@@ -2,15 +2,15 @@
 
 ## 🚀 Acesse a versão completa
 
-Amplie sua Máquina de Edição com **mais seis formatos de edição**.
+Amplie sua Máquina de Edição com **mais dez formatos de edição**.
 
 ### [👉 QUERO A VERSÃO COMPLETA](https://pay.hub.la/0Nq9Z4tSkclRESReVpkw)
 
-O complemento adiciona Reels com B-roll, Ensaio Visual, Nuvem de Imagens, Recorte com Imagens, Formato Ranking e Aula em Tela Dividida.
+O complemento adiciona Reels com B-roll, Ensaio Visual, Nuvem de Imagens, Recorte com Imagens, Formato Ranking, Aula em Tela Dividida, Widgets de Vidro, Cards em Órbita, Capa de Revista e Grade do Perfil.
 
 ---
 
-Inclui a Máquina de Edição e seis formatos, cada um com sua própria skill:
+Inclui a Máquina de Edição e dez formatos, cada um com sua própria skill:
 
 | Comando | Como fica |
 |---|---|
@@ -20,6 +20,10 @@ Inclui a Máquina de Edição e seis formatos, cada um com sua própria skill:
 | `/telas-em-profundidade` | Interfaces animadas atrás de você, com profundidade |
 | `/cortes-de-video-longo` | Seleção e edição de cortes verticais de um vídeo longo |
 | `/youtube-educativo` | Vídeo horizontal com cards, tela dividida e animações explicativas |
+| `/palavra-atras-da-cabeca` | Uma palavra gigante cai atrás da sua cabeça nas palavras mais fortes |
+| `/checklist-na-tela` | A lista do que você fala aparece e cada item ganha ✓ na hora certa |
+| `/zoom-na-palavra` | Aproximação rápida nas palavras fortes e mira travando no seu rosto |
+| `/marcacoes` | Imagem congela com seta à mão, fita no peito e caixa que aumenta o número |
 
 O pacote inclui formatos verticais para Reels, TikTok e Shorts, cortes de vídeos longos e edição horizontal para YouTube. O caminho **Do zero** também permite editar nas duas orientações. Pixelado, Noite Laranja e Claro Tecnológico vêm incluídos e podem ser combinados com qualquer formato.
 
@@ -49,7 +53,7 @@ Mac/Linux:
 bash instalar.sh
 ```
 
-O instalador copia sete skills para `~/.claude/skills/` (o motor e os seis formatos) e instala o [earshot](https://github.com/Leonxlnx/earshot), que a Máquina usa em todos os efeitos sonoros. O earshot fica em `~/.maquina-de-edicao/earshot`, com ambiente Python próprio, e vem com a skill `/earshot`. Na primeira instalação ele baixa cerca de 1,5 GB (PyTorch e os modelos de escuta), então pode levar alguns minutos. Se houver versões antigas das mesmas skills, elas ficam em `~/.claude/skills-backup/`. Preferências, estilos pessoais e outros formatos já instalados são preservados.
+O instalador copia onze skills para `~/.claude/skills/` (o motor e os dez formatos) e instala o [earshot](https://github.com/Leonxlnx/earshot), que a Máquina usa em todos os efeitos sonoros. O earshot fica em `~/.maquina-de-edicao/earshot`, com ambiente Python próprio, e vem com a skill `/earshot`. Na primeira instalação ele baixa cerca de 1,5 GB (PyTorch e os modelos de escuta), então pode levar alguns minutos. Se houver versões antigas das mesmas skills, elas ficam em `~/.claude/skills-backup/`. Preferências, estilos pessoais e outros formatos já instalados são preservados.
 
 Feche e abra o Claude Code depois da instalação.
 
@@ -61,7 +65,7 @@ Na primeira edição, o Claude confere Node.js, FFmpeg, Python, HyperFrames e o 
 
 ## Atualizar e adicionar formatos
 
-Baixe a nova versão do seu pacote, extraia e rode o instalador novamente. Quem comprou o complemento instala o ZIP de seis formatos extras depois do principal; os novos comandos aparecem no mesmo painel.
+Baixe a nova versão do seu pacote, extraia e rode o instalador novamente. Quem comprou o complemento instala o ZIP de dez formatos extras depois do principal; os novos comandos aparecem no mesmo painel.
 
 ## Baixar pelo GitHub
 
@@ -75,6 +79,10 @@ Depois execute o instalador do seu sistema conforme as instruções acima. Para 
 ### Efeitos sonoros com o earshot
 
 Todos os efeitos sonoros (cliques, impactos, confirmações, passagens e o som crescente da abertura) saem do banco de sons do earshot, em todos os formatos e estilos. A Máquina monta o kit de efeitos do vídeo, posiciona cada som no quadro do evento e confere pela escuta do earshot se cada efeito caiu no tempo certo. A música continua sendo criada por código.
+
+### Efeitos de vídeo
+
+Palavra Atrás da Cabeça, Checklist na Tela, Zoom na Palavra e Marcações (e quatro formatos do complemento) aplicam efeitos direto na sua gravação: recortam você, seguem o seu rosto e colocam palavras, listas e cards atrás ou em volta da sua cabeça. Esses efeitos são do [claude-video-effects](https://github.com/Vibha-Ramprakash/claude-video-effects), de Vibha Ramprakash, usados com o código original (licença MIT, em `.claude/skills/maquina-de-edicao/efeitos/LICENSE`). O instalador cria um ambiente Python próprio pra eles em `~/.maquina-de-edicao/efeitos` (OpenCV, MediaPipe e Pillow, cerca de 350 MB). Esses formatos saem a 30 quadros por segundo na câmera.
 
 ### Enquadramento em todos os vídeos
 

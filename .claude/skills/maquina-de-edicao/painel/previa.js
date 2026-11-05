@@ -514,6 +514,12 @@ const PELES = {
   telas: { f: 'Inter', p: 600, cor: '#fff', sombra: '0 4px 18px rgba(0,0,0,.7)', hi: { f: "'Instrument Serif'", ital: true, p: 400, cor: '#E8873A', esc: 1.4, brilho: '0 0 30px rgba(232,135,58,.45)' } },
   broll: { f: 'Inter', p: 600, cor: '#fff', sombra: '0 3px 14px rgba(0,0,0,.65)', hi: null },
   pixel: { pilula: true },
+  fxPessego: { f: 'Inter', p: 700, cor: '#fff', sombra: '0 4px 16px rgba(0,0,0,.7)', hi: { f: "'Instrument Serif'", ital: true, p: 400, cor: '#FFB7A5', esc: 1.15 } },
+  fxVerde: { f: 'Inter', p: 700, cor: '#fff', sombra: '0 4px 16px rgba(0,0,0,.7)', hi: { f: "'Instrument Serif'", ital: true, p: 400, cor: '#34C759', esc: 1.15 } },
+  fxAmarelo: { f: 'Inter', p: 800, cor: '#fff', sombra: '0 4px 18px rgba(0,0,0,.75)', hi: { f: 'Inter', p: 800, cor: '#FFD60A', esc: 1 } },
+  fxMarcador: { f: 'Inter', p: 700, cor: '#fff', sombra: '0 4px 16px rgba(0,0,0,.7)', hi: { f: "'Permanent Marker'", p: 400, cor: '#FFD60A', esc: 1.1 } },
+  fxQuente: { f: 'Inter', p: 700, cor: '#fff', sombra: '0 4px 16px rgba(0,0,0,.7)', hi: { f: "'Instrument Serif'", ital: true, p: 400, cor: '#FFE7C2', esc: 1.15 } },
+  fxRosa: { f: 'Inter', p: 700, cor: '#fff', sombra: '0 4px 16px rgba(0,0,0,.7)', hi: { f: "'Instrument Serif'", ital: true, p: 400, cor: '#FF3D7F', esc: 1.15 } },
 };
 
 function desenharLegenda(ctx, el, lista, mec) {
@@ -747,6 +753,292 @@ function demoRnPixel() {
         entra(ctx, dm, 2.3, { som: null });
       }) },
   ];
+}
+
+// ---------------------------------------------------------------- formatos de efeito
+
+// Peças dos formatos de efeito: imitam, com o bonequinho, os efeitos do fx.py
+// (claude-video-effects). A edição de verdade usa o fx.py original na gravação.
+const VIDRO = { background: 'rgba(255,255,255,.14)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)', border: '1.5px solid rgba(255,255,255,.32)', borderRadius: '34px', boxShadow: '0 20px 50px rgba(0,0,0,.25)', color: '#fff', fontFamily: 'Inter', boxSizing: 'border-box' };
+const CAPAS = ['post', 'cidade', 'mesa', 'loja', 'grafico', 'perfil', 'noticia', 'chat'];
+
+// Câmera cheia em camadas: fundo da gravação, o que fica atrás da pessoa, a pessoa
+// recortada e, fora do zoom, o que fica na frente.
+function fxCena(ctx, atras, frente, o = {}) {
+  const g = h('div', caixa(0, 0, ctx.W, ctx.H, { overflow: 'hidden', background: '#000' }));
+  const cam = h('div', caixa(0, 0, ctx.W, ctx.H), '', 'fx-cam');
+  const fundo = camera(ctx);
+  const tras = h('div', caixa(0, 0, ctx.W, ctx.H));
+  const pessoa = camera(ctx, { recorte: true });
+  if (o.cinza) { fundo.style.filter = 'grayscale(1) contrast(1.1) brightness(.8)'; pessoa.style.filter = 'grayscale(1) contrast(1.15)'; }
+  cam.append(fundo, tras, pessoa);
+  if (o.quente) cam.appendChild(h('div', { position: 'absolute', inset: '0', background: 'rgba(255,160,80,.10)', pointerEvents: 'none' }));
+  const fr = h('div', caixa(0, 0, ctx.W, ctx.H));
+  g.append(cam, fr);
+  if (atras) atras(tras, fr);
+  if (frente) frente(fr);
+  return g;
+}
+
+// Palavra gigante atrás da cabeça (backdrop-word, huge-strike, capa).
+function fxPalavra(ctx, texto, o = {}) {
+  const tam = o.tam ?? caber(texto, 330, 1010, 0.68);
+  const w = h('div', { position: 'absolute', left: '0', width: '1080px', top: px(o.top ?? 200), textAlign: 'center', fontFamily: o.fonte || "'Archivo Black', Archivo, Inter, sans-serif", fontWeight: o.peso ?? 900, fontSize: px(tam), lineHeight: '1', color: o.cor || '#F4E9D8', letterSpacing: '-0.02em', whiteSpace: 'nowrap' });
+  const s = h('span', { display: 'inline-block' }, texto);
+  w.appendChild(s);
+  medirECaber(ctx, s, 1040);
+  ctx.anima(w, [{ opacity: 0, transform: 'translateY(-90px)' }, { opacity: 1, transform: 'none' }], { em: o.em ?? .2, dur: .4, ease: 'cubic-bezier(.3,1.4,.5,1)', som: o.som });
+  return w;
+}
+
+function fxZoom(ctx, el, z, cx, cy, em, dur) {
+  if (!el) return;
+  el.style.transformOrigin = `${cx}px ${cy}px`;
+  ctx.anima(el, [{ transform: 'scale(1)' }, { transform: `scale(${z})`, offset: .18 }, { transform: `scale(${z})`, offset: .85 }, { transform: 'scale(1)' }], { em, dur, ease: 'ease-in-out' });
+}
+
+function fxSoco(ctx, el, z, em) {
+  if (!el) return;
+  el.style.transformOrigin = '540px 690px';
+  ctx.anima(el, [{ transform: 'scale(1)' }, { transform: `scale(${z})`, offset: .12 }, { transform: `scale(${z})`, offset: .7 }, { transform: 'scale(1)' }], { em, dur: 1.4, ease: 'ease-out' });
+}
+
+function fxRelogio(ctx, em) {
+  const g = h('div', caixa(430, 210, 220, 250, { background: '#1B1B1D', borderRadius: '26px', boxShadow: '0 20px 50px rgba(0,0,0,.45)', display: 'grid', placeItems: 'center', fontFamily: "'Archivo Black', Archivo, Inter", fontWeight: 900, fontSize: '190px', color: '#F4E9D8', overflow: 'hidden' }));
+  const n = h('span', {}, '3');
+  g.append(n, h('div', caixa(0, 124, 220, 3, { background: '#000' })));
+  ctx.anima(g, [{ opacity: 0, transform: 'translateY(-30px)' }, { opacity: 1, transform: 'none' }], { em, dur: .3 });
+  ctx.tempo(em + .3, 1.6, (k) => { n.textContent = String(Math.max(1, 3 - Math.floor(k * 3))); });
+  return g;
+}
+
+// Card de lista ao lado da cabeça (todo): cada item ganha ✓ no tempo dele.
+function fxLista(ctx, titulo, itens, tempos) {
+  const c = h('div', caixa(712, 740, 330, 120 + itens.length * 64, { background: 'rgba(250,250,247,.96)', borderRadius: '26px', boxShadow: '0 20px 50px rgba(0,0,0,.35)', padding: '26px 28px', boxSizing: 'border-box', fontFamily: 'Inter', color: '#111' }));
+  const cont = h('span', { fontSize: '22px', color: '#8A8A8E' }, `0 de ${itens.length}`);
+  const topo = h('div', { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' });
+  topo.append(h('b', { fontSize: '26px', color: '#E8873A', letterSpacing: '.04em' }, titulo), cont);
+  c.appendChild(topo);
+  itens.forEach((t, i) => {
+    const l = h('div', { display: 'flex', alignItems: 'center', gap: '16px', height: '64px', fontSize: '30px', fontWeight: 600 });
+    const caixinha = h('span', { width: '30px', height: '30px', borderRadius: '8px', border: '3px solid #C7C7CC', boxSizing: 'border-box', display: 'grid', placeItems: 'center', color: '#fff', fontSize: '20px' });
+    const txt = h('span', {}, t);
+    l.append(caixinha, txt);
+    c.appendChild(l);
+    ctx.anima(caixinha, [{ background: 'transparent', borderColor: '#C7C7CC' }, { background: '#34C759', borderColor: '#34C759' }], { em: tempos[i], dur: .15, som: i === itens.length - 1 ? 'confirma' : null });
+    ctx.anima(txt, [{ color: '#111', textDecoration: 'none' }, { color: '#9A9A9E', textDecoration: 'line-through' }], { em: tempos[i], dur: .15 });
+    ctx.tempo(tempos[i], .05, (k) => { if (k >= 1) { caixinha.textContent = '✓'; cont.textContent = `${i + 1} de ${itens.length}`; } else if (i === 0) { cont.textContent = `0 de ${itens.length}`; } });
+  });
+  ctx.anima(c, [{ opacity: 0, transform: 'translateX(40px)' }, { opacity: 1, transform: 'none' }], { em: .3, dur: .35 });
+  return c;
+}
+
+// Lista de tarefas embaixo do queixo (checklist): cada passo gira e fica verde.
+function fxTarefas(ctx, quem, itens) {
+  const c = h('div', caixa(90, 1120, 900, 140 + itens.length * 96, { ...VIDRO, background: 'rgba(20,20,22,.62)', borderRadius: '30px', padding: '30px 36px' }));
+  const topo = h('div', { display: 'flex', justifyContent: 'space-between', fontSize: '30px', fontWeight: 700, marginBottom: '18px' });
+  const cont = h('span', { fontSize: '24px', color: '#8E8E93', fontWeight: 500 }, `0 de ${itens.length}`);
+  topo.append(h('span', {}, `<span style="color:#FF6B5A">●</span> ${quem} está editando`), cont);
+  c.appendChild(topo);
+  itens.forEach(([t, d], i) => {
+    const em = .5 + i * .6;
+    const l = h('div', { display: 'flex', alignItems: 'center', gap: '22px', height: '96px', fontSize: '34px', fontWeight: 600 });
+    const bola = h('span', { width: '40px', height: '40px', borderRadius: '50%', border: '4px solid rgba(255,255,255,.3)', borderTopColor: '#fff', boxSizing: 'border-box', display: 'grid', placeItems: 'center', fontSize: '24px', flex: 'none' });
+    l.append(bola, h('span', { flex: '1' }, t), h('span', { fontFamily: "'Space Mono', 'JetBrains Mono', monospace", fontSize: '24px', color: '#34D36E' }, d));
+    c.appendChild(l);
+    ctx.anima(bola, [{ transform: 'rotate(0)' }, { transform: 'rotate(720deg)' }], { em: em - .4, dur: .4, ease: 'linear' });
+    ctx.anima(bola, [{ background: 'transparent', border: '4px solid rgba(255,255,255,.3)' }, { background: '#34C759', border: '4px solid #34C759' }], { em, dur: .12, som: i === itens.length - 1 ? 'confirma' : null });
+    ctx.tempo(em, .05, (k) => { bola.textContent = k >= 1 ? '✓' : ''; if (k >= 1) cont.textContent = `${i + 1} de ${itens.length}`; });
+  });
+  ctx.anima(c, [{ opacity: 0, transform: 'translateY(40px)' }, { opacity: 1, transform: 'none' }], { em: .1, dur: .35 });
+  return c;
+}
+
+function fxMira(ctx, tag, em) {
+  const g = h('div', caixa(350, 450, 380, 470));
+  const canto = (l, t, r) => h('div', caixa(l, t, 70, 70, { borderColor: '#fff', borderStyle: 'solid', borderWidth: '0', ...r }));
+  g.append(
+    canto(0, 0, { borderTopWidth: '8px', borderLeftWidth: '8px' }), canto(310, 0, { borderTopWidth: '8px', borderRightWidth: '8px' }),
+    canto(0, 400, { borderBottomWidth: '8px', borderLeftWidth: '8px' }), canto(310, 400, { borderBottomWidth: '8px', borderRightWidth: '8px' }));
+  g.appendChild(h('div', { position: 'absolute', left: '0', width: '380px', top: '492px', textAlign: 'center' }, `<span style="background:rgba(255,255,255,.9);color:#111;font:700 26px Inter;padding:6px 16px;border-radius:8px;letter-spacing:.08em">${tag}</span>`));
+  ctx.anima(g, [{ opacity: 0, transform: 'scale(1.5)' }, { opacity: 1, transform: 'scale(1)' }], { em, dur: .25, som: 'clique' });
+  return g;
+}
+
+function fxSeta(ctx, frente, texto, cor, em) {
+  const pausa = h('div', caixa(60, 90, 84, 84, { background: 'rgba(20,20,22,.8)', borderRadius: '18px', display: 'grid', placeItems: 'center', color: '#fff', fontSize: '40px', fontFamily: 'Inter', fontWeight: 900 }), '❚❚');
+  const rot = h('div', { position: 'absolute', left: '650px', top: '110px', fontFamily: "'Permanent Marker', 'Caveat', cursive", fontSize: '70px', color: cor }, texto);
+  const seta = h('div', caixa(0, 0, 1080, 1920), `<svg viewBox="0 0 1080 1920" width="1080" height="1920" style="position:absolute;inset:0;overflow:visible"><path d="M720 220 C 640 300 600 420 690 560" fill="none" stroke="${cor}" stroke-width="10" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/><path d="M650 530 L690 562 L705 512" fill="none" stroke="${cor}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0"/></svg>`);
+  frente.append(pausa, rot, seta);
+  ctx.anima(pausa, [{ opacity: 0 }, { opacity: 1 }], { em, dur: .1, som: 'clique' });
+  ctx.anima(rot, [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'none' }], { em: em + .1, dur: .25 });
+  const [p1, p2] = seta.querySelectorAll('path');
+  ctx.anima(p1, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { em: em + .3, dur: .5, ease: 'ease-out' });
+  ctx.anima(p2, [{ opacity: 0 }, { opacity: 1 }], { em: em + .8, dur: .1 });
+}
+
+function fxSelecao(ctx, frente, texto, em) {
+  const g = h('div', caixa(330, 170, 420, 260, { border: '3px dashed #3B82F6', background: 'rgba(40,80,160,.35)', display: 'grid', placeItems: 'center', fontFamily: "'Playfair Display', 'Instrument Serif', serif", fontWeight: 700, fontSize: '170px', color: '#fff', transformOrigin: '0 0' }), texto);
+  [[-10, -10], [400, -10], [-10, 240], [400, 240]].forEach(([l, t]) => g.appendChild(h('div', caixa(l, t, 20, 20, { background: '#fff', border: '3px solid #3B82F6', boxSizing: 'border-box' }))));
+  const cursor = h('div', { position: 'absolute', left: '745px', top: '425px', fontSize: '60px', color: '#fff', textShadow: '0 2px 6px rgba(0,0,0,.5)' }, '➚');
+  cursor.style.transform = 'rotate(-90deg)';
+  frente.append(g, cursor);
+  ctx.anima(g, [{ opacity: 0 }, { opacity: 1 }], { em, dur: .2 });
+  ctx.anima(g, [{ transform: 'scale(1)' }, { transform: 'scale(1.18)' }], { em: em + 1, dur: .6, ease: 'ease-in-out' });
+  ctx.anima(cursor, [{ transform: 'rotate(-90deg) translate(0,0)' }, { transform: 'rotate(-90deg) translate(-50px, 75px)' }], { em: em + 1, dur: .6, ease: 'ease-in-out', som: 'clique' });
+}
+
+function fxWidgets(ctx, atras, frente) {
+  const tiles = [
+    [60, 120, 300, 280, `<div style="font-size:24px;opacity:.85">● Claude</div><div style="font:900 120px/1 'Archivo Black',Archivo,Inter;letter-spacing:-.04em;margin-top:10px">51K</div><div style="font-size:24px;opacity:.85;margin-top:8px">seguidores<br>em 1 ano</div>`],
+    [60, 430, 300, 300, `<div style="font-size:24px;font-weight:700">Top reels</div><div style="font:900 56px Inter;color:#FF6B5A">197K</div><div style="display:flex;gap:12px;align-items:flex-end;height:120px">${[100, 74, 64, 40, 26].map(v => `<div style="width:36px;height:${v}%;background:#FF6B5A;border-radius:6px"></div>`).join('')}</div>`],
+    [60, 760, 300, 170, `<div style="font-size:26px;color:#FF6B5A;font-weight:800">QUA</div><div style="font:900 64px Inter">05</div><div style="font-size:22px;background:#FF6B5A;border-radius:8px;padding:2px 10px;display:inline-block">Postar 2 reels</div>`],
+    [720, 120, 320, 120, `<div style="font-size:26px">● Rendering</div><div style="height:12px;background:rgba(255,255,255,.3);border-radius:6px;margin-top:16px"><div style="width:94%;height:100%;background:#fff;border-radius:6px"></div></div>`],
+    [720, 270, 320, 130, `<div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font:800 34px Inter">Matheus</div><div style="font-size:22px;opacity:.8">@seuperfil</div></div><div style="width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#f9a94b,#d6249f)"></div></div>`],
+    [720, 430, 320, 190, `<div style="display:flex;gap:16px;align-items:center"><div style="width:76px;height:76px;border-radius:16px;background:#E8613A;display:grid;place-items:center;font-size:44px">✳</div><div><div style="font-size:18px;opacity:.7">NOW EDITING</div><div style="font:800 28px Inter">Máquina</div></div></div><div style="text-align:center;font-size:34px;margin-top:14px">⏮ ▶ ⏭</div>`],
+    [800, 650, 220, 220, `<div style="width:150px;height:150px;margin:0 auto;border-radius:50%;border:14px solid #34C759;box-sizing:border-box;display:grid;place-items:center;font:900 52px Inter">4K</div>`],
+  ];
+  tiles.forEach(([x, y, w, hh, html], i) => {
+    const t = h('div', caixa(x, y, w, hh, { ...VIDRO, padding: '24px 26px' }), html);
+    atras.appendChild(t);
+    ctx.anima(t, [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'none' }], { em: .2 + i * .08, dur: .32, ease: 'cubic-bezier(.3,1.5,.5,1)', som: i === 0 ? 'impacto' : null });
+  });
+  const pilula = h('div', caixa(300, 1560, 480, 100, { ...VIDRO, borderRadius: '50px', display: 'grid', placeItems: 'center', fontSize: '40px', fontWeight: 600 }), 'Edited by <span style="color:#E8613A;margin-left:10px">Claude</span>');
+  frente.appendChild(pilula);
+  ctx.anima(pilula, [{ opacity: 0, transform: 'translateY(30px)' }, { opacity: 1, transform: 'none' }], { em: .9, dur: .35 });
+}
+
+function fxGrafico(ctx, rotulo, de, ate, suf, x, y, w, hh, em) {
+  const c = h('div', caixa(x, y, w, hh, { ...VIDRO, background: 'rgba(255,255,255,.12)', padding: '34px 40px', overflow: 'hidden' }));
+  const num = h('div', { position: 'absolute', right: '40px', top: '24px', font: "900 96px/1 'Archivo Black', Archivo, Inter", letterSpacing: '-.04em' }, de + suf);
+  c.append(h('div', { fontFamily: "'Space Mono', 'JetBrains Mono', monospace", fontSize: '26px', opacity: .85, letterSpacing: '.08em' }, rotulo), num);
+  const graf = h('div', caixa(30, hh * .38, w - 60, hh * .56), `<svg viewBox="0 0 800 300" width="100%" height="100%" preserveAspectRatio="none" style="overflow:visible"><path d="M0 290 C120 290 200 270 300 240 S520 170 620 110 S760 30 800 10 L800 300 L0 300 Z" fill="rgba(52,211,110,.28)" opacity="0"/><path d="M0 290 C120 290 200 270 300 240 S520 170 620 110 S760 30 800 10" fill="none" stroke="#34D36E" stroke-width="7" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/></svg>`);
+  c.appendChild(graf);
+  const [area, linha] = graf.querySelectorAll('path');
+  ctx.anima(c, [{ opacity: 0, transform: 'translateY(40px) scale(.96)' }, { opacity: 1, transform: 'none' }], { em, dur: .4 });
+  ctx.anima(linha, [{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { em: em + .3, dur: 1.6, ease: 'cubic-bezier(.4,0,.2,1)' });
+  ctx.anima(area, [{ opacity: 0 }, { opacity: 1 }], { em: em + 1.2, dur: .6 });
+  ctx.tempo(em + .3, 1.6, (k) => { const v = de + (ate - de) * (1 - (1 - k) ** 3); num.textContent = (ate < 10 ? v.toFixed(k >= 1 ? 0 : 1).replace('.', ',') : Math.round(v)) + suf; }, 'tique');
+  ctx.som(em + 1.9, 'confirma');
+  return c;
+}
+
+function fxBento(ctx, frente) {
+  const t = [
+    [60, 1170, 300, 280, `<div style="width:150px;height:150px;margin:6px auto 0;border-radius:50%;background:conic-gradient(#FF8A5B 0 29%, rgba(255,255,255,.18) 29% 100%);display:grid;place-items:center"><div style="width:110px;height:110px;border-radius:50%;background:rgba(40,40,44,.7);display:grid;place-items:center;font:900 40px Inter">29%</div></div><div style="text-align:center;font-size:20px;opacity:.8;margin-top:12px">dos seguidores</div>`],
+    [60, 1480, 300, 170, `<div style="font:900 64px Inter">672K</div><div style="font-size:20px;opacity:.8">views · top 7 reels</div>`],
+    [780, 1170, 240, 480, `<div style="font-size:20px;opacity:.8">TOP REELS · MIL</div><div style="display:flex;gap:14px;align-items:flex-end;height:360px;margin-top:20px">${[100, 71, 63, 42, 25].map(v => `<div style="flex:1;height:${v}%;background:${v === 100 ? '#34D36E' : 'rgba(255,255,255,.75)'};border-radius:8px"></div>`).join('')}</div>`],
+  ];
+  t.forEach(([x, y, w, hh, html], i) => {
+    const el = h('div', caixa(x, y, w, hh, { ...VIDRO, padding: '24px' }), html);
+    frente.appendChild(el);
+    ctx.anima(el, [{ opacity: 0, transform: 'translateY(30px)' }, { opacity: 1, transform: 'none' }], { em: .5 + i * .15, dur: .35 });
+  });
+}
+
+function fxCard(T, i, w, hh) {
+  return h('div', { position: 'absolute', left: '0', top: '0', width: px(w), height: px(hh), borderRadius: '16px', overflow: 'hidden', boxShadow: '0 14px 30px rgba(0,0,0,.45)', border: '3px solid rgba(255,255,255,.85)', background: '#fff' }, imagem(CAPAS[i % CAPAS.length], T));
+}
+
+// Cards girando em volta da cabeça (orbit, carousel-spin): os de baixo passam na
+// frente da pessoa, os de cima passam atrás.
+function fxOrbita(ctx, T, o) {
+  const dur = 3.4;
+  let tras, frente;
+  const g = fxCena(ctx, (a, f) => { tras = a; frente = f; });
+  const w = o.w, hh = Math.round(o.w * 1.6);
+  const cards = Array.from({ length: o.n }, (_, i) => {
+    const a = fxCard(T, i, w, hh), b = fxCard(T, i, w, hh);
+    tras.appendChild(a); frente.appendChild(b);
+    return [a, b];
+  });
+  ctx.anima(g.lastChild, [{ opacity: 0 }, { opacity: 1 }], { em: 0, dur: .3 });
+  ctx.tempo(0, dur, (k) => {
+    const giro = (o.freia ? 1 - (1 - k) ** 3 : k) * Math.PI * 2 * o.voltas;
+    cards.forEach(([a, b], i) => {
+      const ang = giro + i * Math.PI * 2 / o.n;
+      const x = 540 + o.rx * Math.cos(ang) - w / 2, y = o.cy + o.ry * Math.sin(ang) - hh / 2;
+      const prof = Math.sin(ang);
+      const esc = 0.72 + 0.28 * (prof + 1) / 2;
+      const giroY = o.freia ? ` rotateY(${Math.round(-Math.cos(ang) * 50)}deg)` : '';
+      const st = `translate(${x}px, ${y}px) scale(${esc})${giroY}`;
+      a.style.transform = st; b.style.transform = st;
+      a.style.visibility = prof > 0 ? 'hidden' : 'visible';
+      b.style.visibility = prof > 0 ? 'visible' : 'hidden';
+    });
+  });
+  if (o.freia) ctx.som(dur - .2, 'impacto');
+  return g;
+}
+
+// Capas se abrindo em leque atrás da cabeça, uma por vez (fan-build).
+function fxLeque(ctx, T, atras) {
+  const n = 11;
+  for (let i = 0; i < n; i++) {
+    const ang = -75 + i * (150 / (n - 1));
+    const c = fxCard(T, i, 150, 240);
+    c.style.transformOrigin = '75px 640px';
+    c.style.left = '465px'; c.style.top = '80px';
+    atras.appendChild(c);
+    ctx.anima(c, [{ opacity: 0, transform: 'rotate(0deg) scale(.7)' }, { opacity: 1, transform: `rotate(${ang}deg)` }], { em: .2 + i * .14, dur: .3, ease: 'cubic-bezier(.3,1.3,.5,1)' });
+  }
+}
+
+// A pessoa encolhe pro centro da grade 3 × 3 do perfil (place-in-grid).
+function fxGrade(ctx, T) {
+  const g = h('div', caixa(0, 0, ctx.W, ctx.H, { overflow: 'hidden', background: '#000' }));
+  g.appendChild(camera(ctx, { desfoque: 16, escurecer: .2 }));
+  g.appendChild(h('div', { position: 'absolute', inset: '0', background: 'rgba(240,236,230,.35)' }));
+  const views = ['1,8M', '2,4M', '3,4M', '312K', '3,1M', '847K', '268K', '1,2M', '596K'];
+  const W = 300, H = 400, gap = 18, x0 = (1080 - (3 * W + 2 * gap)) / 2, y0 = 300;
+  for (let i = 0; i < 9; i++) {
+    const x = x0 + (i % 3) * (W + gap), y = y0 + Math.floor(i / 3) * (H + gap);
+    const t = h('div', caixa(x, y, W, H, { borderRadius: '14px', overflow: 'hidden', boxShadow: '0 14px 30px rgba(0,0,0,.25)', border: i === 4 ? '4px solid #FF8A5B' : 'none' }));
+    if (i === 4) t.appendChild(camera(ctx, { w: W, h: H, escala: .33, topo: 70 }));
+    else t.innerHTML = imagem(CAPAS[i % CAPAS.length], T);
+    t.appendChild(h('div', { position: 'absolute', left: '14px', bottom: '10px', font: '700 26px Inter', color: '#fff', textShadow: '0 2px 6px rgba(0,0,0,.7)' }, `▷ ${views[i]}`));
+    g.appendChild(t);
+    if (i === 4) ctx.anima(t, [{ transform: 'scale(3.4)', opacity: 1 }, { transform: 'scale(1)', opacity: 1 }], { em: .1, dur: .5, ease: 'cubic-bezier(.65,0,.35,1)', som: 'impacto' });
+    else ctx.anima(t, [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'none' }], { em: .7 + i * .06, dur: .2 });
+  }
+  return g;
+}
+
+// Reels se empilhando atrás da cabeça (noise).
+function fxPilha(ctx, T, atras) {
+  const pos = [[90, 160, -8], [760, 140, 7], [300, 90, 4], [600, 260, -6], [40, 520, 5], [820, 480, -4], [430, 40, -3], [180, 330, 9]];
+  pos.forEach(([x, y, r], i) => {
+    const c = fxCard(T, i, 220, 350);
+    c.style.left = px(x); c.style.top = px(y);
+    atras.appendChild(c);
+    ctx.anima(c, [{ opacity: 0, transform: `rotate(${r}deg) scale(1.3)` }, { opacity: 1, transform: `rotate(${r}deg) scale(1)` }], { em: .2 + i * .25, dur: .18 });
+  });
+}
+
+// A grade do perfil enche a parede atrás (profile-wall).
+function fxParede(ctx, T, atras) {
+  const p = h('div', caixa(60, 90, 960, 660, { background: 'rgba(18,18,20,.92)', borderRadius: '26px', padding: '20px 26px', boxSizing: 'border-box', overflow: 'hidden' }));
+  p.appendChild(h('div', { display: 'flex', justifyContent: 'space-around', font: '600 28px Inter', color: '#8E8E93', marginBottom: '18px' }, '<span>Posts</span><span style="color:#fff;border-bottom:3px solid #fff;padding-bottom:6px">Reels</span><span>Marcados</span>'));
+  const grade = h('div', { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' });
+  for (let i = 0; i < 8; i++) {
+    const c = h('div', { height: '260px', borderRadius: '8px', overflow: 'hidden' }, imagem(CAPAS[i % CAPAS.length], T));
+    grade.appendChild(c);
+    ctx.anima(c, [{ opacity: 0 }, { opacity: 1 }], { em: .2 + i * .07, dur: .2 });
+  }
+  p.appendChild(grade);
+  atras.appendChild(p);
+  ctx.anima(p, [{ opacity: 0, transform: 'translateY(-30px)' }, { opacity: 1, transform: 'none' }], { em: .1, dur: .35 });
+}
+
+function fxContagem(ctx, n, rotulo, em) {
+  const c = h('div', caixa(150, 1330, 780, 300, { ...VIDRO, padding: '30px 40px', textAlign: 'center' }));
+  const num = h('div', { font: "900 120px/1 'Archivo Black', Archivo, Inter", letterSpacing: '-.04em' }, '0');
+  c.append(num, h('div', { fontSize: '40px', fontWeight: 700, marginTop: '6px' }, rotulo),
+    h('div', { display: 'flex', alignItems: 'center', gap: '16px', marginTop: '22px', fontSize: '24px', justifyContent: 'center' }, '<span style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#f9a94b,#d6249f)"></span><b>seuperfil</b><span style="background:#2B2B2E;border-radius:10px;padding:6px 18px">Following</span>'));
+  ctx.anima(c, [{ opacity: 0, transform: 'translateY(40px)' }, { opacity: 1, transform: 'none' }], { em, dur: .35 });
+  ctx.tempo(em + .2, 1.8, (k) => { num.textContent = Math.round(n * (1 - (1 - k) ** 3)).toLocaleString('pt-BR'); }, 'tique');
+  ctx.som(em + 2, 'confirma');
+  return c;
 }
 
 const DEMOS = {
@@ -1095,6 +1387,159 @@ const DEMOS = {
       { nome: 'Item 2', dur: 3.2, fala: 'Foto parada hoje é *NOTA F*', leg: legRk,
         montar: (ctx) => { const g = h('div', caixa(0, 0, 1080, 1920)); g.appendChild(camera(ctx)); g.appendChild(tema(ctx)); g.appendChild(montarQuadro(ctx, { S: ['Carrossel'], C: ['Live'] })); g.appendChild(voa(ctx, 'Foto parada', 'F', 6, .3)); return g; } },
       ...pixelInsert(cfg, T),
+    ];
+  },
+
+  // ------------------------------------------------------------ formatos de efeito
+  // Prévia dos efeitos do fx.py (claude-video-effects) com o bonequinho. A edição
+  // de verdade roda o fx.py original na gravação; aqui é só a ideia de cada efeito.
+
+  'palavra-atras-da-cabeca': (cfg) => {
+    const T = resolverVisual(cfg);
+    const cor = T.original ? '#F4E9D8' : T.acc;
+    const leg = { y: 1500, n: 3, tam: 58, pele: 'fxPessego' };
+    return [
+      { nome: 'Palavra atrás', dur: 3.2, fala: 'O *Claude* edita o vídeo inteiro', leg,
+        montar: (ctx) => fxCena(ctx, (atras) => atras.appendChild(fxPalavra(ctx, 'CLAUDE', { cor, em: .25, som: 'impacto' }))) },
+      { nome: 'Palavra riscada', dur: 3.2, fala: 'Você não precisa de *editor*', leg,
+        montar: (ctx) => fxCena(ctx, (atras) => {
+          atras.appendChild(fxPalavra(ctx, 'editor', { cor: '#F4E9D8', fonte: "'Playfair Display', 'Instrument Serif', serif", peso: 700, em: .2, tam: 300, top: 240 }));
+          const r = h('div', caixa(90, 420, 900, 16, { background: '#E02424', borderRadius: '8px', transformOrigin: 'left', transform: 'rotate(-3deg)' }));
+          atras.appendChild(r);
+          ctx.anima(r, [{ transform: 'rotate(-3deg) scaleX(0)' }, { transform: 'rotate(-3deg) scaleX(1)' }], { em: 1, dur: .35, som: 'risco' });
+        }) },
+      { nome: 'Giz de cera', dur: 3, fala: 'O segredo é a *IA*', leg,
+        montar: (ctx) => fxCena(ctx, (atras) => {
+          const w = h('div', { position: 'absolute', left: '0', width: '1080px', top: '150px', textAlign: 'center', fontFamily: "'Permanent Marker', 'Caveat', cursive", fontSize: '260px', color: '#E02424', lineHeight: '1' }, 'IA');
+          atras.appendChild(w);
+          ctx.anima(w, [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }], { em: .2, dur: .8, ease: 'linear' });
+          const s = h('div', caixa(380, 430, 320, 14, { background: '#E02424', borderRadius: '8px', transformOrigin: 'left' }));
+          atras.appendChild(s);
+          ctx.anima(s, [{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { em: 1.05, dur: .3 });
+        }) },
+    ];
+  },
+
+  'checklist-na-tela': (cfg) => {
+    const T = resolverVisual(cfg);
+    const leg = { y: 1540, n: 3, tam: 58, pele: 'fxVerde' };
+    return [
+      { nome: 'Contagem', dur: 2.6, fala: 'São *três* coisas que você precisa', leg,
+        montar: (ctx) => fxCena(ctx, null, (frente) => frente.appendChild(fxRelogio(ctx, .3))) },
+      { nome: 'Lista', dur: 4, fala: 'Gravar, editar e *postar* no mesmo dia', leg,
+        montar: (ctx) => fxCena(ctx, null, (frente) => frente.appendChild(fxLista(ctx, 'HOJE', ['Gravar', 'Editar', 'Postar'], [.8, 1.8, 2.9]))) },
+      { nome: 'Checklist', dur: 3.6, fala: 'Ele corta, legenda e *exporta* sozinho', leg: null,
+        montar: (ctx) => fxCena(ctx, null, (frente) => frente.appendChild(fxTarefas(ctx, 'Claude', [['Cortou os silêncios', 'auto'], ['Colocou legenda', 'IA'], ['Escolheu a música', 'trilha'], ['Exportou', '4K']]))) },
+    ];
+  },
+
+  'zoom-na-palavra': (cfg) => {
+    const T = resolverVisual(cfg);
+    const leg = { y: 1520, n: 2, tam: 62, pele: 'fxAmarelo' };
+    return [
+      { nome: 'Título', dur: 3, fala: 'Como eu edito com IA', leg: null,
+        montar: (ctx) => {
+          const g = fxCena(ctx, null, (frente) => {
+            const t = h('div', { position: 'absolute', left: '0', width: '1080px', top: '170px', textAlign: 'center', fontFamily: 'Inter', fontWeight: 800, fontSize: '78px', color: '#fff', lineHeight: '1.25', textShadow: '0 4px 20px rgba(0,0,0,.5)' }, 'Como eu edito<br><span style="background:#fff;color:#111;padding:2px 18px;border-radius:6px;text-shadow:none">com IA</span>');
+            frente.appendChild(t);
+            ctx.anima(t, [{ opacity: 0, transform: 'translateY(-20px)' }, { opacity: 1, transform: 'none' }], { em: .2, dur: .35, som: 'impacto' });
+          });
+          fxZoom(ctx, g.querySelector('.fx-cam'), 1.2, 540, 700, 0, 2.8);
+          return g;
+        } },
+      { nome: 'Aproximação', dur: 2.6, fala: 'Em *dez* minutos tá pronto', leg,
+        montar: (ctx) => { const g = fxCena(ctx); fxSoco(ctx, g.querySelector('.fx-cam'), 1.45, .5); return g; } },
+      { nome: 'Mira', dur: 3, fala: 'E quem editou foi *você*', leg,
+        montar: (ctx) => {
+          const g = fxCena(ctx, null, (frente) => frente.appendChild(fxMira(ctx, 'VOCÊ', .3)));
+          fxZoom(ctx, g.querySelector('.fx-cam'), 1.35, 540, 690, .3, 2.6);
+          return g;
+        } },
+    ];
+  },
+
+  'marcacoes': (cfg) => {
+    const T = resolverVisual(cfg);
+    const cor = T.original ? '#FFD60A' : T.acc;
+    const leg = { y: 1520, n: 3, tam: 58, pele: 'fxMarcador' };
+    return [
+      { nome: 'Pausa e seta', dur: 3, fala: 'Esse aqui sou *eu*', leg,
+        montar: (ctx) => fxCena(ctx, null, (frente) => fxSeta(ctx, frente, 'EU', cor, .3)) },
+      { nome: 'Fita', dur: 3, fala: 'E tudo isso *sem editor*', leg: null,
+        montar: (ctx) => fxCena(ctx, null, (frente) => {
+          const f = h('div', { position: 'absolute', left: '320px', top: '1180px', width: '440px', padding: '18px 0', textAlign: 'center', background: '#FFD84A', boxShadow: '0 8px 20px rgba(0,0,0,.35)', fontFamily: "'Permanent Marker', 'Caveat', cursive", fontSize: '52px', color: '#1A1A1A', transform: 'rotate(-2deg)' }, 'SEM EDITOR');
+          frente.appendChild(f);
+          ctx.anima(f, [{ opacity: 0, transform: 'rotate(-8deg) scale(1.3)' }, { opacity: 1, transform: 'rotate(-2deg) scale(1)' }], { em: .3, dur: .25 });
+        }) },
+      { nome: 'Seleção', dur: 3, fala: 'Fica *dez vezes* mais rápido', leg,
+        montar: (ctx) => fxCena(ctx, null, (frente) => fxSelecao(ctx, frente, '10X', .3)) },
+    ];
+  },
+
+  'widgets-de-vidro': (cfg) => {
+    const T = resolverVisual(cfg);
+    return [
+      { nome: 'Widgets', dur: 3.6, fala: 'Cinquenta mil pessoas em *um ano*', leg: null,
+        montar: (ctx) => fxCena(ctx, (atras, frente) => fxWidgets(ctx, atras, frente), null, { quente: true }) },
+      { nome: 'Gráfico de vidro', dur: 3.4, fala: 'Saí de dois mil pra *49 mil*', leg: null,
+        montar: (ctx) => fxCena(ctx, null, (frente) => frente.appendChild(fxGrafico(ctx, 'SEGUIDORES', 2, 49, 'K', 90, 1180, 900, 460, .3))) },
+      { nome: 'Bento', dur: 3.4, fala: 'Um milhão de *visualizações*', leg: null,
+        montar: (ctx) => fxCena(ctx, (atras) => atras.appendChild(fxGrafico(ctx, 'VIEWS', 0, 1, 'M', 120, 110, 840, 520, .2)), (frente) => fxBento(ctx, frente)) },
+    ];
+  },
+
+  'cards-em-orbita': (cfg) => {
+    const T = resolverVisual(cfg);
+    const leg = { y: 1540, n: 3, tam: 58, pele: 'fxQuente' };
+    return [
+      { nome: 'Órbita', dur: 3.6, fala: 'Olha *tudo* que eu postei', leg: null,
+        montar: (ctx) => fxOrbita(ctx, T, { n: 7, rx: 430, ry: 150, cy: 820, w: 170, voltas: 1.2 }) },
+      { nome: 'Carrossel 3D', dur: 3.6, fala: 'São *vinte* formatos diferentes', leg: null,
+        montar: (ctx) => fxOrbita(ctx, T, { n: 10, rx: 480, ry: 90, cy: 980, w: 230, voltas: 1.1, freia: true }) },
+      { nome: 'Leque', dur: 3.4, fala: 'Um depois do *outro*', leg,
+        montar: (ctx) => fxCena(ctx, (atras) => fxLeque(ctx, T, atras)) },
+    ];
+  },
+
+  'capa-de-revista': (cfg) => {
+    const T = resolverVisual(cfg);
+    const vermelho = T.original ? '#E82434' : T.acc;
+    return [
+      { nome: 'Capa', dur: 3.6, fala: 'Eu virei *capa* de revista', leg: null,
+        montar: (ctx) => fxCena(ctx, (atras) => {
+          atras.appendChild(fxPalavra(ctx, 'MATHEUS', { cor: vermelho, fonte: "'Archivo Black', Archivo, Inter, sans-serif", peso: 900, em: .2, top: 120, tam: 190, som: 'impacto' }));
+        }, (frente) => {
+          frente.appendChild(h('div', { position: 'absolute', left: '0', width: '1080px', top: '70px', textAlign: 'center', fontFamily: "'Space Mono', 'JetBrains Mono', monospace", fontSize: '24px', color: '#fff', letterSpacing: '.12em' }, 'EDIÇÃO IA · 2026'));
+          const ch = h('div', { position: 'absolute', left: '70px', top: '1020px', fontFamily: 'Inter', fontWeight: 800, fontSize: '50px', lineHeight: '1.25', color: '#fff', textShadow: '0 3px 14px rgba(0,0,0,.5)' }, `<span style="font-family:'Instrument Serif';font-style:italic;font-weight:400;color:#FFD60A;font-size:72px">IA</span><br>EDIÇÃO<br>REELS`);
+          frente.appendChild(ch);
+          ctx.anima(ch, [{ opacity: 0, transform: 'translateX(-30px)' }, { opacity: 1, transform: 'none' }], { em: .6, dur: .35 });
+          frente.appendChild(h('div', caixa(840, 1640, 160, 90, { background: 'repeating-linear-gradient(90deg,#111 0 4px,#fff 4px 7px,#111 7px 9px,#fff 9px 14px)', border: '8px solid #fff' })));
+        }) },
+      { nome: 'Colagem vermelha', dur: 3.6, fala: 'Sem editor, sem app, *só Claude*', leg: null,
+        montar: (ctx) => fxCena(ctx, (atras) => {
+          const w = fxPalavra(ctx, 'IA', { cor: vermelho, fonte: "'Archivo Black', Archivo, Inter, sans-serif", peso: 900, em: .1, top: 140, tam: 420 });
+          w.style.textShadow = `0 0 60px ${rgba(vermelho, .8)}`;
+          atras.appendChild(w);
+        }, (frente) => {
+          ['Sem editor', 'Sem app', 'Só Claude'].forEach((t, i) => {
+            const l = h('div', { position: 'absolute', left: '70px', top: px(1380 + i * 110), fontFamily: 'Inter', fontWeight: 800, fontSize: '96px', letterSpacing: '-.03em', color: i === 1 ? vermelho : '#fff', lineHeight: '1' }, t);
+            frente.appendChild(l);
+            ctx.anima(l, [{ opacity: 0, transform: 'scale(1.4)' }, { opacity: 1, transform: 'none' }], { em: .5 + i * .45, dur: .18, som: 'impacto' });
+          });
+        }, { cinza: true }) },
+    ];
+  },
+
+  'grade-do-perfil': (cfg) => {
+    const T = resolverVisual(cfg);
+    const leg = { y: 1540, n: 3, tam: 58, pele: 'fxRosa' };
+    return [
+      { nome: 'Grade', dur: 3.6, fala: 'Esse é o meu *perfil*', leg: null,
+        montar: (ctx) => fxGrade(ctx, T) },
+      { nome: 'Pilha', dur: 3, fala: 'Eu postei *todo dia*', leg,
+        montar: (ctx) => fxCena(ctx, (atras) => fxPilha(ctx, T, atras)) },
+      { nome: 'Parede', dur: 3.6, fala: 'Cinquenta e um mil *seguidores*', leg: null,
+        montar: (ctx) => fxCena(ctx, (atras) => fxParede(ctx, T, atras), (frente) => frente.appendChild(fxContagem(ctx, 51000, 'seguidores', .4))) },
     ];
   },
 
