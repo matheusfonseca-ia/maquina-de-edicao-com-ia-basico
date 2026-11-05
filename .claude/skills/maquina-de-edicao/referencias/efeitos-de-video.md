@@ -4,12 +4,12 @@ Oito formatos têm como assinatura efeitos aplicados direto na imagem da câmera
 
 | Formato | Pacote |
 |---|---|
-| Palavra Atrás da Cabeça (`palavra-atras-da-cabeca`) | principal |
-| Checklist na Tela (`checklist-na-tela`) | principal |
 | Zoom na Palavra (`zoom-na-palavra`) | principal |
-| Marcações (`marcacoes`) | principal |
-| Widgets de Vidro (`widgets-de-vidro`) | complemento |
-| Cards em Órbita (`cards-em-orbita`) | complemento |
+| Widgets de Vidro (`widgets-de-vidro`) | principal |
+| Cards em Órbita (`cards-em-orbita`) | principal |
+| Palavra Atrás da Cabeça (`palavra-atras-da-cabeca`) | complemento |
+| Checklist na Tela (`checklist-na-tela`) | complemento |
+| Marcações (`marcacoes`) | complemento |
 | Capa de Revista (`capa-de-revista`) | complemento |
 | Grade do Perfil (`grade-do-perfil`) | complemento |
 

@@ -6,7 +6,7 @@ Amplie sua Máquina de Edição com **mais dez formatos de edição**.
 
 ### [👉 QUERO A VERSÃO COMPLETA](https://pay.hub.la/0Nq9Z4tSkclRESReVpkw)
 
-O complemento adiciona Reels com B-roll, Ensaio Visual, Nuvem de Imagens, Recorte com Imagens, Formato Ranking, Aula em Tela Dividida, Widgets de Vidro, Cards em Órbita, Capa de Revista e Grade do Perfil.
+O complemento adiciona Reels com B-roll, Ensaio Visual, Nuvem de Imagens, Recorte com Imagens, Aula em Tela Dividida, Palavra Atrás da Cabeça, Checklist na Tela, Marcações, Capa de Revista e Grade do Perfil.
 
 ---
 
@@ -20,10 +20,10 @@ Inclui a Máquina de Edição e dez formatos, cada um com sua própria skill:
 | `/telas-em-profundidade` | Interfaces animadas atrás de você, com profundidade |
 | `/cortes-de-video-longo` | Seleção e edição de cortes verticais de um vídeo longo |
 | `/youtube-educativo` | Vídeo horizontal com cards, tela dividida e animações explicativas |
-| `/palavra-atras-da-cabeca` | Uma palavra gigante cai atrás da sua cabeça nas palavras mais fortes |
-| `/checklist-na-tela` | A lista do que você fala aparece e cada item ganha ✓ na hora certa |
+| `/formato-ranking` | Tier list animada que se preenche conforme as avaliações |
 | `/zoom-na-palavra` | Aproximação rápida nas palavras fortes e mira travando no seu rosto |
-| `/marcacoes` | Imagem congela com seta à mão, fita no peito e caixa que aumenta o número |
+| `/widgets-de-vidro` | Widgets de vidro em volta da cabeça e gráficos de vidro subindo |
+| `/cards-em-orbita` | Seus posts girando em volta da cabeça, em carrossel 3D ou em leque |
 
 O pacote inclui formatos verticais para Reels, TikTok e Shorts, cortes de vídeos longos e edição horizontal para YouTube. O caminho **Do zero** também permite editar nas duas orientações. Pixelado, Noite Laranja e Claro Tecnológico vêm incluídos e podem ser combinados com qualquer formato.
 
@@ -82,7 +82,7 @@ Todos os efeitos sonoros (cliques, impactos, confirmações, passagens e o som c
 
 ### Efeitos de vídeo
 
-Palavra Atrás da Cabeça, Checklist na Tela, Zoom na Palavra e Marcações (e quatro formatos do complemento) aplicam efeitos direto na sua gravação: recortam você, seguem o seu rosto e colocam palavras, listas e cards atrás ou em volta da sua cabeça. Esses efeitos são do [claude-video-effects](https://github.com/Vibha-Ramprakash/claude-video-effects), de Vibha Ramprakash, usados com o código original, só com os rótulos da interface traduzidos pro português (licença MIT, em `.claude/skills/maquina-de-edicao/efeitos/LICENSE`). O instalador cria um ambiente Python próprio pra eles em `~/.maquina-de-edicao/efeitos` (OpenCV, MediaPipe e Pillow, cerca de 350 MB). Esses formatos saem a 30 quadros por segundo na câmera.
+Zoom na Palavra, Widgets de Vidro e Cards em Órbita (e cinco formatos do complemento) aplicam efeitos direto na sua gravação: recortam você, seguem o seu rosto e colocam widgets, cards e palavras atrás ou em volta da sua cabeça. Esses efeitos são do [claude-video-effects](https://github.com/Vibha-Ramprakash/claude-video-effects), de Vibha Ramprakash, usados com o código original, só com os rótulos da interface traduzidos pro português (licença MIT, em `.claude/skills/maquina-de-edicao/efeitos/LICENSE`). O instalador cria um ambiente Python próprio pra eles em `~/.maquina-de-edicao/efeitos` (OpenCV, MediaPipe e Pillow, cerca de 350 MB). Esses formatos saem a 30 quadros por segundo na câmera.
 
 ### Enquadramento em todos os vídeos
 

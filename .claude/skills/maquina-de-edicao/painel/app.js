@@ -10,7 +10,7 @@ const HEX = /^#[0-9a-f]{6}$/i;
 const EXEMPLO = {
   videos: [{ arquivo: 'gravacao.mp4', orientacao: 'vertical', resolucao: '1080x1920', fps: 30, duracao: 92 }],
   audios: [], pastas: { broll: false, imagens: false, roteiro: false },
-  formatos: ['reels-de-negocio', 'tela-dividida-explicativa', 'legenda-encaixada', 'telas-em-profundidade', 'cortes-de-video-longo', 'youtube-educativo', 'palavra-atras-da-cabeca', 'checklist-na-tela', 'zoom-na-palavra', 'marcacoes'],
+  formatos: ['reels-de-negocio', 'tela-dividida-explicativa', 'legenda-encaixada', 'telas-em-profundidade', 'cortes-de-video-longo', 'youtube-educativo', 'formato-ranking', 'zoom-na-palavra', 'widgets-de-vidro', 'cards-em-orbita'],
   estilosVisuais: [], preferencias: null, formatoFixo: null,
   ferramentas: { node: 'ok', ffmpeg: 'ok', python: 'ok', hyperframes: 'ok' },
 };

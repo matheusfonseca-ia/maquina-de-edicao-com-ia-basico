@@ -2,9 +2,9 @@
 
 Catálogo de 20 formatos, dividido entre dez da oferta principal e dez do complemento (order bump). O formato é a estrutura do vídeo: layouts, posições, ritmo e o que aparece em cada momento. Cada um é uma skill própria; depois de instalado, fica ao lado desta (`<pasta de skills>/<nome-do-formato>/`), com a especificação completa em `formato.md`.
 
-**Oferta principal:** Reels de Negócio, Tela Dividida Explicativa, Legenda Encaixada, Telas em Profundidade, Cortes de Vídeo Longo, YouTube Educativo, Palavra Atrás da Cabeça, Checklist na Tela, Zoom na Palavra e Marcações.
+**Oferta principal:** Reels de Negócio, Tela Dividida Explicativa, Legenda Encaixada, Telas em Profundidade, Cortes de Vídeo Longo, YouTube Educativo, Formato Ranking, Zoom na Palavra, Widgets de Vidro e Cards em Órbita.
 
-**Complemento:** Reels com B-roll, Ensaio Visual, Nuvem de Imagens, Recorte com Imagens, Formato Ranking, Aula em Tela Dividida, Widgets de Vidro, Cards em Órbita, Capa de Revista e Grade do Perfil.
+**Complemento:** Reels com B-roll, Ensaio Visual, Nuvem de Imagens, Recorte com Imagens, Aula em Tela Dividida, Palavra Atrás da Cabeça, Checklist na Tela, Marcações, Capa de Revista e Grade do Perfil.
 
 **Formatos de efeito:** Palavra Atrás da Cabeça, Checklist na Tela, Zoom na Palavra, Marcações, Widgets de Vidro, Cards em Órbita, Capa de Revista e Grade do Perfil aplicam efeitos direto na imagem da câmera com o `fx.py` original do claude-video-effects. Além do `formato.md`, eles seguem `efeitos-de-video.md`.
 
