@@ -13,7 +13,7 @@ Oito formatos têm como assinatura efeitos aplicados direto na imagem da câmera
 | Capa de Revista (`capa-de-revista`) | complemento |
 | Grade do Perfil (`grade-do-perfil`) | complemento |
 
-Os efeitos são os do [claude-video-effects](https://github.com/Vibha-Ramprakash/claude-video-effects), de Vibha Ramprakash (@vibha.in.progress), licença MIT. Eles rodam com o código original, sem nenhuma alteração: `efeitos/scripts/fx.py`, dentro da pasta desta skill. **Não reconstrua esses efeitos em HyperFrames nem edite o `fx.py`**: o efeito tem que sair igual ao original. O que o HyperFrames faz nesses formatos é a legenda, a capa, a música, os efeitos sonoros e a revisão no Studio.
+Os efeitos são os do [claude-video-effects](https://github.com/Vibha-Ramprakash/claude-video-effects), de Vibha Ramprakash (@vibha.in.progress), licença MIT. Eles rodam com o código original (`efeitos/scripts/fx.py`, dentro da pasta desta skill), com uma única mudança: os rótulos fixos da interface foram traduzidos pro português ("Seguindo", "Renderizando", "Editado pelo Claude", "2 de 3"...). O desenho, o movimento e o tempo de cada efeito são os do original. **Não reconstrua esses efeitos em HyperFrames nem edite o `fx.py`**: o efeito tem que sair igual ao original. O que o HyperFrames faz nesses formatos é a legenda, a capa, a música, os efeitos sonoros e a revisão no Studio.
 
 ## Onde fica
 
@@ -99,7 +99,7 @@ Exportação em 4K: renderize de novo com `--width 2160` antes do render final e
 
 Zona: onde o efeito desenha. Legenda: o que a legenda faz na janela dele. Cor: o que o `color` faz. Preencha sempre: opções de texto que nunca podem ficar no padrão.
 
-**Os valores padrão do `fx.py` são do vídeo da autora, em inglês e com o nome e o @ dela** ("Vibha", "@vibha.in.progress", "22 effects", "THE AI ISSUE"). Preencha sempre as opções da última coluna com o conteúdo da fala e os dados da pessoa. Alguns rótulos pequenos são fixos no código e continuam em inglês ("Rendering", "Top reels", "2 of 3", "Following", "Edited by Claude"): não edite o `fx.py` pra traduzir.
+**Alguns valores padrão do `fx.py` são do vídeo da autora, em inglês e com o nome e o @ dela** ("Vibha", "@vibha.in.progress", "EFFECTS", "VIBE"). Preencha sempre as opções da última coluna com o conteúdo da fala e os dados da pessoa. Os rótulos fixos da interface já estão em português.
 
 | Efeito | O que faz | Zona | Legenda | Cor | Som | Preencha sempre |
 |---|---|---|---|---|---|---|

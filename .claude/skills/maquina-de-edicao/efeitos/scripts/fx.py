@@ -272,7 +272,7 @@ def fx_locked_on(c, e):
     for (px, py, dx, dy) in ((x0, y0, 1, 1), (x1, y0, -1, 1), (x0, y1, 1, -1), (x1, y1, -1, -1)):
         d.line([(px, py + dy * L), (px, py), (px + dx * L, py)], fill=(255, 255, 255, 255), width=wd, joint='curve')
     place(c, shadowed(im, 6, 2, 120), c.fx, c.fy, alpha=al)
-    tag = text_img(e.o.get('text', 'LOCKED ON').upper(), c.W * 0.022, 'mono', INK)
+    tag = text_img(e.o.get('text', 'NA MIRA').upper(), c.W * 0.022, 'mono', INK)
     pill = rrect(tag.width + 10, tag.height, tag.height / 2, (255, 255, 255, 235)); pill.alpha_composite(tag, (5, 0))
     place(c, pill, c.fx, c.fy + s * 1.25 + pill.height, alpha=clamp((c.lt - 0.15) / 0.15) * al, guard=True)
 
@@ -404,8 +404,8 @@ def fx_todo(c, e):
     cw = int(c.W * 0.5); lh = int(cw * 0.13); pad = int(cw * 0.07)
     im = rrect(cw, pad * 2 + lh * (len(items) + 1), cw * 0.07, (250, 248, 242, 235)); d = ImageDraw.Draw(im)
     done = sum(c.lt >= t for t in ticks)
-    d.text((pad, pad), e.o.get('title', 'TO DO').upper(), font=font('ui', lh * 0.42), fill=(200, 140, 20, 255))
-    d.text((cw - pad, pad), f'{done} of {len(items)}', font=font('ui', lh * 0.36), fill=(120, 120, 120, 255), anchor='ra')
+    d.text((pad, pad), e.o.get('title', 'A FAZER').upper(), font=font('ui', lh * 0.42), fill=(200, 140, 20, 255))
+    d.text((cw - pad, pad), f'{done} de {len(items)}', font=font('ui', lh * 0.36), fill=(120, 120, 120, 255), anchor='ra')
     f = font('ui', lh * 0.4)
     for i, it in enumerate(items):
         y = pad + lh * (i + 1); bx = lh * 0.42
@@ -440,14 +440,14 @@ def comment_bar(c, e):
     r = bh * 0.32; d.ellipse([bh * 0.2, bh / 2 - r, bh * 0.2 + 2 * r, bh / 2 + r], fill=(214, 41, 118, 255))
     f = font('ui', bh * 0.3)
     if typed: d.text((bh * 0.95, bh / 2), typed + ('|' if int(c.lt * 4) % 2 else ''), font=f, fill=INK + (255,), anchor='lm')
-    elif c.lt < post_t: d.text((bh * 0.95, bh / 2), 'Add a comment...', font=f, fill=(150, 150, 150, 255), anchor='lm')
-    d.text((bw - bh * 0.4, bh / 2), 'Post', font=f, fill=((0, 149, 246, 255) if typed else (180, 210, 240, 255)), anchor='rm')
+    elif c.lt < post_t: d.text((bh * 0.95, bh / 2), 'Adicione um comentário...', font=f, fill=(150, 150, 150, 255), anchor='lm')
+    d.text((bw - bh * 0.4, bh / 2), 'Publicar', font=f, fill=((0, 149, 246, 255) if typed else (180, 210, 240, 255)), anchor='rm')
     al = clamp((e.d - c.lt) / 0.2)
     place(c, shadowed(im, 14, 6, 100), c.W / 2, y, alpha=al, guard=True)
     if c.lt >= post_t:
         k = ease_back((c.lt - post_t) / 0.3)
         b = rrect(int(c.W * 0.52), int(bh * 0.85), bh * 0.3, (255, 255, 255, 240)); bd = ImageDraw.Draw(b)
-        bd.text((bh * 0.3, b.height * 0.32), 'you', font=font('ui', bh * 0.2), fill=(120, 120, 120, 255), anchor='lm')
+        bd.text((bh * 0.3, b.height * 0.32), 'você', font=font('ui', bh * 0.2), fill=(120, 120, 120, 255), anchor='lm')
         bd.text((bh * 0.3, b.height * 0.66), word, font=font('ui', bh * 0.3), fill=INK + (255,), anchor='lm')
         hk = ease_back((c.lt - post_t - 0.3) / 0.3)
         if hk > 0:
@@ -464,7 +464,7 @@ def fx_tap(c, e):
     on = c.lt >= at
     col = rgb(e.o.get('color'), (124, 92, 255)) if on else (0, 149, 246)
     im = rrect(bw, bh, bh * 0.28, col + (255,)); d = ImageDraw.Draw(im)
-    d.text((bw / 2, bh / 2), 'Following' if on else '+ Follow', font=font('ui', bh * 0.4), fill=(255, 255, 255, 255), anchor='mm')
+    d.text((bw / 2, bh / 2), 'Seguindo' if on else '+ Seguir', font=font('ui', bh * 0.4), fill=(255, 255, 255, 255), anchor='mm')
     pop = ease_back(c.lt / 0.3)
     sq = 1.0
     if on: q = (c.lt - at) / 0.3; sq = 1 - 0.12 * math.sin(math.pi * clamp(q)) if q < 1 else 1
@@ -508,7 +508,7 @@ def fx_pause_point(c, e):
     hand_path(d, pts, col, max(6, c.W // 140), k)
     if k >= 0.99: arrow_head(d, pts, col, max(6, c.W // 140), c.W * 0.04)
     comp(c, to_np(lay), 0, 0)
-    lab = text_img(e.o.get('text', 'look here'), c.W * 0.07, 'hand', col[:3], shadow=6)
+    lab = text_img(e.o.get('text', 'olha aqui'), c.W * 0.07, 'hand', col[:3], shadow=6)
     place(c, lab, tx, ty - lab.height * 0.2, 0.7 + 0.3 * ease_back(c.lt / 0.3), -6, clamp(c.lt / 0.1), guard=True)
 
 
@@ -527,7 +527,7 @@ def fx_uninstall(c, e):
         c.img = cv2.resize(small, (c.W, c.H), interpolation=cv2.INTER_NEAREST) * (1 - 0.6 * q)
     bw, bh = int(c.W * 0.7), int(c.W * 0.2)
     im = rrect(bw, bh, 22, (245, 245, 247, 240)); d = ImageDraw.Draw(im)
-    d.text((bw * 0.06, bh * 0.28), e.o.get('text', 'Uninstalling...'), font=font('ui', bh * 0.18), fill=INK + (255,), anchor='lm')
+    d.text((bw * 0.06, bh * 0.28), e.o.get('text', 'Desinstalando...'), font=font('ui', bh * 0.18), fill=INK + (255,), anchor='lm')
     d.rounded_rectangle([bw * 0.06, bh * 0.56, bw * 0.94, bh * 0.7], 8, fill=(215, 215, 220, 255))
     d.rounded_rectangle([bw * 0.06, bh * 0.56, bw * 0.06 + bw * 0.88 * max(0.03, ease_inout(p)), bh * 0.7], 8, fill=(0, 122, 255, 255))
     d.text((bw * 0.94, bh * 0.85), f'{int(ease_inout(p) * 100)}%', font=font('ui', bh * 0.13), fill=(110, 110, 110, 255), anchor='rm')
@@ -561,7 +561,7 @@ def fx_reel_frame(c, e):
     c.fx, c.fy, c.fw = x0 + c.fx * s, y0 + c.fy * s, c.fw * s
     ic = cached(e, 'ic', lambda: shadowed(reel_icons(c.W * 0.075), 6, 2, 120))
     comp(c, ic, x0 + iw - ic.width - c.W * 0.01, y0 + ih * 0.52, k)
-    hdl = text_img(e.o.get('text', '@your.handle'), c.W * 0.032, 'ui', (255, 255, 255), shadow=4)
+    hdl = text_img(e.o.get('text', '@seu.perfil'), c.W * 0.032, 'ui', (255, 255, 255), shadow=4)
     comp(c, hdl, x0 + c.W * 0.03, y0 + ih - hdl.height - c.W * 0.04, k)
 
 
@@ -664,7 +664,7 @@ def fx_cover_star(c, e):
     mast = cached(e, 'm', lambda: fit_text(title, c.W * 0.92, 'bold', 600, fill=col))
     mast_h = min(mast.height, c.H * 0.24)
     place(c, mast, c.W / 2, c.H * 0.035 + mast_h / 2 - (1 - k) * mast_h, mast_h / mast.height, 0, al * k, behind=True)
-    iss = cached(e, 'i', lambda: text_img(e.o.get('issue', 'THE AI ISSUE  ·  2026'), c.W * 0.025, 'mono', (255, 255, 255), shadow=3))
+    iss = cached(e, 'i', lambda: text_img(e.o.get('issue', 'EDIÇÃO IA  ·  2026'), c.W * 0.025, 'mono', (255, 255, 255), shadow=3))
     place(c, iss, c.W / 2, c.H * 0.03, alpha=al * k, behind=True)
     lines = e.o.get('lines', '22 effects|you can steal|no editor|needed').split('|')
     y = c.H * 0.5
@@ -703,7 +703,7 @@ def fx_scribble(c, e):
     al = clamp((e.d - c.lt) / 0.2)
     comp(c, to_np(lay), 0, 0, al)
     if c.lt > 0.7:
-        lab = text_img(e.o.get('text', 'me!'), c.W * 0.075, 'hand', col[:3], shadow=6)
+        lab = text_img(e.o.get('text', 'eu!'), c.W * 0.075, 'hand', col[:3], shadow=6)
         place(c, lab, lx, ly - lab.height * 0.15, 0.7 + 0.3 * ease_back((c.lt - 0.7) / 0.3), 8, al)
 
 
@@ -806,17 +806,17 @@ def glass_widgets_v1(c, e):
     d.ellipse([S * 0.1, S * 0.115, S * 0.1 + S * 0.06, S * 0.115 + S * 0.06], fill=ORANGE + (255,))
     d.text((S * 0.2, S * 0.145), e.o.get('title', 'Claude'), font=font('uim', S * 0.085), fill=(255, 255, 255, 235), anchor='lm')
     d.text((S * 0.08, S * 0.2), e.o.get('text', '22'), font=font('uib', S * 0.44), fill=(255, 255, 255, 255))
-    for j, ln in enumerate(e.o.get('sub', 'effects|one clip').split('|')):
+    for j, ln in enumerate(e.o.get('sub', 'efeitos|um vídeo').split('|')):
         d.text((S * 0.1, S * (0.7 + 0.11 * j)), ln, font=font('uim', S * 0.085), fill=(255, 255, 255, 235))
     place(c, a, mg + S / 2, y_top + S / 2, 0.6 + 0.4 * pop(c, 0.0), 0, al * clamp(c.lt / 0.1), behind=True)
     bw, bh = W * 0.37, W * 0.15; bx = W - mg - bw / 2
     b = glass(c, bw, bh, bh * 0.28, bx, y_top + bh / 2, amt=0.14, dark=gd); d = ImageDraw.Draw(b)
     d.ellipse([bh * 0.17, bh * 0.2, bh * 0.17 + bh * 0.11, bh * 0.31], fill=(255, 69, 58, 255))
-    d.text((bh * 0.36, bh * 0.255), 'Rendering', font=font('uim', bh * 0.19), fill=(255, 255, 255, 240), anchor='lm')
+    d.text((bh * 0.36, bh * 0.255), 'Renderizando', font=font('uim', bh * 0.19), fill=(255, 255, 255, 240), anchor='lm')
     p = ease_inout(c.lt / max(0.3, e.d * 0.85))
     d.rounded_rectangle([bh * 0.17, bh * 0.5, bw - bh * 0.17, bh * 0.6], bh * 0.05, fill=(255, 255, 255, 70))
     d.rounded_rectangle([bh * 0.17, bh * 0.5, bh * 0.17 + (bw - bh * 0.34) * max(0.04, p), bh * 0.6], bh * 0.05, fill=(255, 255, 255, 245))
-    d.text((bh * 0.17, bh * 0.78), f"{e.o.get('label', 'glass UI')}  ·  {int(p * 100)}%", font=font('uim', bh * 0.14), fill=(255, 255, 255, 210), anchor='lm')
+    d.text((bh * 0.17, bh * 0.78), f"{e.o.get('label', 'interface de vidro')}  ·  {int(p * 100)}%", font=font('uim', bh * 0.14), fill=(255, 255, 255, 210), anchor='lm')
     place(c, b, bx, y_top + bh / 2, 0.6 + 0.4 * pop(c, 0.12), 0, al * clamp((c.lt - 0.12) / 0.1), behind=True)
     cy2 = y_top + bh + mg * 0.45 + bh / 2
     g = glass(c, bw, bh, bh * 0.28, bx, cy2, amt=0.14, dark=gd); d = ImageDraw.Draw(g)
@@ -825,7 +825,7 @@ def glass_widgets_v1(c, e):
     d.text((bh * 0.2, bh * 0.66), e.o.get('handle', '@vibha.in.progress'), font=font('uim', bh * 0.14), fill=(255, 255, 255, 215), anchor='lm')
     place(c, g, bx, cy2, 0.6 + 0.4 * pop(c, 0.24), 0, al * clamp((c.lt - 0.24) / 0.1), behind=True)
     f1, f2 = font('uim', W * 0.045), font('uib', W * 0.045)
-    pre, hi = e.o.get('pill', 'Edited by |Claude').split('|') if '|' in e.o.get('pill', 'Edited by |Claude') else (e.o['pill'], '')
+    pre, hi = e.o.get('pill', 'Editado pelo |Claude').split('|') if '|' in e.o.get('pill', 'Editado pelo |Claude') else (e.o['pill'], '')
     tw = f1.getlength(pre) + f2.getlength(hi); ph = W * 0.105; pw = tw + ph * 0.9; py = c.H * 0.865
     q = glass(c, pw, ph, ph / 2, W / 2, py, amt=0.16, tint=(70, 70, 76)); d = ImageDraw.Draw(q)
     d.text(((pw - tw) / 2, ph / 2), pre, font=f1, fill=(255, 255, 255, 255), anchor='lm')
@@ -851,7 +851,7 @@ def fx_red_collage(c, e):
         kk = clamp((c.lt - 0.18 - 0.13 * j) / 0.16)
         if kk > 0: place(c, im, c.W * 0.05 + im.width / 2, y + im.height / 2, 1.4 - 0.4 * ease_out(kk), 0, kk * al, guard=True)
         y += size * 1.0
-    tag = cached(e, 'tag', lambda: text_img(e.o.get('tag', 'REC  ·  RED COLLAGE'), c.W * 0.027, 'mono', red))
+    tag = cached(e, 'tag', lambda: text_img(e.o.get('tag', 'REC  ·  COLAGEM'), c.W * 0.027, 'mono', red))
     dot = Image.new('RGBA', (int(tag.height * 0.4),) * 2, (0, 0, 0, 0)); ImageDraw.Draw(dot).ellipse([0, 0, dot.width - 1, dot.width - 1], fill=red + (255,))
     blink = 1.0 if int(c.lt * 2.5) % 2 == 0 else 0.35
     place(c, dot, c.W * 0.07, c.H * 0.93, alpha=al * k * blink, guard=True)
@@ -886,7 +886,7 @@ def fx_split_headline(c, e):
             x += f.getlength(' ') + (S * 0.12 if core == hl else 0)
     d.rectangle([0, ch - max(5, W // 180), W, ch], fill=col + (255,))
     comp(c, lay, 0, top - ch)
-    pt = text_img(e.o.get('pill', 'in seconds ↗'), W * 0.034, 'uib', (255, 255, 255))
+    pt = text_img(e.o.get('pill', 'em segundos ↗'), W * 0.034, 'uib', (255, 255, 255))
     pill = rrect(pt.width + W * 0.02, pt.height * 0.95, pt.height * 0.47, col + (255,)); pill.alpha_composite(pt, (int(W * 0.01), int(-pt.height * 0.025)))
     place(c, shadowed(pill, 10, 4, 80), W * 0.93 - pill.width / 2, top + pill.height * 0.95, 0.6 + 0.4 * pop(c, 0.62), 0, clamp((c.lt - 0.62) / 0.1) * k, guard=True)
 
@@ -911,10 +911,10 @@ def fx_pastel_word(c, e):
     d.text((chh * 0.98, chh * 0.38), e.o.get('name', 'Vibha'), font=font('uib', chh * 0.22), fill=(20, 20, 22, 255), anchor='lm')
     h1 = e.o.get('handle', '@vibha.in.progress  ·  '); f = font('uim', chh * 0.15)
     d.text((chh * 0.98, chh * 0.66), h1, font=f, fill=(140, 140, 150, 255), anchor='lm')
-    d.text((chh * 0.98 + f.getlength(h1), chh * 0.66), e.o.get('role', 'creator'), font=f, fill=PURPLE + (255,), anchor='lm')
+    d.text((chh * 0.98 + f.getlength(h1), chh * 0.66), e.o.get('role', 'criador'), font=f, fill=PURPLE + (255,), anchor='lm')
     at = e.d * 0.6; on = c.lt >= at
     bx = cw - chh * 0.22
-    d.text((bx, chh / 2), 'Following' if on else 'Follow', font=font('uib', chh * 0.2), fill=((140, 140, 150, 255) if on else PURPLE + (255,)), anchor='rm')
+    d.text((bx, chh / 2), 'Seguindo' if on else 'Seguir', font=font('uib', chh * 0.2), fill=((140, 140, 150, 255) if on else PURPLE + (255,)), anchor='rm')
     sq = 1 - 0.06 * math.sin(math.pi * clamp((c.lt - at) / 0.25)) if on else 1
     place(c, shadowed(card_, 18, 8, 90), W / 2, cy, sq, 0, al * clamp((c.lt - 0.15) / 0.12), guard=True)
     cu = cached(e, 'cur', lambda: cursor(W * 0.06))
@@ -982,7 +982,7 @@ def red_timeline(c, e):
     comp(c, rec, W * 0.065 + dot.width * 1.4 - sl, H * 0.075, tb, guard=True)
     ti = cached(e, 'ti', lambda: text_img(e.o.get('text', 'AUTO-EDIT'), W * 0.13, 'uib', (255, 255, 255), shadow=10))
     comp(c, ti, W * 0.055 - sl, H * 0.075 + rec.height * 0.85, tb, guard=True)
-    su = cached(e, 'su', lambda: text_img(e.o.get('sub', 'timeline by Claude'), W * 0.037, 'uim', red))
+    su = cached(e, 'su', lambda: text_img(e.o.get('sub', 'linha do tempo pelo Claude'), W * 0.037, 'uim', red))
     comp(c, su, W * 0.065 - sl, H * 0.075 + rec.height * 0.85 + ti.height * 0.88, tb, guard=True)
     pw, phh = int(W * 0.9), int(H * 0.19); py = H * 0.755 + (1 - ease_out((c.lt - 0.1) / 0.35)) * H * 0.3
     lay = rrect(pw, phh, W * 0.03, (14, 10, 10, 215), (255, 70, 60, 90), 2); d = ImageDraw.Draw(lay)
@@ -1026,7 +1026,7 @@ def fx_profile_wall(c, e):
     W, H = c.W, c.H; al = fade(c, e)
     def wall():
         pw = int(W * 0.92); ph = int(H * 0.36); im = rrect(pw, ph, W * 0.035, (16, 16, 18, 240)); d = ImageDraw.Draw(im)
-        tabs = ('Posts', 'Reels', 'Tagged'); f = font('uim', W * 0.032)
+        tabs = ('Posts', 'Reels', 'Marcados'); f = font('uim', W * 0.032)
         for j, tb in enumerate(tabs):
             x = pw * (0.2 + 0.3 * j); d.text((x, ph * 0.06), tb, font=f, fill=((255, 255, 255, 255) if j == 1 else (130, 130, 136, 255)), anchor='mm')
             if j == 1: d.rectangle([x - pw * 0.08, ph * 0.1, x + pw * 0.08, ph * 0.1 + 4], fill=(255, 255, 255, 255))
@@ -1038,14 +1038,14 @@ def fx_profile_wall(c, e):
     g = glass(c, cw, chh, chh * 0.18, W / 2, cy, amt=0.5, tint=(12, 12, 14)); d = ImageDraw.Draw(g)
     target = int(e.o.get('count', 197000)); n = int(target * ease_out((c.lt - 0.2) / 0.8))
     swap = clamp((c.lt - 1.15) / 0.2)
-    if swap < 1: d.text((cw / 2, chh * 0.33), f'{n:,}', font=font('uib', chh * 0.3), fill=(255, 255, 255, int(255 * (1 - swap))), anchor='mm')
-    if swap > 0: d.text((cw / 2, chh * 0.33), e.o.get('label', 'views'), font=font('uib', chh * 0.3), fill=(255, 255, 255, int(255 * swap)), anchor='mm')
+    if swap < 1: d.text((cw / 2, chh * 0.33), f'{n:,}'.replace(',', '.'), font=font('uib', chh * 0.3), fill=(255, 255, 255, int(255 * (1 - swap))), anchor='mm')
+    if swap > 0: d.text((cw / 2, chh * 0.33), e.o.get('label', 'visualizações'), font=font('uib', chh * 0.3), fill=(255, 255, 255, int(255 * swap)), anchor='mm')
     av = face_chip(c, e, chh * 0.3); g.alpha_composite(av, (int(chh * 0.14), int(chh * 0.58)))
     d.text((chh * 0.52, chh * 0.68), e.o.get('name', 'vibha.in.progress'), font=font('uib', chh * 0.09), fill=(255, 255, 255, 255), anchor='lm')
-    d.text((chh * 0.52, chh * 0.8), e.o.get('sub', 'top reel'), font=font('uim', chh * 0.075), fill=(170, 170, 176, 255), anchor='lm')
+    d.text((chh * 0.52, chh * 0.8), e.o.get('sub', 'reel em destaque'), font=font('uim', chh * 0.075), fill=(170, 170, 176, 255), anchor='lm')
     on = c.lt >= e.d * 0.7
     d.rounded_rectangle([cw - chh * 0.95, chh * 0.62, cw - chh * 0.14, chh * 0.86], chh * 0.12, fill=((60, 60, 66, 255) if on else (255, 255, 255, 255)))
-    d.text((cw - chh * 0.545, chh * 0.74), 'Following' if on else 'Follow', font=font('uib', chh * 0.08), fill=((255, 255, 255, 255) if on else (16, 16, 18, 255)), anchor='mm')
+    d.text((cw - chh * 0.545, chh * 0.74), 'Seguindo' if on else 'Seguir', font=font('uib', chh * 0.08), fill=((255, 255, 255, 255) if on else (16, 16, 18, 255)), anchor='mm')
     place(c, g, W / 2, cy + (1 - ease_out((c.lt - 0.05) / 0.3)) * H * 0.1, 1, 0, al * clamp((c.lt - 0.05) / 0.12), guard=True)
 
 
@@ -1095,7 +1095,7 @@ def fx_broll_split(c, e):
         top = np.asarray(im, np.float32) / 255
         c.img[:sh] = top[int(H * 0.5) - sh:]; c.m[:sh] = 0
         c.img[max(0, sh - 3):sh + 3] = 1.0
-    tag = cached(e, 'tag', lambda: text_img(e.o.get('text', '4 hrs  →  4 min'), W * 0.06, 'uib', (16, 16, 18)))
+    tag = cached(e, 'tag', lambda: text_img(e.o.get('text', '4 h  →  4 min'), W * 0.06, 'uib', (16, 16, 18)))
     tw, th = int(tag.width + W * 0.11), int(tag.height * 1.25)
     st = Image.new('RGBA', (tw, th), (0, 0, 0, 0)); d = ImageDraw.Draw(st); n = th * 0.5
     d.polygon([(0, th / 2), (n, 0), (tw, 0), (tw, th), (n, th)], fill=(255, 255, 255, 255))
@@ -1187,6 +1187,7 @@ def fx_headline_wall(c, e):
                                          'Jev, the new AI model faster and cheaper than Claude::40K views|Scrape LinkedIn automatically::38K views|'
                                          'Protect your personal data on the internet::140K views').split('|')]
     looks = [((255, 255, 255), (20, 20, 22)), ((22, 20, 24), (255, 255, 255)), ((246, 238, 226), (30, 24, 20)), ((255, 214, 10), (20, 20, 22))]
+    hd = '@' + str(e.o.get('handle', 'seu.perfil')).lstrip('@')
     def hcard(i):
         title, meta = (items[i % len(items)] + [''])[:2]; bg, fg = looks[i % len(looks)]
         cw = int(W * 0.5); f = font('uib', cw * 0.085); words = title.split(' '); lines, cur = [], ''
@@ -1200,7 +1201,7 @@ def fx_headline_wall(c, e):
         for j, ln in enumerate(lines): d.text((cw * 0.08, cw * 0.07 + j * lh), ln, font=f, fill=fg + (255,))
         my = chh - cw * 0.085; s = cw * 0.04
         d.polygon([(cw * 0.08, my - s / 2), (cw * 0.08, my + s / 2), (cw * 0.08 + s * 0.9, my)], fill=(255, 48, 64, 255))
-        d.text((cw * 0.08 + s * 1.5, my), ('@vibha.in.progress  ·  ' + meta) if meta else '@vibha.in.progress', font=font('uim', cw * 0.045), fill=fg + (170,), anchor='lm')
+        d.text((cw * 0.08 + s * 1.5, my), (hd + '  ·  ' + meta) if meta else hd, font=font('uim', cw * 0.045), fill=fg + (170,), anchor='lm')
         return shadowed(im, 14, 8, 110)
     N = int(e.o.get('count', 13))
     cards = cached(e, 'cards', lambda: [hcard(i) for i in range(N)])
@@ -1234,9 +1235,9 @@ def fx_checklist(c, e):
         ang = a * math.pi / 2 + math.pi / 4
         d.line([(sx, sy), (sx + 18 * u * math.cos(ang), sy + 18 * u * math.sin(ang))], fill=(217, 119, 87, 255), width=int(7 * u))
         d.line([(sx, sy), (sx + 18 * u * math.cos(ang + math.pi / 4), sy + 18 * u * math.sin(ang + math.pi / 4))], fill=(217, 119, 87, 255), width=int(5 * u))
-    d.text((80 * u, hh / 2), e.o.get('title', 'Claude is editing your clip'), font=font('uib', 42 * u), fill=(255, 255, 255, 255), anchor='lm')
+    d.text((80 * u, hh / 2), e.o.get('title', 'Claude está editando seu vídeo'), font=font('uib', 42 * u), fill=(255, 255, 255, 255), anchor='lm')
     nd = sum(c.lt >= t for t in done_at)
-    d.text((cw - 36 * u, hh / 2), f'{nd} of {n}', font=font('uim', 28 * u), fill=(170, 170, 176, 255), anchor='rm')
+    d.text((cw - 36 * u, hh / 2), f'{nd} de {n}', font=font('uim', 28 * u), fill=(170, 170, 176, 255), anchor='rm')
     d.line([(30 * u, hh), (cw - 30 * u, hh)], fill=(255, 255, 255, 30), width=max(1, int(2 * u)))
     for i, (txt, meta) in enumerate([(r + [''])[:2] for r in rows]):
         y = hh + 13 * u + rh * i + rh / 2; x = 56 * u; r_ = 24 * u
@@ -1304,16 +1305,16 @@ def glass_widgets_v2(c, e):
     d.ellipse([S * 0.1, S * 0.115, S * 0.16, S * 0.175], fill=ORANGE + (255,))
     d.text((S * 0.2, S * 0.145), e.o.get('title', 'Claude'), font=font('uim', S * 0.085), fill=white + (235,), anchor='lm')
     d.text((S * 0.08, S * 0.2), e.o.get('text', '38'), font=font('uib', S * 0.44), fill=white + (255,))
-    for j, ln in enumerate(e.o.get('sub', 'effects|one clip').split('|')): d.text((S * 0.1, S * (0.7 + 0.11 * j)), ln, font=font('uim', S * 0.085), fill=white + (235,))
+    for j, ln in enumerate(e.o.get('sub', 'efeitos|um vídeo').split('|')): d.text((S * 0.1, S * (0.7 + 0.11 * j)), ln, font=font('uim', S * 0.085), fill=white + (235,))
     show(a, ax, ay, 0)
     # 2 · render bar
     bw, bh = 400 * u, 150 * u; bx, by = W - 50 * u - bw / 2, 118 * u + bh / 2
     b = G(bw, bh, bx, by, bh * 0.28); d = ImageDraw.Draw(b); p = ease_inout(c.lt / max(0.3, e.d * 0.85))
     d.ellipse([bh * 0.17, bh * 0.2, bh * 0.28, bh * 0.31], fill=(255, 69, 58, 255))
-    d.text((bh * 0.36, bh * 0.255), 'Rendering', font=font('uim', bh * 0.19), fill=white + (240,), anchor='lm')
+    d.text((bh * 0.36, bh * 0.255), 'Renderizando', font=font('uim', bh * 0.19), fill=white + (240,), anchor='lm')
     d.rounded_rectangle([bh * 0.17, bh * 0.5, bw - bh * 0.17, bh * 0.6], bh * 0.05, fill=white + (70,))
     d.rounded_rectangle([bh * 0.17, bh * 0.5, bh * 0.17 + (bw - bh * 0.34) * max(0.04, p), bh * 0.6], bh * 0.05, fill=white + (245,))
-    d.text((bh * 0.17, bh * 0.78), f"4K render  ·  {int(p * 100)}%", font=font('uim', bh * 0.14), fill=white + (210,), anchor='lm')
+    d.text((bh * 0.17, bh * 0.78), f"Render 4K  ·  {int(p * 100)}%", font=font('uim', bh * 0.14), fill=white + (210,), anchor='lm')
     show(b, bx, by, 1)
     # 3 · profile
     cy3 = by + bh / 2 + 22 * u + bh / 2
@@ -1325,10 +1326,10 @@ def glass_widgets_v2(c, e):
     # 4 · views artifact (a mini page inside the glass)
     aw, ah = 330 * u, 330 * u; dx, dy = 50 * u + aw / 2, ay + S / 2 + 26 * u + ah / 2
     art = G(aw, ah, dx, dy, 44 * u); d = ImageDraw.Draw(art)
-    d.text((24 * u, 30 * u), 'artifact · views.html', font=font('mono', 15 * u), fill=white + (220,), anchor='lm')
+    d.text((24 * u, 30 * u), 'artefato · views.html', font=font('mono', 15 * u), fill=white + (220,), anchor='lm')
     inn = rrect(aw - 36 * u, ah - 74 * u, 20 * u, (250, 248, 244, 255)); di = ImageDraw.Draw(inn); iw, ih = inn.size
     for j in range(3): di.ellipse([14 * u + j * 16 * u, 14 * u, 24 * u + j * 16 * u, 24 * u], fill=((255, 95, 87), (255, 189, 46), (40, 200, 64))[j] + (255,))
-    di.text((16 * u, 40 * u), 'Top reels', font=font('uib', 26 * u), fill=(24, 22, 26, 255))
+    di.text((16 * u, 40 * u), 'Melhores reels', font=font('uib', 26 * u), fill=(24, 22, 26, 255))
     di.text((16 * u, 72 * u), '197K', font=font('anton', 44 * u), fill=(200, 85, 61, 255))
     vals = [197, 140, 124, 83, 50, 40, 38]; gx0, gx1, gy1 = 16 * u, iw - 16 * u, ih - 18 * u; bwid = (gx1 - gx0) / 7 * 0.66
     for j, v in enumerate(vals):
@@ -1346,9 +1347,9 @@ def glass_widgets_v2(c, e):
     for k_ in range(6):
         ang = k_ * math.pi / 3; ad.line([(A / 2 - 26 * u * math.cos(ang), A / 2 - 26 * u * math.sin(ang)), (A / 2 + 26 * u * math.cos(ang), A / 2 + 26 * u * math.sin(ang))], fill=(255, 255, 255, 255), width=int(7 * u))
     mu.alpha_composite(art2, (int(22 * u), int(22 * u)))
-    d.text((134 * u, 44 * u), 'NOW EDITING', font=font('mono', 15 * u), fill=white + (200,), anchor='lm')
-    d.text((134 * u, 78 * u), e.o.get('song', 'soft UI pops'), font=font('uib', 28 * u), fill=white + (255,), anchor='lm')
-    d.text((134 * u, 108 * u), 'sfx · 25.7s', font=font('uim', 20 * u), fill=white + (200,), anchor='lm')
+    d.text((134 * u, 44 * u), 'EDITANDO AGORA', font=font('mono', 15 * u), fill=white + (200,), anchor='lm')
+    d.text((134 * u, 78 * u), e.o.get('song', 'pops suaves'), font=font('uib', 28 * u), fill=white + (255,), anchor='lm')
+    d.text((134 * u, 108 * u), 'efeitos · 25,7s', font=font('uim', 20 * u), fill=white + (200,), anchor='lm')
     pp = clamp(c.lt / max(0.5, e.d)); d.rounded_rectangle([22 * u, 140 * u, mw - 22 * u, 146 * u], 3 * u, fill=white + (70,))
     d.rounded_rectangle([22 * u, 140 * u, 22 * u + (mw - 44 * u) * pp, 146 * u], 3 * u, fill=white + (240,))
     cxm, cym = mw / 2, 184 * u
@@ -1361,10 +1362,10 @@ def glass_widgets_v2(c, e):
     # 6 · calendar
     kw, kh = 330 * u, 190 * u; kx, ky = 50 * u + kw / 2, dy + ah / 2 + 26 * u + kh / 2
     ca = G(kw, kh, kx, ky, 40 * u); d = ImageDraw.Draw(ca)
-    d.text((26 * u, 36 * u), e.o.get('day', 'WED'), font=font('uib', 22 * u), fill=(255, 92, 82, 255), anchor='lm')
+    d.text((26 * u, 36 * u), e.o.get('day', 'QUA'), font=font('uib', 22 * u), fill=(255, 92, 82, 255), anchor='lm')
     d.text((26 * u, 82 * u), e.o.get('date', '21'), font=font('uib', 56 * u), fill=white + (255,), anchor='lm')
     d.rounded_rectangle([22 * u, 120 * u, kw - 22 * u, 168 * u], 12 * u, fill=(255, 92, 82, 210))
-    d.text((36 * u, 144 * u), e.o.get('event', 'Post 2 reels · tonight'), font=font('uib', 22 * u), fill=white + (255,), anchor='lm')
+    d.text((36 * u, 144 * u), e.o.get('event', 'Postar 2 reels · hoje'), font=font('uib', 22 * u), fill=white + (255,), anchor='lm')
     show(ca, kx, ky, 5)
     # 7 · 4K ring
     R = 250 * u; rx, ry = W - 50 * u - R / 2, my + mh / 2 + 26 * u + R / 2
@@ -1375,7 +1376,7 @@ def glass_widgets_v2(c, e):
     d.text((R / 2, R - 26 * u), 'render', font=font('uim', 20 * u), fill=white + (210,), anchor='mm')
     show(rg, rx, ry, 6)
     # 8 · Edited by Claude pill (in front)
-    f1, f2 = font('uim', W * 0.045), font('uib', W * 0.045); pre, hi = 'Edited by ', 'Claude'
+    f1, f2 = font('uim', W * 0.045), font('uib', W * 0.045); pre, hi = 'Editado pelo ', 'Claude'
     tw = f1.getlength(pre) + f2.getlength(hi); ph = W * 0.105; pw = tw + ph * 0.9; py = H * 0.875
     q = glass(c, pw, ph, ph / 2, W / 2, py, amt=0.16, tint=(70, 70, 76)); d = ImageDraw.Draw(q)
     d.text(((pw - tw) / 2, ph / 2), pre, font=f1, fill=white + (255,), anchor='lm')
@@ -1413,27 +1414,27 @@ def comment_sheet(c, e):
     gets a heart, then your reply drops in with a link chip."""
     W, H = c.W, c.H; u = W / 1080; al = fade(c, e)
     word = e.o.get('text', 'EFFECTS'); handle = e.o.get('handle', 'vibha.in.progress')
-    reply = e.o.get('reply', 'Sent you the pack'); chip = e.o.get('chip', '22 effects')
+    reply = e.o.get('reply', 'Te mandei o material'); chip = e.o.get('chip', '22 efeitos')
     sw, sh = 740 * u, 450 * u
     t_post = 0.3 + 0.06 * len(word) + 0.1; t_heart, t_rep = t_post + 0.25, t_post + 0.4
     sheet = rrect(sw, sh, 30 * u, (38, 38, 40, 248)); d = ImageDraw.Draw(sheet)
     white, grey, blue = (245, 245, 245, 255), (160, 160, 166, 255), (0, 149, 246, 255)
     d.rounded_rectangle([sw / 2 - 32 * u, 14 * u, sw / 2 + 32 * u, 20 * u], 3 * u, fill=(110, 110, 116, 255))
-    d.text((sw / 2, 50 * u), 'Comments', font=font('uib', 26 * u), fill=white, anchor='mm')
+    d.text((sw / 2, 50 * u), 'Comentários', font=font('uib', 26 * u), fill=white, anchor='mm')
     d.line([(0, 80 * u), (sw, 80 * u)], fill=(60, 60, 64, 255), width=max(1, int(2 * u)))
     def avatar(sz):
         a = Image.new('RGBA', (int(sz), int(sz)), (0, 0, 0, 0)); ad = ImageDraw.Draw(a)
-        ad.ellipse([0, 0, sz - 1, sz - 1], fill=(233, 90, 140, 255)); ad.text((sz / 2, sz / 2), 'V', font=font('uib', sz * 0.5), fill=(255, 255, 255, 255), anchor='mm')
+        ad.ellipse([0, 0, sz - 1, sz - 1], fill=(233, 90, 140, 255)); ad.text((sz / 2, sz / 2), (handle.lstrip('@')[:1] or 'V').upper(), font=font('uib', sz * 0.5), fill=(255, 255, 255, 255), anchor='mm')
         return a
     if c.lt < t_post:
-        d.text((sw / 2, 190 * u), 'Start the conversation.', font=font('uim', 21 * u), fill=grey, anchor='mm')
+        d.text((sw / 2, 190 * u), 'Comece a conversa.', font=font('uim', 21 * u), fill=grey, anchor='mm')
     else:
         q = ease_out((c.lt - t_post) / 0.25); oy = (1 - q) * -20 * u; a8 = int(255 * clamp(q * 1.5))
         av = avatar(46 * u); av.putalpha(av.split()[3].point(lambda v: v * a8 // 255)); sheet.alpha_composite(av, (int(26 * u), int(100 * u + oy)))
-        d.text((88 * u, 108 * u + oy), 'you', font=font('uib', 19 * u), fill=white[:3] + (a8,), anchor='lm')
-        d.text((88 * u + font('uib', 19 * u).getlength('you ') + 4 * u, 108 * u + oy), 'now', font=font('uim', 18 * u), fill=grey[:3] + (a8,), anchor='lm')
+        d.text((88 * u, 108 * u + oy), 'você', font=font('uib', 19 * u), fill=white[:3] + (a8,), anchor='lm')
+        d.text((88 * u + font('uib', 19 * u).getlength('você ') + 4 * u, 108 * u + oy), 'agora', font=font('uim', 18 * u), fill=grey[:3] + (a8,), anchor='lm')
         d.text((86 * u, 128 * u + oy), word, font=font('uib', 50 * u), fill=white[:3] + (a8,))
-        d.text((88 * u, 196 * u + oy), 'Reply', font=font('uim', 17 * u), fill=grey[:3] + (a8,), anchor='lm')
+        d.text((88 * u, 196 * u + oy), 'Responder', font=font('uim', 17 * u), fill=grey[:3] + (a8,), anchor='lm')
         hk = ease_back((c.lt - t_heart) / 0.3)
         if hk > 0:
             hh = heart(30 * u * hk, (255, 48, 64)); sheet.alpha_composite(hh, (int(sw - 46 * u - hh.width / 2), int(130 * u - hh.height / 2)))
@@ -1442,7 +1443,7 @@ def comment_sheet(c, e):
             ra = int(255 * clamp(rk * 1.5)); ry = 226 * u + (1 - rk) * 16 * u; rx = 88 * u
             fc = face_chip(c, e, 34 * u); fc.putalpha(fc.split()[3].point(lambda v: v * ra // 255)); sheet.alpha_composite(fc, (int(rx), int(ry)))
             d.text((rx + 46 * u, ry + 8 * u), handle, font=font('uib', 18 * u), fill=white[:3] + (ra,), anchor='lm')
-            d.text((rx + 46 * u + font('uib', 18 * u).getlength(handle) + 10 * u, ry + 8 * u), 'Author', font=font('uim', 16 * u), fill=grey[:3] + (ra,), anchor='lm')
+            d.text((rx + 46 * u + font('uib', 18 * u).getlength(handle) + 10 * u, ry + 8 * u), 'Autor', font=font('uim', 16 * u), fill=grey[:3] + (ra,), anchor='lm')
             d.text((rx + 46 * u, ry + 36 * u), reply, font=font('uim', 22 * u), fill=white[:3] + (ra,), anchor='lm')
             gift = emoji('🎁', 24 * u)
             if gift is not None:
@@ -1471,9 +1472,9 @@ def comment_sheet(c, e):
         d.text((104 * u, iy + 24 * u), typed, font=font('uib', 26 * u), fill=white, anchor='lm')
         if int(c.lt * 4) % 2: d.rectangle([104 * u + font('uib', 26 * u).getlength(typed) + 3 * u, iy + 10 * u, 106 * u + font('uib', 26 * u).getlength(typed) + 3 * u, iy + 38 * u], fill=(0, 149, 246, 255))
     else:
-        d.text((104 * u, iy + 24 * u), f'Add a comment for {handle}', font=font('uim', 20 * u), fill=grey, anchor='lm')
+        d.text((104 * u, iy + 24 * u), f'Adicione um comentário para {handle}', font=font('uim', 20 * u), fill=grey, anchor='lm')
     pressed = t_post - 0.08 <= c.lt < t_post
-    d.text((sw - 44 * u, iy + 24 * u), 'Post', font=font('uib', 23 * u), fill=(blue if typed else (70, 110, 160, 255)) if not pressed else (140, 200, 255, 255), anchor='rm')
+    d.text((sw - 44 * u, iy + 24 * u), 'Publicar', font=font('uib', 23 * u), fill=(blue if typed else (70, 110, 160, 255)) if not pressed else (140, 200, 255, 255), anchor='rm')
     sheet = shadowed(sheet, 22, 10, 120)
     bottom = c.fy - c.fw * 0.5; top = bottom - sheet.height
     s = 1.0
@@ -1787,7 +1788,7 @@ def cover_editorial(c, e):
     m = cached(e, 'm', mast)
     s = 1.05 - 0.05 * ease_out(c.lt / 0.5)
     place(c, m, W / 2, H * 0.085 + m.height / 2, s, 0, al * k, behind=True)
-    iss = cached(e, 'i', lambda: tracked(e.o.get('issue', 'THE ONE-CLIP ISSUE  ·  NO. 42  ·  OCTOBER 2026'), int(W * 0.022), 'ui', ink, W * 0.006))
+    iss = cached(e, 'i', lambda: tracked(e.o.get('issue', 'EDIÇÃO ÚNICA  ·  Nº 42  ·  OUTUBRO 2026'), int(W * 0.022), 'ui', ink, W * 0.006))
     place(c, iss, W / 2, H * 0.075, alpha=al * k, behind=True)
     rule = cached(e, 'r', lambda: rrect(W * 0.86, max(3, W // 600), 1, ink + (255,)))
     place(c, rule, W / 2, H * 0.087 + m.height, alpha=al * k * 0.8, behind=True)
@@ -1825,7 +1826,7 @@ def glass_bento(c, e):
     pan = glass(c, pw, ph, W * 0.04, pcx, pcy, amt=0.06, dark=0.62, blur=max(10, W // 30))
     lay = Image.new('RGBA', (pw, ph), (0, 0, 0, 0)); d = ImageDraw.Draw(lay); pad = pw * 0.05
     g = ease_inout((c.lt - 0.2) / max(0.3, e.d * 0.75))
-    d.text((pad, pad * 0.8), e.o.get('text', 'VIEWS').upper(), font=font('mono', pw * 0.026), fill=(255, 255, 255, 180))
+    d.text((pad, pad * 0.8), e.o.get('text', 'VISUALIZAÇÕES').upper(), font=font('mono', pw * 0.026), fill=(255, 255, 255, 180))
     a, _, _ = num_parts(e.o.get('from', '0')); b, suf, dp = num_parts(e.o.get('to', '197K')); s = f'{a + (b - a) * g:.{dp}f}{suf}'
     f = font('uib', pw * 0.085); d.text((pw - pad - f.getlength(s), pad * 0.45), s, font=f, fill=(255, 255, 255, 255))
     x0, x1, y0, y1 = pad, pw - pad, ph - pad * 0.8, ph * 0.3
@@ -1853,7 +1854,7 @@ def glass_bento(c, e):
         b, suf, dp = num_parts(kv); v = b * ease_out((c.lt - 0.45) / 0.8)
         d.text((tw * 0.1, th * 0.18), f'{v:.{dp}f}{suf}', font=font('uib', th * 0.36), fill=(255, 255, 255, 255))
         d.text((tw * 0.1, th * 0.7), kl.upper(), font=font('mono', th * 0.1), fill=(255, 255, 255, 170))
-    bv, bl = (e.o.get('bars', '197|140|124|83|50::top reels · K views').split('::') + [''])[:2]; vals = [num_parts(v)[0] for v in bv.split('|')]
+    bv, bl = (e.o.get('bars', '197|140|124|83|50::melhores reels · mil visualizações').split('::') + [''])[:2]; vals = [num_parts(v)[0] for v in bv.split('|')]
     def dr_bars(t, d, tw, th):
         d.text((tw * 0.1, th * 0.06), bl.upper(), font=font('mono', tw * 0.055), fill=(255, 255, 255, 170))
         n = len(vals); bw = tw * 0.8 / n; top, base = th * 0.2, th * 0.88; mx = max(vals)
@@ -1963,7 +1964,7 @@ def fx_over_the_shoulder_zoom(c, e):
     k1 = clamp((p - 0.42) / 0.065) * (1 - clamp((p - 0.66) / 0.055)); k2 = clamp((p - 0.84) / 0.065)
     if k1 <= 0 and k2 <= 0: return
     me, m = c.img.copy(), c.m[..., None]
-    a, b = (e.o.get('text') or 'Views · this reel|Top reels · total').split('|')[:2]
+    a, b = (e.o.get('text') or 'Visualizações · este reel|Melhores reels · total').split('|')[:2]
     va, vb = (str(e.o.get('to') or '197K|672K')).split('|')[:2]
     glass_graph(c, c.W * 0.43, c.H * 0.255, k1, clamp((p - 0.45) / 0.17), a, va, 'line')
     glass_graph(c, c.W * 0.57, c.H * 0.255, k2, clamp((p - 0.86) / 0.14), b, vb, 'bars')
@@ -2000,7 +2001,7 @@ def msg_bubble(c, y, title, body, a):
 @effect('messages', 'iMessage notifications pop in one after another, creamy glass with a soft glow, stacking up above the bottom of the frame')
 def fx_messages(c, e):
     msgs = (e.o.get('text') or 'how did you edit this??|wait, which app is this|send me the effects pls|EFFECTS').split('|')
-    title = e.o.get('title', 'Messages'); n = len(msgs); u = c.W / 2160
+    title = e.o.get('title', 'Mensagens'); n = len(msgs); u = c.W / 2160
     gap = min(0.4, e.d * 0.75 / max(1, n)); pops = [0.13 + i * gap for i in range(n)]
     bottom = c.H * float(e.o.get('y', 0.61)); out = fade(c, e, 0.2)
     for k in range(n):
@@ -2076,7 +2077,7 @@ def fx_tape_label(c, e):
     k = pop(c, 0.05, 0.25) * fade(c, e)
     if k <= 0: return
     def tape():
-        S = int(c.W * 0.055); t = text_img(e.o.get('text', 'your own reels'), S, 'hand', INKY)
+        S = int(c.W * 0.055); t = text_img(e.o.get('text', 'seus próprios reels'), S, 'hand', INKY)
         w, h = int(t.width + S * 0.6), int(t.height + S * 0.2); o = max(4, S // 9)
         im = Image.new('RGBA', (w + o, h + o), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
         d.rectangle([o, o, w + o - 1, h + o - 1], fill=(17, 17, 17, 255)); d.rectangle([0, 0, w - 1, h - 1], fill=TAPE + (255,))

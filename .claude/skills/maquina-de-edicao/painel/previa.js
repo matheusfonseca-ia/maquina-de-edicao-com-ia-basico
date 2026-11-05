@@ -759,13 +759,13 @@ function demoRnPixel() {
 
 // Peças dos formatos de efeito: imitam, com o bonequinho, os efeitos do fx.py
 // (claude-video-effects). A edição de verdade usa o fx.py original na gravação.
-const VIDRO = { background: 'rgba(255,255,255,.14)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)', border: '1.5px solid rgba(255,255,255,.32)', borderRadius: '34px', boxShadow: '0 20px 50px rgba(0,0,0,.25)', color: '#fff', fontFamily: 'Inter', boxSizing: 'border-box' };
+const VIDRO = { background: 'rgba(255,255,255,.14)', backdropFilter: 'blur(18px)', WebkitBackdropFilter: 'blur(18px)', border: '1.5px solid rgba(255,255,255,.32)', borderRadius: '34px', boxShadow: '0 20px 50px rgba(0,0,0,.25)', color: '#fff', fontFamily: 'Inter, Archivo, sans-serif', boxSizing: 'border-box' };
 const CAPAS = ['post', 'cidade', 'mesa', 'loja', 'grafico', 'perfil', 'noticia', 'chat'];
 
 // Câmera cheia em camadas: fundo da gravação, o que fica atrás da pessoa, a pessoa
 // recortada e, fora do zoom, o que fica na frente.
 function fxCena(ctx, atras, frente, o = {}) {
-  const g = h('div', caixa(0, 0, ctx.W, ctx.H, { overflow: 'hidden', background: '#000' }));
+  const g = h('div', caixa(0, 0, ctx.W, ctx.H, { overflow: 'hidden', background: '#000', textAlign: 'left' }));
   const cam = h('div', caixa(0, 0, ctx.W, ctx.H), '', 'fx-cam');
   const fundo = camera(ctx);
   const tras = h('div', caixa(0, 0, ctx.W, ctx.H));
@@ -814,7 +814,7 @@ function fxRelogio(ctx, em) {
 
 // Card de lista ao lado da cabeça (todo): cada item ganha ✓ no tempo dele.
 function fxLista(ctx, titulo, itens, tempos) {
-  const c = h('div', caixa(712, 740, 330, 120 + itens.length * 64, { background: 'rgba(250,250,247,.96)', borderRadius: '26px', boxShadow: '0 20px 50px rgba(0,0,0,.35)', padding: '26px 28px', boxSizing: 'border-box', fontFamily: 'Inter', color: '#111' }));
+  const c = h('div', caixa(712, 740, 330, 120 + itens.length * 64, { background: 'rgba(250,250,247,.96)', borderRadius: '26px', boxShadow: '0 20px 50px rgba(0,0,0,.35)', padding: '26px 28px', boxSizing: 'border-box', fontFamily: 'Inter, Archivo, sans-serif', color: '#111' }));
   const cont = h('span', { fontSize: '22px', color: '#8A8A8E' }, `0 de ${itens.length}`);
   const topo = h('div', { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' });
   topo.append(h('b', { fontSize: '26px', color: '#E8873A', letterSpacing: '.04em' }, titulo), cont);
@@ -860,15 +860,15 @@ function fxMira(ctx, tag, em) {
   g.append(
     canto(0, 0, { borderTopWidth: '8px', borderLeftWidth: '8px' }), canto(310, 0, { borderTopWidth: '8px', borderRightWidth: '8px' }),
     canto(0, 400, { borderBottomWidth: '8px', borderLeftWidth: '8px' }), canto(310, 400, { borderBottomWidth: '8px', borderRightWidth: '8px' }));
-  g.appendChild(h('div', { position: 'absolute', left: '0', width: '380px', top: '492px', textAlign: 'center' }, `<span style="background:rgba(255,255,255,.9);color:#111;font:700 26px Inter;padding:6px 16px;border-radius:8px;letter-spacing:.08em">${tag}</span>`));
+  g.appendChild(h('div', { position: 'absolute', left: '0', width: '380px', top: '492px', textAlign: 'center' }, `<span style="background:rgba(255,255,255,.9);color:#111;font:700 26px Inter,Archivo,sans-serif;padding:6px 16px;border-radius:8px;letter-spacing:.08em">${tag}</span>`));
   ctx.anima(g, [{ opacity: 0, transform: 'scale(1.5)' }, { opacity: 1, transform: 'scale(1)' }], { em, dur: .25, som: 'clique' });
   return g;
 }
 
 function fxSeta(ctx, frente, texto, cor, em) {
-  const pausa = h('div', caixa(60, 90, 84, 84, { background: 'rgba(20,20,22,.8)', borderRadius: '18px', display: 'grid', placeItems: 'center', color: '#fff', fontSize: '40px', fontFamily: 'Inter', fontWeight: 900 }), '❚❚');
+  const pausa = h('div', caixa(60, 90, 84, 84, { background: 'rgba(20,20,22,.8)', borderRadius: '18px', display: 'grid', placeItems: 'center', color: '#fff', fontSize: '40px', fontFamily: 'Inter, Archivo, sans-serif', fontWeight: 900 }), '❚❚');
   const rot = h('div', { position: 'absolute', left: '650px', top: '110px', fontFamily: "'Permanent Marker', 'Caveat', cursive", fontSize: '70px', color: cor }, texto);
-  const seta = h('div', caixa(0, 0, 1080, 1920), `<svg viewBox="0 0 1080 1920" width="1080" height="1920" style="position:absolute;inset:0;overflow:visible"><path d="M720 220 C 640 300 600 420 690 560" fill="none" stroke="${cor}" stroke-width="10" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/><path d="M650 530 L690 562 L705 512" fill="none" stroke="${cor}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0"/></svg>`);
+  const seta = h('div', caixa(0, 0, 1080, 1920), `<svg viewBox="0 0 1080 1920" width="1080" height="1920" style="position:absolute;inset:0;overflow:visible"><path d="M700 200 C 620 260 600 340 650 420" fill="none" stroke="${cor}" stroke-width="10" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/><path d="M648 375 L650 420 L610 399" fill="none" stroke="${cor}" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0"/></svg>`);
   frente.append(pausa, rot, seta);
   ctx.anima(pausa, [{ opacity: 0 }, { opacity: 1 }], { em, dur: .1, som: 'clique' });
   ctx.anima(rot, [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'none' }], { em: em + .1, dur: .25 });
@@ -890,20 +890,20 @@ function fxSelecao(ctx, frente, texto, em) {
 
 function fxWidgets(ctx, atras, frente) {
   const tiles = [
-    [60, 120, 300, 280, `<div style="font-size:24px;opacity:.85">● Claude</div><div style="font:900 120px/1 'Archivo Black',Archivo,Inter;letter-spacing:-.04em;margin-top:10px">51K</div><div style="font-size:24px;opacity:.85;margin-top:8px">seguidores<br>em 1 ano</div>`],
-    [60, 430, 300, 300, `<div style="font-size:24px;font-weight:700">Top reels</div><div style="font:900 56px Inter;color:#FF6B5A">197K</div><div style="display:flex;gap:12px;align-items:flex-end;height:120px">${[100, 74, 64, 40, 26].map(v => `<div style="width:36px;height:${v}%;background:#FF6B5A;border-radius:6px"></div>`).join('')}</div>`],
-    [60, 760, 300, 170, `<div style="font-size:26px;color:#FF6B5A;font-weight:800">QUA</div><div style="font:900 64px Inter">05</div><div style="font-size:22px;background:#FF6B5A;border-radius:8px;padding:2px 10px;display:inline-block">Postar 2 reels</div>`],
-    [720, 120, 320, 120, `<div style="font-size:26px">● Rendering</div><div style="height:12px;background:rgba(255,255,255,.3);border-radius:6px;margin-top:16px"><div style="width:94%;height:100%;background:#fff;border-radius:6px"></div></div>`],
-    [720, 270, 320, 130, `<div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font:800 34px Inter">Matheus</div><div style="font-size:22px;opacity:.8">@seuperfil</div></div><div style="width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#f9a94b,#d6249f)"></div></div>`],
-    [720, 430, 320, 190, `<div style="display:flex;gap:16px;align-items:center"><div style="width:76px;height:76px;border-radius:16px;background:#E8613A;display:grid;place-items:center;font-size:44px">✳</div><div><div style="font-size:18px;opacity:.7">NOW EDITING</div><div style="font:800 28px Inter">Máquina</div></div></div><div style="text-align:center;font-size:34px;margin-top:14px">⏮ ▶ ⏭</div>`],
-    [800, 650, 220, 220, `<div style="width:150px;height:150px;margin:0 auto;border-radius:50%;border:14px solid #34C759;box-sizing:border-box;display:grid;place-items:center;font:900 52px Inter">4K</div>`],
+    [40, 120, 270, 280, `<div style="font-size:24px;opacity:.85">● Claude</div><div style="font:900 104px/1 'Archivo Black',Archivo,Inter,sans-serif;letter-spacing:-.04em;margin-top:10px">51K</div><div style="font-size:24px;opacity:.85;margin-top:8px">seguidores<br>em 1 ano</div>`],
+    [40, 430, 270, 300, `<div style="font-size:24px;font-weight:700">Melhores reels</div><div style="font:900 56px Inter,Archivo,sans-serif;color:#FF6B5A">197K</div><div style="display:flex;gap:12px;align-items:flex-end;height:120px">${[100, 74, 64, 40, 26].map(v => `<div style="width:36px;height:${v}%;background:#FF6B5A;border-radius:6px"></div>`).join('')}</div>`],
+    [40, 760, 270, 210, `<div style="font-size:26px;color:#FF6B5A;font-weight:800">QUA</div><div style="font:900 64px Inter,Archivo,sans-serif">05</div><div style="font-size:22px;background:#FF6B5A;border-radius:8px;padding:2px 10px;display:inline-block">Postar 2 reels</div>`],
+    [720, 120, 320, 120, `<div style="font-size:26px">● Renderizando</div><div style="height:12px;background:rgba(255,255,255,.3);border-radius:6px;margin-top:16px"><div style="width:94%;height:100%;background:#fff;border-radius:6px"></div></div>`],
+    [720, 270, 320, 130, `<div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font:800 34px Inter,Archivo,sans-serif">Matheus</div><div style="font-size:22px;opacity:.8">@seuperfil</div></div><div style="width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,#f9a94b,#d6249f)"></div></div>`],
+    [720, 430, 320, 190, `<div style="display:flex;gap:16px;align-items:center"><div style="width:76px;height:76px;border-radius:16px;background:#E8613A;display:grid;place-items:center;font-size:44px">✳</div><div><div style="font-size:18px;opacity:.7">EDITANDO AGORA</div><div style="font:800 28px Inter,Archivo,sans-serif">Máquina</div></div></div><div style="text-align:center;font-size:34px;margin-top:14px">⏮ ▶ ⏭</div>`],
+    [800, 650, 220, 220, `<div style="width:150px;height:150px;margin:0 auto;border-radius:50%;border:14px solid #34C759;box-sizing:border-box;display:grid;place-items:center;font:900 52px Inter,Archivo,sans-serif">4K</div>`],
   ];
   tiles.forEach(([x, y, w, hh, html], i) => {
     const t = h('div', caixa(x, y, w, hh, { ...VIDRO, padding: '24px 26px' }), html);
     atras.appendChild(t);
     ctx.anima(t, [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'none' }], { em: .2 + i * .08, dur: .32, ease: 'cubic-bezier(.3,1.5,.5,1)', som: i === 0 ? 'impacto' : null });
   });
-  const pilula = h('div', caixa(300, 1560, 480, 100, { ...VIDRO, borderRadius: '50px', display: 'grid', placeItems: 'center', fontSize: '40px', fontWeight: 600 }), 'Edited by <span style="color:#E8613A;margin-left:10px">Claude</span>');
+  const pilula = h('div', caixa(250, 1560, 580, 100, { ...VIDRO, borderRadius: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center', whiteSpace: 'nowrap', fontSize: '40px', fontWeight: 600 }), 'Editado pelo <span style="color:#E8613A;margin-left:10px">Claude</span>');
   frente.appendChild(pilula);
   ctx.anima(pilula, [{ opacity: 0, transform: 'translateY(30px)' }, { opacity: 1, transform: 'none' }], { em: .9, dur: .35 });
 }
@@ -925,9 +925,9 @@ function fxGrafico(ctx, rotulo, de, ate, suf, x, y, w, hh, em) {
 
 function fxBento(ctx, frente) {
   const t = [
-    [60, 1170, 300, 280, `<div style="width:150px;height:150px;margin:6px auto 0;border-radius:50%;background:conic-gradient(#FF8A5B 0 29%, rgba(255,255,255,.18) 29% 100%);display:grid;place-items:center"><div style="width:110px;height:110px;border-radius:50%;background:rgba(40,40,44,.7);display:grid;place-items:center;font:900 40px Inter">29%</div></div><div style="text-align:center;font-size:20px;opacity:.8;margin-top:12px">dos seguidores</div>`],
-    [60, 1480, 300, 170, `<div style="font:900 64px Inter">672K</div><div style="font-size:20px;opacity:.8">views · top 7 reels</div>`],
-    [780, 1170, 240, 480, `<div style="font-size:20px;opacity:.8">TOP REELS · MIL</div><div style="display:flex;gap:14px;align-items:flex-end;height:360px;margin-top:20px">${[100, 71, 63, 42, 25].map(v => `<div style="flex:1;height:${v}%;background:${v === 100 ? '#34D36E' : 'rgba(255,255,255,.75)'};border-radius:8px"></div>`).join('')}</div>`],
+    [60, 1170, 300, 280, `<div style="width:150px;height:150px;margin:6px auto 0;border-radius:50%;background:conic-gradient(#FF8A5B 0 29%, rgba(255,255,255,.18) 29% 100%);display:grid;place-items:center"><div style="width:110px;height:110px;border-radius:50%;background:rgba(40,40,44,.7);display:grid;place-items:center;font:900 40px Inter,Archivo,sans-serif">29%</div></div><div style="text-align:center;font-size:20px;opacity:.8;margin-top:12px">dos seguidores</div>`],
+    [60, 1480, 300, 170, `<div style="font:900 64px Inter,Archivo,sans-serif">672K</div><div style="font-size:20px;opacity:.8">views · top 7 reels</div>`],
+    [780, 1170, 240, 480, `<div style="font-size:20px;opacity:.8">MELHORES REELS · MIL</div><div style="display:flex;gap:14px;align-items:flex-end;height:360px;margin-top:20px">${[100, 71, 63, 42, 25].map(v => `<div style="flex:1;height:${v}%;background:${v === 100 ? '#34D36E' : 'rgba(255,255,255,.75)'};border-radius:8px"></div>`).join('')}</div>`],
   ];
   t.forEach(([x, y, w, hh, html], i) => {
     const el = h('div', caixa(x, y, w, hh, { ...VIDRO, padding: '24px' }), html);
@@ -986,7 +986,7 @@ function fxLeque(ctx, T, atras) {
 
 // A pessoa encolhe pro centro da grade 3 × 3 do perfil (place-in-grid).
 function fxGrade(ctx, T) {
-  const g = h('div', caixa(0, 0, ctx.W, ctx.H, { overflow: 'hidden', background: '#000' }));
+  const g = h('div', caixa(0, 0, ctx.W, ctx.H, { overflow: 'hidden', background: '#000', textAlign: 'left' }));
   g.appendChild(camera(ctx, { desfoque: 16, escurecer: .2 }));
   g.appendChild(h('div', { position: 'absolute', inset: '0', background: 'rgba(240,236,230,.35)' }));
   const views = ['1,8M', '2,4M', '3,4M', '312K', '3,1M', '847K', '268K', '1,2M', '596K'];
@@ -996,7 +996,7 @@ function fxGrade(ctx, T) {
     const t = h('div', caixa(x, y, W, H, { borderRadius: '14px', overflow: 'hidden', boxShadow: '0 14px 30px rgba(0,0,0,.25)', border: i === 4 ? '4px solid #FF8A5B' : 'none' }));
     if (i === 4) t.appendChild(camera(ctx, { w: W, h: H, escala: .33, topo: 70 }));
     else t.innerHTML = imagem(CAPAS[i % CAPAS.length], T);
-    t.appendChild(h('div', { position: 'absolute', left: '14px', bottom: '10px', font: '700 26px Inter', color: '#fff', textShadow: '0 2px 6px rgba(0,0,0,.7)' }, `▷ ${views[i]}`));
+    t.appendChild(h('div', { position: 'absolute', left: '14px', bottom: '10px', font: '700 26px Inter, Archivo, sans-serif', color: '#fff', textShadow: '0 2px 6px rgba(0,0,0,.7)' }, `▷ ${views[i]}`));
     g.appendChild(t);
     if (i === 4) ctx.anima(t, [{ transform: 'scale(3.4)', opacity: 1 }, { transform: 'scale(1)', opacity: 1 }], { em: .1, dur: .5, ease: 'cubic-bezier(.65,0,.35,1)', som: 'impacto' });
     else ctx.anima(t, [{ opacity: 0, transform: 'scale(.6)' }, { opacity: 1, transform: 'none' }], { em: .7 + i * .06, dur: .2 });
@@ -1018,7 +1018,7 @@ function fxPilha(ctx, T, atras) {
 // A grade do perfil enche a parede atrás (profile-wall).
 function fxParede(ctx, T, atras) {
   const p = h('div', caixa(60, 90, 960, 660, { background: 'rgba(18,18,20,.92)', borderRadius: '26px', padding: '20px 26px', boxSizing: 'border-box', overflow: 'hidden' }));
-  p.appendChild(h('div', { display: 'flex', justifyContent: 'space-around', font: '600 28px Inter', color: '#8E8E93', marginBottom: '18px' }, '<span>Posts</span><span style="color:#fff;border-bottom:3px solid #fff;padding-bottom:6px">Reels</span><span>Marcados</span>'));
+  p.appendChild(h('div', { display: 'flex', justifyContent: 'space-around', font: '600 28px Inter, Archivo, sans-serif', color: '#8E8E93', marginBottom: '18px' }, '<span>Posts</span><span style="color:#fff;border-bottom:3px solid #fff;padding-bottom:6px">Reels</span><span>Marcados</span>'));
   const grade = h('div', { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px' });
   for (let i = 0; i < 8; i++) {
     const c = h('div', { height: '260px', borderRadius: '8px', overflow: 'hidden' }, imagem(CAPAS[i % CAPAS.length], T));
@@ -1034,7 +1034,7 @@ function fxContagem(ctx, n, rotulo, em) {
   const c = h('div', caixa(150, 1330, 780, 300, { ...VIDRO, padding: '30px 40px', textAlign: 'center' }));
   const num = h('div', { font: "900 120px/1 'Archivo Black', Archivo, Inter", letterSpacing: '-.04em' }, '0');
   c.append(num, h('div', { fontSize: '40px', fontWeight: 700, marginTop: '6px' }, rotulo),
-    h('div', { display: 'flex', alignItems: 'center', gap: '16px', marginTop: '22px', fontSize: '24px', justifyContent: 'center' }, '<span style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#f9a94b,#d6249f)"></span><b>seuperfil</b><span style="background:#2B2B2E;border-radius:10px;padding:6px 18px">Following</span>'));
+    h('div', { display: 'flex', alignItems: 'center', gap: '16px', marginTop: '22px', fontSize: '24px', justifyContent: 'center' }, '<span style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#f9a94b,#d6249f)"></span><b>seuperfil</b><span style="background:#2B2B2E;border-radius:10px;padding:6px 18px">Seguindo</span>'));
   ctx.anima(c, [{ opacity: 0, transform: 'translateY(40px)' }, { opacity: 1, transform: 'none' }], { em, dur: .35 });
   ctx.tempo(em + .2, 1.8, (k) => { num.textContent = Math.round(n * (1 - (1 - k) ** 3)).toLocaleString('pt-BR'); }, 'tique');
   ctx.som(em + 2, 'confirma');
@@ -1440,7 +1440,7 @@ const DEMOS = {
       { nome: 'Título', dur: 3, fala: 'Como eu edito com IA', leg: null,
         montar: (ctx) => {
           const g = fxCena(ctx, null, (frente) => {
-            const t = h('div', { position: 'absolute', left: '0', width: '1080px', top: '170px', textAlign: 'center', fontFamily: 'Inter', fontWeight: 800, fontSize: '78px', color: '#fff', lineHeight: '1.25', textShadow: '0 4px 20px rgba(0,0,0,.5)' }, 'Como eu edito<br><span style="background:#fff;color:#111;padding:2px 18px;border-radius:6px;text-shadow:none">com IA</span>');
+            const t = h('div', { position: 'absolute', left: '0', width: '1080px', top: '170px', textAlign: 'center', fontFamily: 'Inter, Archivo, sans-serif', fontWeight: 800, fontSize: '78px', color: '#fff', lineHeight: '1.25', textShadow: '0 4px 20px rgba(0,0,0,.5)' }, 'Como eu edito<br><span style="background:#fff;color:#111;padding:2px 18px;border-radius:6px;text-shadow:none">com IA</span>');
             frente.appendChild(t);
             ctx.anima(t, [{ opacity: 0, transform: 'translateY(-20px)' }, { opacity: 1, transform: 'none' }], { em: .2, dur: .35, som: 'impacto' });
           });
@@ -1510,7 +1510,7 @@ const DEMOS = {
           atras.appendChild(fxPalavra(ctx, 'MATHEUS', { cor: vermelho, fonte: "'Archivo Black', Archivo, Inter, sans-serif", peso: 900, em: .2, top: 120, tam: 190, som: 'impacto' }));
         }, (frente) => {
           frente.appendChild(h('div', { position: 'absolute', left: '0', width: '1080px', top: '70px', textAlign: 'center', fontFamily: "'Space Mono', 'JetBrains Mono', monospace", fontSize: '24px', color: '#fff', letterSpacing: '.12em' }, 'EDIÇÃO IA · 2026'));
-          const ch = h('div', { position: 'absolute', left: '70px', top: '1020px', fontFamily: 'Inter', fontWeight: 800, fontSize: '50px', lineHeight: '1.25', color: '#fff', textShadow: '0 3px 14px rgba(0,0,0,.5)' }, `<span style="font-family:'Instrument Serif';font-style:italic;font-weight:400;color:#FFD60A;font-size:72px">IA</span><br>EDIÇÃO<br>REELS`);
+          const ch = h('div', { position: 'absolute', left: '70px', top: '1020px', fontFamily: 'Inter, Archivo, sans-serif', fontWeight: 800, fontSize: '50px', lineHeight: '1.25', color: '#fff', textShadow: '0 3px 14px rgba(0,0,0,.5)' }, `<span style="font-family:'Instrument Serif';font-style:italic;font-weight:400;color:#FFD60A;font-size:72px">IA</span><br>EDIÇÃO<br>REELS`);
           frente.appendChild(ch);
           ctx.anima(ch, [{ opacity: 0, transform: 'translateX(-30px)' }, { opacity: 1, transform: 'none' }], { em: .6, dur: .35 });
           frente.appendChild(h('div', caixa(840, 1640, 160, 90, { background: 'repeating-linear-gradient(90deg,#111 0 4px,#fff 4px 7px,#111 7px 9px,#fff 9px 14px)', border: '8px solid #fff' })));
@@ -1522,7 +1522,7 @@ const DEMOS = {
           atras.appendChild(w);
         }, (frente) => {
           ['Sem editor', 'Sem app', 'Só Claude'].forEach((t, i) => {
-            const l = h('div', { position: 'absolute', left: '70px', top: px(1380 + i * 110), fontFamily: 'Inter', fontWeight: 800, fontSize: '96px', letterSpacing: '-.03em', color: i === 1 ? vermelho : '#fff', lineHeight: '1' }, t);
+            const l = h('div', { position: 'absolute', left: '70px', top: px(1380 + i * 110), fontFamily: 'Inter, Archivo, sans-serif', fontWeight: 800, fontSize: '96px', letterSpacing: '-.03em', color: i === 1 ? vermelho : '#fff', lineHeight: '1' }, t);
             frente.appendChild(l);
             ctx.anima(l, [{ opacity: 0, transform: 'scale(1.4)' }, { opacity: 1, transform: 'none' }], { em: .5 + i * .45, dur: .18, som: 'impacto' });
           });

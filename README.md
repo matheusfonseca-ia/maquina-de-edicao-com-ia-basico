@@ -82,7 +82,7 @@ Todos os efeitos sonoros (cliques, impactos, confirmações, passagens e o som c
 
 ### Efeitos de vídeo
 
-Palavra Atrás da Cabeça, Checklist na Tela, Zoom na Palavra e Marcações (e quatro formatos do complemento) aplicam efeitos direto na sua gravação: recortam você, seguem o seu rosto e colocam palavras, listas e cards atrás ou em volta da sua cabeça. Esses efeitos são do [claude-video-effects](https://github.com/Vibha-Ramprakash/claude-video-effects), de Vibha Ramprakash, usados com o código original (licença MIT, em `.claude/skills/maquina-de-edicao/efeitos/LICENSE`). O instalador cria um ambiente Python próprio pra eles em `~/.maquina-de-edicao/efeitos` (OpenCV, MediaPipe e Pillow, cerca de 350 MB). Esses formatos saem a 30 quadros por segundo na câmera.
+Palavra Atrás da Cabeça, Checklist na Tela, Zoom na Palavra e Marcações (e quatro formatos do complemento) aplicam efeitos direto na sua gravação: recortam você, seguem o seu rosto e colocam palavras, listas e cards atrás ou em volta da sua cabeça. Esses efeitos são do [claude-video-effects](https://github.com/Vibha-Ramprakash/claude-video-effects), de Vibha Ramprakash, usados com o código original, só com os rótulos da interface traduzidos pro português (licença MIT, em `.claude/skills/maquina-de-edicao/efeitos/LICENSE`). O instalador cria um ambiente Python próprio pra eles em `~/.maquina-de-edicao/efeitos` (OpenCV, MediaPipe e Pillow, cerca de 350 MB). Esses formatos saem a 30 quadros por segundo na câmera.
 
 ### Enquadramento em todos os vídeos
 
