@@ -6,8 +6,11 @@ $pastaPacote = $PSScriptRoot
 if ($Pacote -eq 'order-bump') { $pastaPacote = Join-Path $PSScriptRoot 'order-bump' }
 $manifesto = Get-Content -LiteralPath (Join-Path $pastaPacote 'pacote.json') -Raw -Encoding UTF8 | ConvertFrom-Json
 $origem = Join-Path $pastaPacote '.claude/skills'
-$destino = Join-Path $env:USERPROFILE '.claude/skills'
-$backup = Join-Path $env:USERPROFILE ('.claude/skills-backup/' + (Get-Date -Format 'yyyy-MM-dd_HH-mm-ss') + '-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
+# As skills vao pra duas pastas: ~/.claude/skills (Claude Code, OpenCode, Freebuff)
+# e ~/.agents/skills (Codex, OpenCode, Freebuff). A primeira e a referencia das conferencias.
+$destinos = @((Join-Path $env:USERPROFILE '.claude/skills'), (Join-Path $env:USERPROFILE '.agents/skills'))
+$destino = $destinos[0]
+$carimbo = (Get-Date -Format 'yyyy-MM-dd_HH-mm-ss') + '-' + [guid]::NewGuid().ToString('N').Substring(0, 8)
 
 # Efeitos sonoros: a Maquina usa sempre o earshot (github.com/Leonxlnx/earshot).
 # O pacote principal instala; o complemento so confere que ele existe.
@@ -62,19 +65,22 @@ foreach ($nome in $manifesto.skills) {
     if ($nome -notmatch '^[a-z0-9]+(-[a-z0-9]+)*$') { throw "Nome de skill invalido: $nome" }
     if (-not (Test-Path -LiteralPath (Join-Path $origem "$nome/SKILL.md"))) { throw "Skill ausente no pacote: $nome" }
 }
-New-Item -ItemType Directory -Force -Path $destino | Out-Null
-$fezBackup = $false
+foreach ($raiz in $destinos) { New-Item -ItemType Directory -Force -Path $raiz | Out-Null }
+$backups = @()
 function Install-Skill([string]$nome, [string]$pastaOrigem) {
-    $alvo = Join-Path $destino $nome
-    if (Test-Path -LiteralPath $alvo) {
-        $alvoResolvido = [IO.Path]::GetFullPath($alvo)
-        $raizResolvida = [IO.Path]::GetFullPath($destino).TrimEnd([IO.Path]::DirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
-        if (-not $alvoResolvido.StartsWith($raizResolvida, [StringComparison]::OrdinalIgnoreCase)) { throw 'Destino fora da pasta de skills.' }
-        New-Item -ItemType Directory -Force -Path $backup | Out-Null
-        Move-Item -LiteralPath $alvoResolvido -Destination (Join-Path $backup $nome)
-        $script:fezBackup = $true
+    foreach ($raiz in $destinos) {
+        $alvo = Join-Path $raiz $nome
+        if (Test-Path -LiteralPath $alvo) {
+            $alvoResolvido = [IO.Path]::GetFullPath($alvo)
+            $raizResolvida = [IO.Path]::GetFullPath($raiz).TrimEnd([IO.Path]::DirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+            if (-not $alvoResolvido.StartsWith($raizResolvida, [StringComparison]::OrdinalIgnoreCase)) { throw 'Destino fora da pasta de skills.' }
+            $backup = Join-Path (Split-Path $raiz) "skills-backup/$carimbo"
+            New-Item -ItemType Directory -Force -Path $backup | Out-Null
+            Move-Item -LiteralPath $alvoResolvido -Destination (Join-Path $backup $nome)
+            if ($script:backups -notcontains $backup) { $script:backups += $backup }
+        }
+        Copy-Item -LiteralPath $pastaOrigem -Destination $alvo -Recurse
     }
-    Copy-Item -LiteralPath $pastaOrigem -Destination $alvo -Recurse
     Write-Host "  ok  /$nome"
 }
 foreach ($nome in $manifesto.skills) { Install-Skill $nome (Join-Path $origem $nome) }
@@ -115,5 +121,8 @@ if (-not $manifesto.requerMotor) {
 }
 
 Write-Host "Pronto! $($manifesto.skills.Count) skills instaladas ($($manifesto.id))." -ForegroundColor Green
-if ($fezBackup) { Write-Host "As versoes antigas foram guardadas em $backup" }
-Write-Host 'Feche e abra o Claude Code. Na pasta do seu video, digite /maquina-de-edicao ou o comando do formato.'
+foreach ($b in $backups) { Write-Host "As versoes antigas foram guardadas em $b" }
+Write-Host 'Feche e abra o seu agente (Claude Code, Codex, OpenCode ou Freebuff). Na pasta do seu video, chame a Maquina:'
+Write-Host '  Claude Code: /maquina-de-edicao      Codex: $maquina-de-edicao'
+Write-Host '  OpenCode: @maquina-de-edicao         Freebuff: /skill:maquina-de-edicao'
+Write-Host 'Em qualquer um tambem funciona pedir: "edita esse video com a maquina de edicao".'

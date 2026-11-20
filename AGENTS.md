@@ -2,7 +2,7 @@
 
 Repositório de instalação do pacote principal. O manifesto `pacote.json` define as skills deste pacote.
 
-Para instalar ou atualizar, rode `powershell -ExecutionPolicy Bypass -File .\instalar.ps1` no Windows ou `bash instalar.sh` no Mac/Linux. Em uma cópia clonada do GitHub, rode `git pull` antes de atualizar. Depois peça para fechar e abrir o Claude Code.
+Para instalar ou atualizar, rode `powershell -ExecutionPolicy Bypass -File .\instalar.ps1` no Windows ou `bash instalar.sh` no Mac/Linux. Em uma cópia clonada do GitHub, rode `git pull` antes de atualizar. Depois peça para fechar e abrir o agente (Claude Code, Codex, OpenCode ou Freebuff). As skills vão para `~/.claude/skills` e `~/.agents/skills`.
 
 Este pacote inclui o motor e dez formatos (três deles são formatos de efeito, que usam o `fx.py` original do claude-video-effects em `.claude/skills/maquina-de-edicao/efeitos/`, só com os rótulos fixos da interface traduzidos pro português; não edite esse arquivo). O link para comprar os dez extras está em destaque no README.
 

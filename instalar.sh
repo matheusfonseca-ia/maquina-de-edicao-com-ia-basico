@@ -17,8 +17,11 @@ if [ -z "$lista" ] || { [ "$requer_motor" != true ] && [ "$requer_motor" != fals
   echo 'Manifesto de pacote invalido.'; exit 1
 fi
 origem="$pasta_pacote/.claude/skills"
+# As skills vao pra duas pastas: ~/.claude/skills (Claude Code, OpenCode, Freebuff)
+# e ~/.agents/skills (Codex, OpenCode, Freebuff). A primeira e a referencia das conferencias.
 destino="$HOME/.claude/skills"
-backup="$HOME/.claude/skills-backup/$(date +%Y-%m-%d_%H-%M-%S)-$$"
+destinos=("$HOME/.claude/skills" "$HOME/.agents/skills")
+carimbo="$(date +%Y-%m-%d_%H-%M-%S)-$$"
 
 # Efeitos sonoros: a Maquina usa sempre o earshot (github.com/Leonxlnx/earshot).
 # O pacote principal instala; o complemento so confere que ele existe.
@@ -66,17 +69,21 @@ while IFS= read -r nome; do
   case "$nome" in ''|*[!a-z0-9-]*|-*|*-|*--*) echo "Nome de skill invalido: $nome"; exit 1 ;; esac
   if [ ! -f "$origem/$nome/SKILL.md" ]; then echo "Skill ausente no pacote: $nome"; exit 1; fi
 done <<< "$lista"
-mkdir -p "$destino"
 total=0
-fez_backup=0
+backups=''
 instalar_skill() {
-  local alvo="$destino/$1"
-  if [ -e "$alvo" ]; then
-    mkdir -p "$backup"
-    mv "$alvo" "$backup/$1"
-    fez_backup=1
-  fi
-  cp -R "$2" "$alvo"
+  local raiz alvo backup
+  for raiz in "${destinos[@]}"; do
+    mkdir -p "$raiz"
+    alvo="$raiz/$1"
+    if [ -e "$alvo" ]; then
+      backup="$(dirname "$raiz")/skills-backup/$carimbo"
+      mkdir -p "$backup"
+      mv "$alvo" "$backup/$1"
+      case "$backups" in *"$backup"*) ;; *) backups="$backups$backup"$'\n' ;; esac
+    fi
+    cp -R "$2" "$alvo"
+  done
   echo "  ok  /$1"
 }
 while IFS= read -r nome; do
@@ -117,5 +124,8 @@ if [ "$requer_motor" = false ]; then
 fi
 
 echo "Pronto! $total skills instaladas."
-if [ "$fez_backup" = 1 ]; then echo "As versoes antigas foram guardadas em $backup"; fi
-echo 'Feche e abra o Claude Code. Na pasta do seu video, digite /maquina-de-edicao ou o comando do formato.'
+if [ -n "$backups" ]; then printf '%s' "$backups" | while IFS= read -r b; do echo "As versoes antigas foram guardadas em $b"; done; fi
+echo 'Feche e abra o seu agente (Claude Code, Codex, OpenCode ou Freebuff). Na pasta do seu video, chame a Maquina:'
+echo '  Claude Code: /maquina-de-edicao      Codex: $maquina-de-edicao'
+echo '  OpenCode: @maquina-de-edicao         Freebuff: /skill:maquina-de-edicao'
+echo 'Em qualquer um tambem funciona pedir: "edita esse video com a maquina de edicao".'

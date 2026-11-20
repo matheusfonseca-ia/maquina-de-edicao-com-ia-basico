@@ -1,6 +1,6 @@
 ---
 name: zoom-na-palavra
-description: Edita um vídeo falado no formato Zoom na Palavra. Vídeo vertical 9:16 com a pessoa em tela cheia e a câmera reagindo à fala: aproximação rápida nas palavras fortes, mira travando no rosto, título com aproximação no gancho e aproximação lenta no fechamento. Depois de escolher o formato, a pessoa escolhe o estilo visual (original do formato, Pixelado, Noite Laranja, Claro Tecnológico ou um que ela criou). Faz parte da Máquina de Edição (precisa da skill maquina-de-edicao instalada). Use quando o usuário chamar /zoom-na-palavra ou pedir pra editar um vídeo "no formato Zoom na Palavra", "zoom na palavra", "punch-in" ou "zoom nas palavras fortes".
+description: Edita um vídeo falado no formato Zoom na Palavra. Vídeo vertical 9:16 com a pessoa em tela cheia e a câmera reagindo à fala, com aproximação rápida nas palavras fortes, mira travando no rosto, título com aproximação no gancho e aproximação lenta no fechamento. Depois de escolher o formato, a pessoa escolhe o estilo visual (original do formato, Pixelado, Noite Laranja, Claro Tecnológico ou um que ela criou). Faz parte da Máquina de Edição (precisa da skill maquina-de-edicao instalada). Use quando o usuário chamar /zoom-na-palavra ou pedir pra editar um vídeo "no formato Zoom na Palavra", "zoom na palavra", "punch-in" ou "zoom nas palavras fortes".
 ---
 
 # Zoom na Palavra

@@ -53,15 +53,24 @@ Mac/Linux:
 bash instalar.sh
 ```
 
-O instalador copia onze skills para `~/.claude/skills/` (o motor e os dez formatos) e instala o [earshot](https://github.com/Leonxlnx/earshot), que a Máquina usa em todos os efeitos sonoros. O earshot fica em `~/.maquina-de-edicao/earshot`, com ambiente Python próprio, e vem com a skill `/earshot`. Na primeira instalação ele baixa cerca de 1,5 GB (PyTorch e os modelos de escuta), então pode levar alguns minutos. Se houver versões antigas das mesmas skills, elas ficam em `~/.claude/skills-backup/`. Preferências, estilos pessoais e outros formatos já instalados são preservados.
+O instalador copia onze skills (o motor e os dez formatos) para `~/.claude/skills/` (Claude Code, OpenCode e Freebuff) e para `~/.agents/skills/` (Codex) e instala o [earshot](https://github.com/Leonxlnx/earshot), que a Máquina usa em todos os efeitos sonoros. O earshot fica em `~/.maquina-de-edicao/earshot`, com ambiente Python próprio, e vem com a skill `/earshot`. Na primeira instalação ele baixa cerca de 1,5 GB (PyTorch e os modelos de escuta), então pode levar alguns minutos. Se houver versões antigas das mesmas skills, elas ficam em `~/.claude/skills-backup/` e `~/.agents/skills-backup/`. Preferências, estilos pessoais e outros formatos já instalados são preservados.
 
-Feche e abra o Claude Code depois da instalação.
+Funciona no Claude Code, no Codex, no OpenCode e no Freebuff. Depois de instalar, feche e abra o seu agente.
+
+| Agente | Como chamar a Máquina |
+|---|---|
+| Claude Code | `/maquina-de-edicao` |
+| Codex | `$maquina-de-edicao` |
+| OpenCode | `@maquina-de-edicao` |
+| Freebuff | `/skill:maquina-de-edicao` |
+
+Os formatos seguem a mesma regra (ex: `$reels-de-negocio` no Codex). Em qualquer agente também funciona pedir em texto: "edita esse vídeo com a máquina de edição". A Máquina foi criada e testada no Claude Code; nos outros agentes a qualidade da edição depende do modelo que você usa.
 
 ## Editar
 
-Crie uma pasta própria para cada vídeo, fora desta pasta de instalação, e coloque a gravação nela. Abra o Claude Code nessa pasta e digite `/maquina-de-edicao` ou o comando de um formato. É necessário acesso ao Claude Code.
+Crie uma pasta própria para cada vídeo, fora desta pasta de instalação, e coloque a gravação nela. Abra o seu agente nessa pasta e chame a Máquina ou um formato, do jeito da tabela acima. É necessário ter acesso a um dos agentes.
 
-Na primeira edição, o Claude confere Node.js, FFmpeg, Python, HyperFrames e o earshot e orienta a instalação do que faltar. Um painel local abre no navegador para você escolher o formato e o visual. Depois da montagem, assista no HyperFrames Studio e peça ajustes. Para gerar o MP4 final, diga **pode exportar**. A saída fica em `edit/final.mp4`.
+Na primeira edição, o agente confere Node.js, FFmpeg, Python, HyperFrames e o earshot e orienta a instalação do que faltar. Um painel local abre no navegador para você escolher o formato e o visual. Depois da montagem, assista no HyperFrames Studio e peça ajustes. Para gerar o MP4 final, diga **pode exportar**. A saída fica em `edit/final.mp4`.
 
 ## Atualizar e adicionar formatos
 
